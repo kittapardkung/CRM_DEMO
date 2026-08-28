@@ -69,6 +69,19 @@ export default function HomePage() {
               style={{ objectFit: 'cover', borderRadius: 'var(--radius-lg)' }}
             />
           </div>
+          <span
+            aria-hidden
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: 8,
+              background: 'var(--wl-lime)',
+              borderRadius: '0 0 var(--radius-lg) var(--radius-lg)',
+              zIndex: 3,
+            }}
+          />
         </div>
       </section>
 
