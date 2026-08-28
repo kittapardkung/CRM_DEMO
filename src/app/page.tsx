@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import type { Metadata } from 'next';
 import ImageSlot from '@/components/ImageSlot';
 import ModelCard from '@/components/ModelCard';
@@ -71,28 +72,15 @@ export default function HomePage() {
                 display: 'block',
               }}
             />
-            <div
-              style={{
-                position: 'relative',
-                zIndex: 2,
-                aspectRatio: '4 / 3',
-                background: '#0b1730',
-                border: '1px dashed rgba(255,255,255,0.4)',
-                borderRadius: 'var(--radius-lg)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                textAlign: 'center',
-                padding: 'var(--space-4)',
-              }}
-            >
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
-                ภาพ HERO
-                <br />
-                <b style={{ fontWeight: 600 }}>WULING · Exterior Front 3/4</b>
-                <br />
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>hero-wuling-front-34.webp · รอไฟล์จริง</span>
-              </span>
+            <div style={{ position: 'relative', zIndex: 2, aspectRatio: '4 / 3' }}>
+              <Image
+                src="/images/hero-wuling-front-34.webp"
+                alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
+                fill
+                priority
+                sizes="(max-width: 820px) 100vw, 50vw"
+                style={{ objectFit: 'contain' }}
+              />
             </div>
           </div>
         </div>
