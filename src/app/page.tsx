@@ -59,29 +59,15 @@ export default function HomePage() {
               <Link href="/test-drive" className="btn btn-on-dark">ทดลองขับ</Link>
             </div>
           </div>
-          <div style={{ position: 'relative', zIndex: 2 }}>
-            <span
-              style={{
-                position: 'absolute',
-                right: '-5%',
-                top: '14%',
-                width: '38%',
-                height: '72%',
-                background: 'var(--wl-lime)',
-                borderRadius: 'var(--radius-lg)',
-                display: 'block',
-              }}
+          <div style={{ position: 'relative', zIndex: 2, aspectRatio: '4 / 3' }}>
+            <Image
+              src="/images/hero-wuling-front-34.webp"
+              alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
+              fill
+              priority
+              sizes="(max-width: 820px) 100vw, 50vw"
+              style={{ objectFit: 'cover', borderRadius: 'var(--radius-lg)' }}
             />
-            <div style={{ position: 'relative', zIndex: 2, aspectRatio: '4 / 3' }}>
-              <Image
-                src="/images/hero-wuling-front-34.webp"
-                alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
-                fill
-                priority
-                sizes="(max-width: 820px) 100vw, 50vw"
-                style={{ objectFit: 'contain' }}
-              />
-            </div>
           </div>
         </div>
       </section>
