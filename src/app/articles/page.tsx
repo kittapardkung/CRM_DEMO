@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import ArticleCard from '@/components/ArticleCard';
-import { articles, categories } from '@/lib/data/articles';
+import { allArticles, categories } from '@/lib/data/articles';
 
 export const metadata: Metadata = {
   title: 'บทความรถยนต์ไฟฟ้า',
@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default async function ArticlesPage({ searchParams }: { searchParams: Promise<{ cat?: string }> }) {
   const { cat } = await searchParams;
   const activeCategory = cat && categories.includes(cat) ? cat : 'ทั้งหมด';
-  const list = activeCategory === 'ทั้งหมด' ? articles : articles.filter((a) => a.category === activeCategory);
+  const list = activeCategory === 'ทั้งหมด' ? allArticles : allArticles.filter((a) => a.category === activeCategory);
 
   return (
     <div className="wrap">

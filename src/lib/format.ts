@@ -11,7 +11,8 @@ export function isDemoPricing(): boolean {
   return process.env.NEXT_PUBLIC_DEMO_PRICES !== 'false';
 }
 
-export function money(amount: number): string {
+export function money(amount: number | null | undefined): string {
+  if (amount === null || amount === undefined) return PLACEHOLDER;
   if (!isDemoPricing()) return '฿XXX,XXX';
   return '฿' + Math.round(amount).toLocaleString('en-US');
 }

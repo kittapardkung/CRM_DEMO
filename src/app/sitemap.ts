@@ -1,12 +1,13 @@
 import type { MetadataRoute } from 'next';
 import { vehicles } from '@/lib/data/vehicles';
-import { articles } from '@/lib/data/articles';
+import { allArticles } from '@/lib/data/articles';
 import { SITE_URL } from '@/lib/seo';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
     '',
     '/models',
+    '/lease',
     '/compare',
     '/promotions',
     '/calculator',
@@ -25,7 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entries.push({ url: `${SITE_URL}/models/${v.slug}`, lastModified: new Date() });
   });
 
-  articles.forEach((a) => {
+  allArticles.forEach((a) => {
     entries.push({ url: `${SITE_URL}/articles/${a.slug}`, lastModified: new Date() });
   });
 

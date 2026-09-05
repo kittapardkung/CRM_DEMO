@@ -4,12 +4,14 @@ import { notFound } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import ImageSlot from '@/components/ImageSlot';
 import CTASection from '@/components/CTASection';
-import { articles, getArticle } from '@/lib/data/articles';
+import { allArticles, getArticle } from '@/lib/data/articles';
 import { getVehicle } from '@/lib/data/vehicles';
+import { renderInline } from '@/lib/inline';
+import { ctaHref } from '@/lib/nav';
 import { SITE_URL } from '@/lib/seo';
 
 export function generateStaticParams() {
-  return articles.map((a) => ({ slug: a.slug }));
+  return allArticles.map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -29,7 +31,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   if (!article) notFound();
 
   const relatedVehicle = getVehicle(article.relatedVehicleSlug);
-  const relatedArticles = articles.filter((a) => a.slug !== article.slug).slice(0, 3);
+  const related = (article.readNext?.length ? article.readNext.map((s) => getArticle(s)).filter(Boolean) : allArticles.filter((a) => a.slug !== article.slug).slice(0, 3)) as typeof allArticles;
 
   const jsonLd = [
     {
@@ -49,6 +51,15 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         acceptedAnswer: { '@type': 'Answer', text: f.answer },
       })),
     },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${SITE_URL}/` },
+        { '@type': 'ListItem', position: 2, name: 'บทความ', item: `${SITE_URL}/articles` },
+        { '@type': 'ListItem', position: 3, name: article.title, item: `${SITE_URL}/articles/${article.slug}` },
+      ],
+    },
   ];
 
   return (
@@ -57,7 +68,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
       <article style={{ paddingBottom: 'var(--space-8)', display: 'grid', gridTemplateColumns: 'minmax(0,1fr)', gap: 'var(--space-6)', maxWidth: 1100 }}>
         <header>
           <p style={{ margin: '0 0 var(--space-3)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>{article.category}</p>
-          <h1 style={{ fontSize: 'clamp(28px,3.8vw,44px)', lineHeight: 1.1, margin: '0 0 var(--space-4)', maxWidth: '26ch' }}>{article.title}</h1>
+          <h1 style={{ fontSize: 'clamp(28px,3.8vw,44px)', lineHeight: 1.1, margin: '0 0 var(--space-4)', maxWidth: '30ch' }}>{article.title}</h1>
           <p style={{ margin: '0 0 var(--space-3)', fontSize: 19, color: 'var(--color-neutral-800)', maxWidth: '60ch' }}>{article.excerpt}</p>
           <p className="tnum" style={{ margin: 0, fontSize: 13, color: 'var(--color-neutral-600)' }}>เผยแพร่ {article.publishedAt} · อ่าน {article.readingTime}</p>
         </header>
@@ -87,13 +98,116 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 ) : null}
               </div>
             ) : null}
+            {article.social ? (
+              <a
+                href={article.social.url}
+                target="_blank"
+                rel="noreferrer"
+                style={{ display: 'block', border: '1px solid var(--color-divider)', padding: 'var(--space-4)', textDecoration: 'none', color: 'var(--color-text)' }}
+              >
+                <p style={{ margin: '0 0 var(--space-2)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
+                  ดูภาพและคลิปการใช้งานจริงเพิ่มเติมได้ที่
+                </p>
+                <p style={{ margin: 0, fontSize: 17 }}>{article.social.label} →</p>
+              </a>
+            ) : null}
           </aside>
 
-          <div style={{ order: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+          <div style={{ order: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-7)' }}>
             {article.sections.map((s) => (
-              <section key={s.id} id={s.id}>
-                <h2 style={{ fontSize: 'clamp(21px,2.6vw,28px)', margin: '0 0 var(--space-3)', scrollMarginTop: 96 }}>{s.heading}</h2>
-                <p style={{ margin: 0, textAlign: 'justify', hyphens: 'auto', color: 'var(--color-neutral-900)' }}>{s.body}</p>
+              <section key={s.id} id={s.id} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
+                <h2 style={{ fontSize: 'clamp(21px,2.6vw,28px)', margin: 0, scrollMarginTop: 96 }}>{s.heading}</h2>
+
+                {s.answer ? (
+                  <p
+                    style={{
+                      margin: 0,
+                      fontSize: 18,
+                      lineHeight: 1.6,
+                      color: 'var(--color-text)',
+                      background: 'var(--color-accent-100)',
+                      borderLeft: '3px solid var(--color-accent)',
+                      padding: 'var(--space-3) var(--space-4)',
+                    }}
+                  >
+                    {renderInline(s.answer)}
+                  </p>
+                ) : null}
+
+                {s.body ? (
+                  <p style={{ margin: 0, textAlign: 'justify', hyphens: 'auto', color: 'var(--color-neutral-900)' }}>{renderInline(s.body)}</p>
+                ) : null}
+
+                {s.bullets?.length ? (
+                  <ul style={{ margin: 0, paddingLeft: '1.3em', display: 'flex', flexDirection: 'column', gap: 6, color: 'var(--color-neutral-900)' }}>
+                    {s.bullets.map((b, i) => (
+                      <li key={i}>{renderInline(b)}</li>
+                    ))}
+                  </ul>
+                ) : null}
+
+                {s.table ? (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table className="table" style={{ minWidth: 480 }}>
+                      <thead>
+                        <tr>
+                          {s.table.head.map((h) => (
+                            <th key={h}>{h}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {s.table.rows.map((row, i) => (
+                          <tr key={i}>
+                            {row.map((cell, j) => (
+                              <td key={j} className={j === 0 ? undefined : 'tnum'}>{cell}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                ) : null}
+
+                {s.image !== undefined || s.imageCaption ? (
+                  <ImageSlot aspectRatio="16 / 9" caption={s.imageCaption || 'ARTICLE · Inline Image'} filename={s.image} />
+                ) : null}
+
+                {s.note ? (
+                  <p style={{ margin: 0, fontSize: 14, color: 'var(--color-neutral-700)', fontStyle: 'italic' }}>{renderInline(s.note)}</p>
+                ) : null}
+
+                {s.link ? (
+                  <p style={{ margin: 0, fontSize: 15 }}>
+                    {s.link.lead}{' '}
+                    <Link href={`/articles/${s.link.toSlug}`}>
+                      {getArticle(s.link.toSlug)?.title ?? s.link.toSlug}
+                    </Link>
+                  </p>
+                ) : null}
+
+                {s.cta ? (
+                  <div
+                    style={{
+                      background: 'var(--wl-ink)',
+                      borderRadius: 'var(--radius-lg)',
+                      padding: 'var(--space-5)',
+                      display: 'flex',
+                      flexWrap: 'wrap',
+                      gap: 'var(--space-4)',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <div>
+                      <p style={{ margin: '0 0 6px', fontSize: 19, color: '#fff', fontFamily: 'var(--font-heading)' }}>{s.cta.heading}</p>
+                      <p style={{ margin: 0, fontSize: 14, color: 'rgba(255,255,255,0.78)', maxWidth: '48ch' }}>{s.cta.body}</p>
+                    </div>
+                    <Link href={ctaHref(s.cta.goRoute)} className="btn btn-primary" style={{ flex: '0 0 auto' }}>
+                      {s.cta.label}
+                    </Link>
+                  </div>
+                ) : null}
               </section>
             ))}
 
@@ -112,7 +226,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
             <section>
               <h2 style={{ fontSize: 'clamp(20px,2.4vw,25px)', margin: '0 0 var(--space-4)' }}>บทความที่เกี่ยวข้อง</h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
-                {relatedArticles.map((r) => (
+                {related.map((r) => (
                   <Link
                     key={r.slug}
                     href={`/articles/${r.slug}`}
@@ -125,7 +239,13 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
               </div>
             </section>
 
-            <CTASection heading="พร้อมลองขับจริงแล้วหรือยัง?" showPhone={false} />
+            <CTASection
+              heading={article.endCta?.heading ?? 'พร้อมลองขับจริงแล้วหรือยัง?'}
+              body={article.endCta?.body ?? 'ทีมงานพร้อมนำรถไปให้ทดลองขับที่บ้านหรือบริษัทของคุณ ตามพื้นที่ให้บริการและเงื่อนไขของบริษัท'}
+              primaryLabel={article.endCta?.label ?? 'นัดทดลองขับ'}
+              primaryHref={ctaHref(article.endCta?.goRoute ?? 'testdrive')}
+              showPhone={false}
+            />
           </div>
         </div>
       </article>
@@ -134,7 +254,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         <script
           key={i}
           type="application/ld+json"
-           
+
           dangerouslySetInnerHTML={{ __html: JSON.stringify(obj) }}
         />
       ))}

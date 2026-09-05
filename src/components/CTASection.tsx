@@ -5,12 +5,18 @@ import PhoneLink from './PhoneLink';
 
 export default function CTASection({
   heading,
+  body,
   showCalculator = true,
   showPhone = true,
+  primaryLabel = 'ลงทะเบียนทดลองขับ',
+  primaryHref = '/test-drive',
 }: {
   heading: ReactNode;
+  body?: ReactNode;
   showCalculator?: boolean;
   showPhone?: boolean;
+  primaryLabel?: string;
+  primaryHref?: string;
 }) {
   return (
     <section
@@ -25,9 +31,12 @@ export default function CTASection({
         justifyContent: 'space-between',
       }}
     >
-      <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'clamp(22px,2.8vw,31px)', margin: 0, color: '#fff' }}>{heading}</h2>
+      <div>
+        <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'clamp(22px,2.8vw,31px)', margin: 0, color: '#fff' }}>{heading}</h2>
+        {body ? <p style={{ margin: 'var(--space-2) 0 0', fontSize: 15, color: 'rgba(255,255,255,0.78)', maxWidth: '48ch' }}>{body}</p> : null}
+      </div>
       <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
-        <Link href="/test-drive" className="btn btn-primary">ลงทะเบียนทดลองขับ</Link>
+        <Link href={primaryHref} className="btn btn-primary">{primaryLabel}</Link>
         {showCalculator ? (
           <Link href="/calculator" className="btn btn-on-dark">คำนวณค่างวด</Link>
         ) : null}

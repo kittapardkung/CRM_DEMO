@@ -20,6 +20,7 @@ export default function VehicleVisuals({ vehicle }: { vehicle: Vehicle }) {
   const color = vehicle.colors[colorIndex];
   const extView = vehicle.exteriorViews[extIndex];
   const extFile = `${vehicle.slug}-${extView.slug}-${color.slug}.webp`;
+  const confirmedColors = vehicle.slug === 'porta' || vehicle.slug === 'darion';
 
   const openLightbox = () => dialogRef.current?.showModal();
   const closeLightbox = () => dialogRef.current?.close();
@@ -91,8 +92,8 @@ export default function VehicleVisuals({ vehicle }: { vehicle: Vehicle }) {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--space-6) 0' }}>
-        <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>Colors · ตัวอย่างชุดสี (รอยืนยัน)</p>
+      <section id="sec-colors" style={{ padding: 'var(--space-6) 0', scrollMarginTop: 140 }}>
+        <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>Colors · {confirmedColors ? 'สีที่จำหน่ายจริง' : 'ตัวอย่างชุดสี (รอยืนยัน)'}</p>
         <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap', marginBottom: 'var(--space-4)' }}>
           {vehicle.colors.map((c, i) => (
             <button
@@ -125,7 +126,7 @@ export default function VehicleVisuals({ vehicle }: { vehicle: Vehicle }) {
         </div>
       </section>
 
-      <section style={{ padding: 'var(--space-6) 0' }}>
+      <section id="sec-exterior" style={{ padding: 'var(--space-6) 0', scrollMarginTop: 140 }}>
         <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-4)' }}>ภายนอก</h2>
         <button
           type="button"

@@ -14,7 +14,8 @@ export default function PortaConfigurator({ vehicle }: { vehicle: Vehicle }) {
 
   const selectedAccessories = accessories.filter((a) => selected[a.id]);
   const accTotal = selectedAccessories.reduce((sum, a) => sum + a.price, 0);
-  const total = vehicle.startingPrice + accTotal;
+  const basePrice = vehicle.startingPrice ?? 0;
+  const total = basePrice + accTotal;
 
   const visualLayerIds = useMemo(
     () => accessories.filter((a) => a.isVisualLayer && selected[a.id]).map((a) => a.id),

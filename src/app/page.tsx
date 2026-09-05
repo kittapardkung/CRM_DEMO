@@ -123,6 +123,29 @@ export default function HomePage() {
         </div>
       </section>
 
+      <section
+        style={{
+          background: 'var(--wl-ink)',
+          borderRadius: 'var(--radius-lg)',
+          padding: 'clamp(24px,3.4vw,44px)',
+          margin: 'var(--space-6) 0',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
+          gap: 'var(--space-8)',
+          alignItems: 'center',
+        }}
+      >
+        <div>
+          <p style={{ margin: '0 0 var(--space-2)', fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--wl-lime)' }}>Operating Lease · สำหรับองค์กร</p>
+          <h2 style={{ fontSize: 'clamp(28px,3.6vw,42px)', margin: '0 0 var(--space-3)', color: '#fff' }}>เช่ารถไฟฟ้าระยะยาว วางแผนต้นทุนได้ทุกเดือน</h2>
+          <p style={{ margin: '0 0 var(--space-4)', maxWidth: '44ch', color: 'rgba(255,255,255,0.78)' }}>
+            บริการ Operating Lease รถยนต์ไฟฟ้า WULING PORTA EV และ DARION EV สำหรับบริษัท โรงงาน และองค์กร พร้อมเครื่องคำนวณต้นทุน Fleet
+          </p>
+          <Link href="/lease" className="btn btn-primary">ดู Operating Lease</Link>
+        </div>
+        <ImageSlot aspectRatio="16 / 10" caption="Fleet · WULING PORTA EV และ DARION EV" filename="lease-fleet-teaser.jpg" />
+      </section>
+
       <section className="section">
         <h2 style={{ fontSize: 'clamp(23px,2.9vw,31px)', margin: '0 0 var(--space-6)' }}>โปรโมชั่นเดือนนี้</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 'var(--space-4)' }}>
@@ -164,6 +187,7 @@ export default function HomePage() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)' }}>
           {[
+            { label: 'Operating Lease สำหรับองค์กร', href: '/lease' },
             { label: 'คำนวณค่างวด', href: '/calculator' },
             { label: 'เปรียบเทียบรถทุกรุ่น', href: '/compare' },
             { label: 'ศูนย์บริการและนัดหมาย', href: '/service' },
