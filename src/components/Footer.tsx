@@ -47,6 +47,17 @@ export default function Footer() {
           <p style={{ margin: '0 0 var(--space-3)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--wl-lime)' }}>เวลาทำการ</p>
           <p style={{ margin: 0, fontSize: 15, color: 'rgba(255,255,255,0.7)' }}>{dealer.hours}</p>
         </div>
+        <div>
+          <p style={{ margin: '0 0 var(--space-3)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--wl-lime)' }}>ติดตามเรา</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
+              Facebook
+            </a>
+            <a href={dealer.lineUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
+              LINE
+            </a>
+          </div>
+        </div>
       </div>
     </footer>
   );

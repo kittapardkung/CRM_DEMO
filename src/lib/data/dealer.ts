@@ -5,8 +5,8 @@ export const dealer = {
   phoneHref: 'tel:0823247915',
   lineUrl: 'https://lin.ee/ZSQFaMd',
   email: 'justiceauto.sa@gmail.com',
-  address: 'ถนนบายบาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี จังหวัดชลบุรี 20000',
-  addressStreet: 'ถนนบายบาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี',
+  address: 'ถนนบายพาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี จังหวัดชลบุรี 20000',
+  addressStreet: 'ถนนบายพาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี',
   addressRegion: 'ชลบุรี',
   postalCode: '20000',
   /** Showroom pin coordinates, confirmed by the dealer from the GBP map. */
@@ -18,6 +18,7 @@ export const dealer = {
   gbpUrl: 'https://share.google/YLW3gDhz6dfzp6kZY',
   /** Real showroom pin — used for the "navigate here" link (no API key needed). */
   mapsUrl: 'https://maps.app.goo.gl/96HHoHDMUTiYHAwF7',
+  facebookUrl: 'https://www.facebook.com/profile.php?id=61583789612737',
 };
 
 export const contactRows = [

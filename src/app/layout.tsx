@@ -64,7 +64,7 @@ const localBusinessJsonLd = {
     closes: '17:00',
   },
   hasMap: dealer.mapsUrl,
-  sameAs: [dealer.gbpUrl],
+  sameAs: [dealer.gbpUrl, dealer.facebookUrl],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
