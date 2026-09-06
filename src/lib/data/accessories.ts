@@ -1,10 +1,6 @@
-import { Accessory, AccessoryUseCase, CargoShot, TradePersona } from './types';
+import { Accessory, CargoShot, TradePersona } from './types';
 
-/**
- * PORTA configurator accessories — 7 real, confirmed items.
- * `isVisualLayer` accessories are the ones the configurator's image-mapping
- * system composites into the cargo preview; the rest only affect price.
- */
+/** PORTA accessories — 7 real, confirmed items. */
 export const accessories: Accessory[] = [
   {
     id: 'floor',
@@ -57,22 +53,8 @@ export const accessories: Accessory[] = [
   },
 ];
 
-/** Layer order the configurator's image-mapping system composites in. */
-export const layerOrder = ['floor', 'panel', 'ac'] as const;
-
-/** Combinations that have a real (in this build: labeled placeholder) preview image. */
-export const configuratorImageMap = ['base', 'floor', 'floor+panel', 'floor+ac', 'floor+panel+ac', 'ac', 'panel'];
-
-/** Photo grid of all 7 accessories shown ahead of the picker — same order as the design export. */
+/** Photo grid of all 7 accessories shown in the gallery — same order as the design export. */
 export const accessoryGalleryOrder = ['floor', 'roofrack', 'ladder', 'window', 'panel', 'ac', 'leafspring'];
-
-export const useCases: AccessoryUseCase[] = [
-  { id: 'cargo', label: 'ขนส่งสินค้า', accessoryIds: ['floor', 'panel'] },
-  { id: 'factory', label: 'ใช้งานในโรงงาน', accessoryIds: ['floor'] },
-  { id: 'service', label: 'Service Vehicle', accessoryIds: ['floor'] },
-  { id: 'cold', label: 'ขนส่งควบคุมอุณหภูมิ', accessoryIds: ['floor', 'panel', 'ac'] },
-  { id: 'custom', label: 'กำหนดเอง', accessoryIds: [] },
-];
 
 /** Persona quick-pick cards — "เลือกอุปกรณ์ตามสายงาน" section. */
 export const tradePersonas: TradePersona[] = [
@@ -129,24 +111,4 @@ export const portaVideos = [
 
 export function getAccessory(id: string): Accessory | undefined {
   return accessories.find((a) => a.id === id);
-}
-
-/**
- * Resolve which configurator preview image key applies for a set of
- * selected visual-layer accessory ids, falling back to the closest
- * combination that does have an image rather than ever showing a broken
- * one (Placeholder Rule / section 16).
- */
-export function resolveConfiguratorImage(selectedIds: string[]): { key: string; fallbackOf: string | null } {
-  const selected = layerOrder.filter((id) => selectedIds.includes(id));
-  const key = selected.length ? selected.join('+') : 'base';
-  if (configuratorImageMap.includes(key)) return { key, fallbackOf: null };
-
-  const probe = [...selected];
-  while (probe.length) {
-    probe.pop();
-    const candidate = probe.length ? probe.join('+') : 'base';
-    if (configuratorImageMap.includes(candidate)) return { key, fallbackOf: candidate };
-  }
-  return { key, fallbackOf: 'base' };
 }

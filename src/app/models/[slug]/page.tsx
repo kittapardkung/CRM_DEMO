@@ -6,7 +6,6 @@ import VehicleVisuals from '@/components/VehicleVisuals';
 import VariantCard from '@/components/VariantCard';
 import SpecificationAccordion from '@/components/SpecificationAccordion';
 import CTASection from '@/components/CTASection';
-import PortaConfigurator from '@/components/PortaConfigurator';
 import PageIndexNav from '@/components/PageIndexNav';
 import PortaAccessoryShowcase from '@/components/PortaAccessoryShowcase';
 import CargoCapacitySection from '@/components/CargoCapacitySection';
@@ -174,8 +173,6 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           <section id="sec-accessories" className="section" style={{ scrollMarginTop: 140 }}>
             <PortaAccessoryShowcase />
           </section>
-
-          <PortaConfigurator vehicle={vehicle} />
 
           <section id="sec-video" className="section" style={{ scrollMarginTop: 140 }}>
             <p className="kicker kicker-2">งานจริง</p>

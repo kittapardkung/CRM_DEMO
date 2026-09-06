@@ -31,10 +31,7 @@ function PersonaIcon({ icon }: { icon: 'truck' | 'wrench' | 'store' }) {
   );
 }
 
-/**
- * Informational "เลือกอุปกรณ์ตามสายงาน" persona cards + full accessory photo
- * gallery — shown ahead of the interactive configurator (PortaConfigurator).
- */
+/** "เลือกอุปกรณ์ตามสายงาน" persona cards + full accessory photo gallery. */
 export default function PortaAccessoryShowcase() {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
