@@ -1,15 +1,19 @@
 import { Article } from './types';
 import { leaseArticles } from './leaseArticles';
 
+/**
+ * Filter chips on /articles. Keep this list matching only categories that at
+ * least one article actually uses — an unused entry renders a filter pill
+ * that leads to an empty page (verified against every article.category and
+ * leaseArticle.category value below and in leaseArticles.ts).
+ */
 export const categories = [
   'ทั้งหมด',
   'รถยนต์ไฟฟ้า',
-  'รีวิว WULING',
   'เปรียบเทียบรถ',
   'EV สำหรับธุรกิจ',
   'เทคนิคการใช้งาน',
   'คู่มือซื้อรถ',
-  'ข่าวสาร',
   'Fleet องค์กร',
 ];
 

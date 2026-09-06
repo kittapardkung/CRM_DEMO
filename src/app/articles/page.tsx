@@ -5,7 +5,7 @@ import { allArticles, categories } from '@/lib/data/articles';
 
 export const metadata: Metadata = {
   title: 'บทความรถยนต์ไฟฟ้า',
-  description: 'บทความ รีวิว และคู่มือเลือกรถยนต์ไฟฟ้า WULING',
+  description: 'บทความและคู่มือเลือกรถยนต์ไฟฟ้า WULING สเปก ราคา และการใช้งานจริง',
   alternates: { canonical: '/articles' },
 };
 
