@@ -1,21 +1,26 @@
-import { PLACEHOLDER } from './types';
-
-/** The one confirmed piece of real dealer contact info; everything else is unconfirmed. */
+/** Real dealer contact info, confirmed by the dealer (2026-09). */
 export const dealer = {
   name: 'WULING CHONBURI',
   phoneDisplay: '082-324-7915',
   phoneHref: 'tel:0823247915',
-  line: PLACEHOLDER,
-  address: `${PLACEHOLDER} (จังหวัดชลบุรี)`,
-  hours: PLACEHOLDER,
-  email: PLACEHOLDER,
+  lineUrl: 'https://lin.ee/ZSQFaMd',
+  email: 'justiceauto.sa@gmail.com',
+  address: 'ถนนบายบาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี จังหวัดชลบุรี 20000',
+  addressStreet: 'ถนนบายบาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี',
+  addressRegion: 'ชลบุรี',
+  postalCode: '20000',
+  hours: 'เปิดบริการทุกวัน 08:30–17:00 น.',
   siteUrl: 'https://wulingjtgroup.com',
+  /** Google Business Profile short link — used as sameAs in structured data. */
+  gbpUrl: 'https://share.google/YLW3gDhz6dfzp6kZY',
+  /** Real showroom pin — used for the "navigate here" link (no API key needed). */
+  mapsUrl: 'https://maps.app.goo.gl/96HHoHDMUTiYHAwF7',
 };
 
 export const contactRows = [
-  { label: 'โทรศัพท์', value: dealer.phoneDisplay },
-  { label: 'LINE', value: dealer.line },
-  { label: 'ที่ตั้งโชว์รูม', value: dealer.address },
+  { label: 'โทรศัพท์', value: dealer.phoneDisplay, href: dealer.phoneHref },
+  { label: 'LINE', value: 'เพิ่มเพื่อนทาง LINE', href: dealer.lineUrl },
+  { label: 'ที่ตั้งโชว์รูม', value: dealer.address, href: dealer.mapsUrl },
   { label: 'เวลาทำการ', value: dealer.hours },
-  { label: 'อีเมล', value: dealer.email },
+  { label: 'อีเมล', value: dealer.email, href: `mailto:${dealer.email}` },
 ];

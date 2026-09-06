@@ -41,9 +41,25 @@ const localBusinessJsonLd = {
   '@type': 'AutoDealer',
   name: dealer.name,
   telephone: dealer.phoneDisplay,
+  email: dealer.email,
   url: SITE_URL,
   areaServed: 'ชลบุรี',
   image: `${SITE_URL}/assets/wuling-chonburi-logo.jpg`,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: dealer.addressStreet,
+    addressRegion: dealer.addressRegion,
+    postalCode: dealer.postalCode,
+    addressCountry: 'TH',
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens: '08:30',
+    closes: '17:00',
+  },
+  hasMap: dealer.mapsUrl,
+  sameAs: [dealer.gbpUrl],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
