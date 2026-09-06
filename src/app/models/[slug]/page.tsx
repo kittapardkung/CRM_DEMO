@@ -113,17 +113,29 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
       }
     : {
         '@context': 'https://schema.org',
-        '@type': 'Vehicle',
-        name: vehicle.name,
-        description: vehicle.tagline,
-        vehicleConfiguration: vehicle.vehicleType,
-        url: `${SITE_URL}/models/${vehicle.slug}`,
-        offers: {
-          '@type': 'Offer',
-          priceCurrency: 'THB',
-          price: vehicle.startingPrice,
-          availability: 'https://schema.org/InStock',
-        },
+        '@graph': [
+          {
+            '@type': 'Vehicle',
+            name: vehicle.name,
+            description: vehicle.tagline,
+            vehicleConfiguration: vehicle.vehicleType,
+            url: `${SITE_URL}/models/${vehicle.slug}`,
+            offers: {
+              '@type': 'Offer',
+              priceCurrency: 'THB',
+              price: vehicle.startingPrice,
+              availability: 'https://schema.org/InStock',
+            },
+          },
+          {
+            '@type': 'BreadcrumbList',
+            itemListElement: [
+              { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${SITE_URL}/` },
+              { '@type': 'ListItem', position: 2, name: 'รถยนต์ WULING', item: `${SITE_URL}/models` },
+              { '@type': 'ListItem', position: 3, name: vehicle.name, item: `${SITE_URL}/models/${vehicle.slug}` },
+            ],
+          },
+        ],
       };
 
   return (
