@@ -7,7 +7,6 @@ import VariantCard from '@/components/VariantCard';
 import SpecificationAccordion from '@/components/SpecificationAccordion';
 import CTASection from '@/components/CTASection';
 import PortaConfigurator from '@/components/PortaConfigurator';
-import BeforeAfterSlider from '@/components/BeforeAfterSlider';
 import PageIndexNav from '@/components/PageIndexNav';
 import PortaAccessoryShowcase from '@/components/PortaAccessoryShowcase';
 import CargoCapacitySection from '@/components/CargoCapacitySection';
@@ -177,8 +176,6 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           </section>
 
           <PortaConfigurator vehicle={vehicle} />
-
-          <BeforeAfterSlider afterCaption="PORTA Customized" afterFile="porta-cargo-configured.webp" />
 
           <section id="sec-video" className="section" style={{ scrollMarginTop: 140 }}>
             <p className="kicker kicker-2">งานจริง</p>

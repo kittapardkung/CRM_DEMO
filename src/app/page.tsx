@@ -9,7 +9,6 @@ import { vehicles } from '@/lib/data/vehicles';
 import { promotions } from '@/lib/data/promotions';
 import { articles } from '@/lib/data/articles';
 import { dealer } from '@/lib/data/dealer';
-import { getVehicle } from '@/lib/data/vehicles';
 import { SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -26,7 +25,6 @@ const promoLinkHref = (linkTo: string) => {
 
 export default function HomePage() {
   const topArticles = articles.slice(0, 3);
-  const porta = getVehicle('porta')!;
 
   return (
     <div className="wrap">
@@ -97,29 +95,6 @@ export default function HomePage() {
           {vehicles.map((v) => (
             <ModelCard key={v.slug} vehicle={v} />
           ))}
-        </div>
-      </section>
-
-      <section
-        style={{
-          background: 'var(--color-surface)',
-          borderRadius: 'var(--radius-lg)',
-          padding: 'clamp(24px,3.4vw,44px)',
-          margin: 'var(--space-6) 0',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))',
-          gap: 'var(--space-8)',
-          alignItems: 'center',
-        }}
-      >
-        <ImageSlot aspectRatio="16 / 10" caption="PORTA · Cargo Aluminum Floor" filename="porta-cargo-floor.webp" />
-        <div>
-          <p className="kicker kicker-2" style={{ margin: '0 0 var(--space-2)' }}>PORTA Configurator</p>
-          <h2 style={{ fontSize: 'clamp(28px,3.6vw,42px)', margin: '0 0 var(--space-3)' }}>สร้าง PORTA ในแบบธุรกิจของคุณ</h2>
-          <p style={{ margin: '0 0 var(--space-4)', maxWidth: '44ch', color: 'var(--color-neutral-800)' }}>
-            เลือกอุปกรณ์เสริม ดูภาพตัวรถเปลี่ยนตามสเปกที่เลือก และสรุปราคาได้ทันที ก่อนขอใบเสนอราคาสเปกนั้นจากฝ่ายขาย
-          </p>
-          <Link href={`/models/${porta.slug}`} className="btn btn-primary">เริ่มออกแบบ PORTA</Link>
         </div>
       </section>
 
