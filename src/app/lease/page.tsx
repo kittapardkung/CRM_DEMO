@@ -27,10 +27,21 @@ const packageItems = [
 export default function LeasePage() {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Service',
-    serviceType: 'Operating Lease',
-    provider: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: 'ชลบุรี' },
-    url: `${SITE_URL}/lease`,
+    '@graph': [
+      {
+        '@type': 'Service',
+        serviceType: 'Operating Lease',
+        provider: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: 'ชลบุรี' },
+        url: `${SITE_URL}/lease`,
+      },
+      {
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+          { '@type': 'ListItem', position: 1, name: 'หน้าแรก', item: `${SITE_URL}/` },
+          { '@type': 'ListItem', position: 2, name: 'Operating Lease', item: `${SITE_URL}/lease` },
+        ],
+      },
+    ],
   };
 
   return (
