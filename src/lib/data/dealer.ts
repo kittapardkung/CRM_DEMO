@@ -9,7 +9,7 @@ export const dealer = {
   address: `${PLACEHOLDER} (จังหวัดชลบุรี)`,
   hours: PLACEHOLDER,
   email: PLACEHOLDER,
-  siteUrl: 'https://wulingchonburi.example',
+  siteUrl: 'https://wulingjtgroup.com',
 };
 
 export const contactRows = [
