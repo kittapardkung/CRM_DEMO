@@ -54,6 +54,17 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
     ...(isPorta ? [{ id: 'sec-accessories', label: 'ของแต่ง' }, { id: 'sec-video', label: 'คลิป' }] : []),
     { id: 'sec-variants', label: 'ราคา' },
     { id: 'sec-specs', label: 'สเปก' },
+    ...(isPorta ? [{ id: 'sec-faq', label: 'คำถามที่พบบ่อย' }] : []),
+  ];
+
+  /** Shared with the FAQPage schema below so markup always matches the visible section. */
+  const portaFaq = [
+    { question: 'PORTA EV บรรทุกได้เท่าไหร่', answer: 'ห้องบรรทุกมีความจุสูงสุด 6.5 ลูกบาศก์เมตร ขนาด 2.83 × 1.65 เมตร สูงใต้หลังคา 1.35 เมตร รองรับพาเลทมาตรฐาน 2 พาเลท ลังพลาสติกขนส่งประมาณ 80 ลัง หรือถังน้ำดื่ม 20 ลิตร ประมาณ 60 ถัง' },
+    { question: 'PORTA EV วิ่งได้ไกลเท่าไหร่ต่อการชาร์จ', answer: 'วิ่งได้ 400 กิโลเมตรต่อการชาร์จ ตามมาตรฐาน CLTC ด้วยแบตเตอรี่ LFP ความจุ 56.9 kWh ติดตั้งกลางตัวรถ' },
+    { question: 'PORTA EV ชาร์จนานแค่ไหน', answer: 'ชาร์จเร็ว DC ใช้เวลา 30 นาที จาก 30 ถึง 80 เปอร์เซ็นต์ ชาร์จปกติ AC ใช้เวลา 6 ถึง 8 ชั่วโมง หัวชาร์จเป็นแบบ CCS Type 2' },
+    { question: 'PORTA EV รับประกันกี่ปี', answer: 'รับประกันตัวรถ 3 ปี หรือ 100,000 กิโลเมตร รับประกันแบตเตอรี่และมอเตอร์ 5 ปี หรือ 200,000 กิโลเมตร' },
+    { question: 'PORTA EV ราคาเท่าไหร่', answer: 'ราคาเริ่มต้น 659,000 บาท สำหรับรุ่น Standard ยังไม่รวมอุปกรณ์เสริม เช่น กรุพื้นอลูมิเนียม แร็คหลังคา บันไดปีนท้ายรถ และแอร์ห้องบรรทุก' },
+    { question: 'ทำไมบางเว็บข่าวรายงานราคา PORTA EV ต่ำกว่านี้', answer: 'ราคา 599,000 และ 629,000 บาท ที่ปรากฏในข่าวเปิดตัวคือราคาเดิมก่อนปรับ ราคาปัจจุบันเริ่มต้น 659,000 บาท ปรับขึ้นตั้งแต่เดือนสิงหาคม 2569 กรุณายึดราคาล่าสุดจากตัวแทนจำหน่ายอย่างเป็นทางการ' },
   ];
 
   // Real photo paths are resolved here (server side) and handed to the client
@@ -94,13 +105,11 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           },
           {
             '@type': 'FAQPage',
-            mainEntity: [
-              { '@type': 'Question', name: 'PORTA EV บรรทุกได้เท่าไหร่', acceptedAnswer: { '@type': 'Answer', text: 'ห้องบรรทุกมีความจุสูงสุด 6.5 ลูกบาศก์เมตร ขนาด 2.83 × 1.65 เมตร สูงใต้หลังคา 1.35 เมตร รองรับพาเลทมาตรฐาน 2 พาเลท ลังพลาสติกขนส่งประมาณ 80 ลัง หรือถังน้ำดื่ม 20 ลิตร ประมาณ 60 ถัง' } },
-              { '@type': 'Question', name: 'PORTA EV วิ่งได้ไกลเท่าไหร่ต่อการชาร์จ', acceptedAnswer: { '@type': 'Answer', text: 'วิ่งได้ 400 กิโลเมตรต่อการชาร์จ ตามมาตรฐาน CLTC ด้วยแบตเตอรี่ LFP ความจุ 56.9 kWh ติดตั้งกลางตัวรถ' } },
-              { '@type': 'Question', name: 'PORTA EV ชาร์จนานแค่ไหน', acceptedAnswer: { '@type': 'Answer', text: 'ชาร์จเร็ว DC ใช้เวลา 30 นาที จาก 30 ถึง 80 เปอร์เซ็นต์ ชาร์จปกติ AC ใช้เวลา 6 ถึง 8 ชั่วโมง หัวชาร์จเป็นแบบ CCS Type 2' } },
-              { '@type': 'Question', name: 'PORTA EV รับประกันกี่ปี', acceptedAnswer: { '@type': 'Answer', text: 'รับประกันตัวรถ 3 ปี หรือ 100,000 กิโลเมตร รับประกันแบตเตอรี่และมอเตอร์ 5 ปี หรือ 200,000 กิโลเมตร' } },
-              { '@type': 'Question', name: 'PORTA EV ราคาเท่าไหร่', acceptedAnswer: { '@type': 'Answer', text: 'ราคาเริ่มต้น 659,000 บาท สำหรับรุ่น Standard ยังไม่รวมอุปกรณ์เสริม เช่น กรุพื้นอลูมิเนียม แร็คหลังคา บันไดปีนท้ายรถ และแอร์ห้องบรรทุก' } },
-            ],
+            mainEntity: portaFaq.map((f) => ({
+              '@type': 'Question',
+              name: f.question,
+              acceptedAnswer: { '@type': 'Answer', text: f.answer },
+            })),
           },
           {
             '@type': 'BreadcrumbList',
@@ -228,6 +237,20 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           สเปกอาจแตกต่างกันในแต่ละรุ่นย่อย ข้อมูลทั้งหมดรอยืนยันจากผู้จำหน่ายเว้นแต่ระบุไว้ว่ายืนยันแล้ว
         </p>
       </section>
+
+      {isPorta ? (
+        <section id="sec-faq" className="section" style={{ scrollMarginTop: 140 }}>
+          <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-6)' }}>คำถามที่พบบ่อย</h2>
+          <div style={{ borderTop: '1px solid var(--color-divider)' }}>
+            {portaFaq.map((f) => (
+              <div key={f.question} style={{ borderBottom: '1px solid var(--color-divider)', padding: 'var(--space-4) 0' }}>
+                <h3 style={{ fontSize: 19, margin: '0 0 6px' }}>{f.question}</h3>
+                <p style={{ margin: 0, color: 'var(--color-neutral-800)' }}>{f.answer}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       <section style={{ padding: 'var(--space-6) 0 var(--space-8)' }}>
         <CTASection heading={`สนใจ ${vehicle.shortName}?`} />
