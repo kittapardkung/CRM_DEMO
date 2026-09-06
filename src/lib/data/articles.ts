@@ -736,6 +736,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'commercial-ev-cargo-van',
+    image: 'article-commercial-ev-cargo-van.webp',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '6 ก.ย. 2569',
