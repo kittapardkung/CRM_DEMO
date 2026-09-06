@@ -10,6 +10,8 @@ import { dealer } from '@/lib/data/dealer';
 import { renderInline } from '@/lib/inline';
 import { ctaHref } from '@/lib/nav';
 import { SITE_URL } from '@/lib/seo';
+import { resolveAsset } from '@/lib/assets';
+import { toISODate } from '@/lib/format';
 
 export function generateStaticParams() {
   return allArticles.map((a) => ({ slug: a.slug }));
@@ -41,14 +43,23 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     url: 'https://www.facebook.com/profile.php?id=61583789612737',
   };
 
+  const articleImage = resolveAsset(article.image);
+
   const jsonLd = [
     {
       '@context': 'https://schema.org',
       '@type': 'Article',
       headline: article.title,
       description: article.excerpt,
-      datePublished: article.publishedAt,
+      datePublished: toISODate(article.publishedAt),
       url: `${SITE_URL}/articles/${article.slug}`,
+      ...(articleImage ? { image: `${SITE_URL}${articleImage}` } : {}),
+      author: { '@type': 'Organization', name: dealer.name, url: SITE_URL },
+      publisher: {
+        '@type': 'Organization',
+        name: dealer.name,
+        logo: { '@type': 'ImageObject', url: `${SITE_URL}/assets/wuling-chonburi-logo.jpg` },
+      },
     },
     {
       '@context': 'https://schema.org',

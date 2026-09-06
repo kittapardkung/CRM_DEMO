@@ -19,4 +19,27 @@ export function money(amount: number | null | undefined): string {
 
 export const priceNote = isDemoPricing() ? '(ราคาสาธิต — รอยืนยันราคาจริง)' : '(ราคารอยืนยัน)';
 
+const THAI_MONTHS: Record<string, string> = {
+  'ม.ค.': '01', 'ก.พ.': '02', 'มี.ค.': '03', 'เม.ย.': '04',
+  'พ.ค.': '05', 'มิ.ย.': '06', 'ก.ค.': '07', 'ส.ค.': '08',
+  'ก.ย.': '09', 'ต.ค.': '10', 'พ.ย.': '11', 'ธ.ค.': '12',
+};
+
+/**
+ * Converts a display date like "1 ก.ย. 2569" (Buddhist Era) to ISO 8601
+ * ("2026-09-01") for structured data — schema.org's datePublished needs a
+ * real date, not the Thai-formatted string shown on the page. Falls back
+ * to the original string if it doesn't match the expected shape, so a
+ * future non-Thai date format degrades safely instead of throwing.
+ */
+export function toISODate(thaiDate: string): string {
+  const match = thaiDate.trim().match(/^(\d{1,2})\s+([ก-ฮ.]+)\s+(\d{4})$/);
+  if (!match) return thaiDate;
+  const [, day, month, buddhistYear] = match;
+  const isoMonth = THAI_MONTHS[month];
+  if (!isoMonth) return thaiDate;
+  const gregorianYear = Number(buddhistYear) - 543;
+  return `${gregorianYear}-${isoMonth}-${day.padStart(2, '0')}`;
+}
+
 export { PLACEHOLDER };
