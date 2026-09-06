@@ -9,6 +9,9 @@ export const dealer = {
   addressStreet: 'ถนนบายบาส ชลบุรี ตำบลนาป่า อำเภอเมืองชลบุรี',
   addressRegion: 'ชลบุรี',
   postalCode: '20000',
+  /** Showroom pin coordinates, confirmed by the dealer from the GBP map. */
+  latitude: 13.3795129862833,
+  longitude: 101.01978779414407,
   hours: 'เปิดบริการทุกวัน 08:30–17:00 น.',
   siteUrl: 'https://wulingjtgroup.com',
   /** Google Business Profile short link — used as sameAs in structured data. */

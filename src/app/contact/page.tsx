@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function ContactPage() {
-  const mapEmbedSrc = `https://www.google.com/maps?q=${encodeURIComponent(dealer.address)}&output=embed`;
+  const mapEmbedSrc = `https://www.google.com/maps?q=${dealer.latitude},${dealer.longitude}&output=embed`;
 
   return (
     <div className="wrap">

@@ -52,6 +52,11 @@ const localBusinessJsonLd = {
     postalCode: dealer.postalCode,
     addressCountry: 'TH',
   },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: dealer.latitude,
+    longitude: dealer.longitude,
+  },
   openingHoursSpecification: {
     '@type': 'OpeningHoursSpecification',
     dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
