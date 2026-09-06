@@ -6,7 +6,12 @@ export default function ArticleCard({ article, size = 'md' }: { article: Article
   const Heading = size === 'lg' ? 'h2' : 'h3';
   return (
     <article style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-      <ImageSlot aspectRatio="16 / 10" caption="ARTICLE" filename={`article-${article.slug}.webp`} />
+      <ImageSlot
+        aspectRatio="16 / 10"
+        caption={article.title}
+        filename={article.image ?? `article-${article.slug}.webp`}
+        sizes="(max-width: 820px) 100vw, 33vw"
+      />
       <p style={{ margin: 'var(--space-2) 0 0', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
         {article.category}
       </p>

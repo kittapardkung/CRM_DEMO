@@ -33,7 +33,13 @@ export default function CargoCapacitySection() {
       </p>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'var(--space-6)', alignItems: 'start', marginBottom: 'var(--space-6)' }}>
-        <ImageSlot aspectRatio="3 / 2" caption="ขนาดห้องบรรจุของ WULING PORTA EV" filename="porta-cargo-dimensions.jpg" />
+        <ImageSlot
+          aspectRatio="3 / 2"
+          caption="ขนาดห้องบรรจุของ WULING PORTA EV: ยาว 2.83 ม. กว้าง 1.65 ม."
+          filename="porta-cargo-dimensions.jpg"
+          fit="contain"
+          style={{ background: 'var(--color-neutral-100)', borderRadius: 'var(--radius-lg)' }}
+        />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 'var(--space-3)', paddingBottom: 'var(--space-4)', borderBottom: '1px solid var(--color-neutral-300)' }}>
             <p className="tnum" style={{ margin: 0, fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'clamp(44px,5vw,60px)', lineHeight: 0.9 }}>

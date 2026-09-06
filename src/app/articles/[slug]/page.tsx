@@ -81,7 +81,13 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           <p className="tnum" style={{ margin: 0, fontSize: 13, color: 'var(--color-neutral-600)' }}>เผยแพร่ {article.publishedAt} · อ่าน {article.readingTime}</p>
         </header>
 
-        <ImageSlot aspectRatio="16 / 9" caption="ARTICLE · Featured Image" filename={`article-${article.slug}.webp`} />
+        <ImageSlot
+          aspectRatio="16 / 9"
+          caption={article.title}
+          filename={article.image ?? `article-${article.slug}.webp`}
+          sizes="(max-width: 1100px) 100vw, 1100px"
+          priority
+        />
 
         <div className="om-art-grid">
           <aside style={{ order: 2, display: 'flex', flexDirection: 'column', gap: 'var(--space-6)', minWidth: 0 }}>

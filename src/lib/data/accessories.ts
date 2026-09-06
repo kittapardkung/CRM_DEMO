@@ -53,8 +53,12 @@ export const accessories: Accessory[] = [
   },
 ];
 
-/** Photo grid of all 7 accessories shown in the gallery — same order as the design export. */
-export const accessoryGalleryOrder = ['floor', 'roofrack', 'ladder', 'window', 'panel', 'ac', 'leafspring'];
+/**
+ * Accessory photo grid — same six items and order as the design export.
+ * Leaf-spring reinforcement has no product photo, so it stays out of the
+ * gallery while remaining in the accessory list above.
+ */
+export const accessoryGalleryOrder = ['floor', 'roofrack', 'ladder', 'window', 'panel', 'ac'];
 
 /** Persona quick-pick cards — "เลือกอุปกรณ์ตามสายงาน" section. */
 export const tradePersonas: TradePersona[] = [
@@ -78,11 +82,12 @@ export const tradePersonas: TradePersona[] = [
   },
 ];
 
+/** Filenames match the dealer's real photo pack, per the design export's cargo image map. */
 export const cargoShots: CargoShot[] = [
-  { label: 'พื้นที่บรรทุก', filename: 'porta-cargo-area.webp' },
-  { label: 'เปิดประตูท้าย', filename: 'porta-rear-door-open.webp' },
-  { label: 'เปิดประตูข้าง', filename: 'porta-side-door-open.webp' },
-  { label: 'พื้นห้องบรรทุก', filename: 'porta-cargo-floor.webp' },
+  { label: 'พื้นที่บรรทุก', filename: 'porta-real-cargo-detail.jpg' },
+  { label: 'เปิดประตูท้าย', filename: 'porta-real-cargo-rear-open.jpg' },
+  { label: 'เปิดประตูข้าง', filename: 'porta-real-cargo-side-open.jpg' },
+  { label: 'พื้นห้องบรรทุก', filename: 'porta-real-cargo-side-open-2.jpg' },
 ];
 
 /** Real cargo dimensions + everyday-object equivalents — source: PORTA EV spec sheet + design export. */

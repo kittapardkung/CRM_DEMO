@@ -249,7 +249,7 @@ export default function LeasePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 'var(--space-6)' }}>
           {leaseArticles.map((a) => (
             <article key={a.slug} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-              <ImageSlot aspectRatio="16 / 10" caption="ARTICLE" filename={`article-${a.slug}.webp`} />
+              <ImageSlot aspectRatio="16 / 10" caption={a.title} filename={a.image ?? `article-${a.slug}.webp`} sizes="(max-width: 820px) 100vw, 33vw" />
               <p style={{ margin: 'var(--space-2) 0 0', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>{a.category}</p>
               <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 20, margin: 0, lineHeight: 1.3 }}>
                 <Link href={`/articles/${a.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>{a.title}</Link>

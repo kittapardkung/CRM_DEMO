@@ -11,6 +11,7 @@ import CargoCapacitySection from '@/components/CargoCapacitySection';
 import VideoEmbed from '@/components/VideoEmbed';
 import { vehicles, getVehicle } from '@/lib/data/vehicles';
 import { cargoShots, portaVideos } from '@/lib/data/accessories';
+import { resolveAsset } from '@/lib/assets';
 import { SITE_URL } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -53,6 +54,18 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
     { id: 'sec-variants', label: 'ราคา' },
     { id: 'sec-specs', label: 'สเปก' },
   ];
+
+  // Real photo paths are resolved here (server side) and handed to the client
+  // gallery; a colour-specific shot wins over the generic one for that angle.
+  const heroSrc = resolveAsset(vehicle.image);
+  const exteriorSrc: Record<string, string | null> = {};
+  for (const view of vehicle.exteriorViews) {
+    for (const c of vehicle.colors) {
+      const named = vehicle.exteriorImages?.[`${view.slug}-${c.slug}`] ?? vehicle.exteriorImages?.[view.slug];
+      exteriorSrc[`${view.slug}-${c.slug}`] =
+        resolveAsset(named) ?? resolveAsset(`${vehicle.slug}-${view.slug}-${c.slug}.jpg`);
+    }
+  }
 
   const productJsonLd = isPorta
     ? {
@@ -117,7 +130,7 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
     <div className="wrap">
       <Breadcrumb items={[{ label: 'หน้าแรก', href: '/' }, { label: 'รถยนต์', href: '/models' }, { label: vehicle.shortName }]} />
 
-      <VehicleVisuals vehicle={vehicle} pageIndex={pageIndexItems} />
+      <VehicleVisuals vehicle={vehicle} pageIndex={pageIndexItems} heroSrc={heroSrc} exteriorSrc={exteriorSrc} />
 
       <section id="sec-highlights" className="section" style={{ scrollMarginTop: 140 }}>
         <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-6)' }}>ตัวเลขสำคัญ</h2>

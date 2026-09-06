@@ -8,8 +8,9 @@ export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
     <article className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', padding: 0, overflow: 'hidden' }}>
       <ImageSlot
         aspectRatio="16 / 11"
-        caption={`${vehicle.shortName} · Exterior Front 3/4`}
-        filename={`${vehicle.slug}-front-34.webp`}
+        caption={`WULING ${vehicle.shortName} มุมหน้า 3/4 — ${vehicle.positioning}`}
+        filename={vehicle.image ?? `${vehicle.slug}-front-34.webp`}
+        sizes="(max-width: 820px) 100vw, 25vw"
         style={{ borderRadius: 0, borderLeft: 'none', borderRight: 'none', borderTop: 'none' }}
       />
       <div style={{ padding: '0 var(--space-4) var(--space-4)', display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>

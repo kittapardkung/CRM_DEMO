@@ -17,6 +17,7 @@ export const categories = [
 export const articles: Article[] = [
   {
     slug: 'porta-ev-range',
+    image: 'porta-ev-range-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -79,6 +80,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-payload',
+    image: 'porta-ev-payload-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -131,6 +133,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-cargo-space',
+    image: 'porta-ev-cargo-space-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -184,6 +187,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-dimensions',
+    image: 'porta-ev-dimensions-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -233,6 +237,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-running-cost',
+    image: 'porta-ev-running-cost-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -292,6 +297,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'ev-van-vs-diesel',
+    image: 'ev-van-vs-diesel-hero.png',
     category: 'เปรียบเทียบรถ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -348,6 +354,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-maintenance',
+    image: 'porta-ev-maintenance-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -403,6 +410,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-charging',
+    image: 'porta-ev-charging-hero.png',
     category: 'เทคนิคการใช้งาน',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -463,6 +471,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'wuling-magic-battery',
+    image: 'wuling-magic-battery-hero.png',
     category: 'เทคนิคการใช้งาน',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -514,6 +523,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-warranty',
+    image: 'porta-ev-warranty-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -569,6 +579,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-vs-pickup',
+    image: 'porta-ev-vs-pickup-hero.png',
     category: 'เปรียบเทียบรถ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -631,6 +642,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'porta-ev-business-use',
+    image: 'porta-ev-business-use-hero.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '1 ก.ย. 2569',
@@ -687,6 +699,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'ev-cargo',
+    image: 'article-ev-cargo.png',
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'porta',
     publishedAt: '12 ส.ค. 2569',
@@ -718,6 +731,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'ev-7-seat',
+    image: 'article-ev-7-seat.png',
     category: 'คู่มือซื้อรถ',
     relatedVehicleSlug: 'darion',
     publishedAt: '5 ส.ค. 2569',
@@ -749,6 +763,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'city-ev',
+    image: 'article-city-ev.png',
     category: 'รถยนต์ไฟฟ้า',
     relatedVehicleSlug: 'binguo',
     publishedAt: '28 ก.ค. 2569',
@@ -780,6 +795,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'charge-guide',
+    image: 'article-charge-guide.png',
     category: 'เทคนิคการใช้งาน',
     relatedVehicleSlug: 'ekxion',
     publishedAt: '20 ก.ค. 2569',

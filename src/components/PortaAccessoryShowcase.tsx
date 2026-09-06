@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import ImageSlot from './ImageSlot';
 import { accessories, accessoryGalleryOrder, getAccessory, tradePersonas } from '@/lib/data/accessories';
 
 function PersonaIcon({ icon }: { icon: 'truck' | 'wrench' | 'store' }) {
@@ -67,22 +68,13 @@ export default function PortaAccessoryShowcase() {
                 boxShadow: 'var(--shadow-sm)',
               }}
             >
-              <div
-                style={{
-                  position: 'relative',
-                  aspectRatio: '4 / 3',
-                  background: 'var(--color-neutral-200)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center',
-                  padding: 'var(--space-2)',
-                  fontSize: 11,
-                  color: 'var(--color-neutral-600)',
-                }}
-              >
-                รอภาพประกอบ
-              </div>
+              <ImageSlot
+                aspectRatio="4 / 3"
+                caption={acc.name}
+                filename={`porta-acc-${acc.id}.jpg`}
+                sizes="(max-width: 560px) 50vw, (max-width: 1100px) 33vw, 16vw"
+                style={{ borderRadius: 0, border: 'none' }}
+              />
               <p style={{ margin: 0, padding: 'var(--space-3)', fontSize: 14, color: 'var(--color-neutral-800)' }}>{acc.name}</p>
             </div>
           );

@@ -2,6 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Vehicle } from '@/lib/data/types';
 import { money, priceNote } from '@/lib/format';
 import { track } from '@/lib/analytics';
@@ -12,16 +13,33 @@ import PageIndexNav, { PageIndexItem } from './PageIndexNav';
  * These three sections share the selected color / exterior view, so they
  * live in one client island; everything else on the page stays server
  * rendered.
+ *
+ * Real photo paths are resolved on the server (this is a client component, so
+ * it can't touch the filesystem) and passed in via `heroSrc` / `exteriorSrc`;
+ * anything still missing falls back to a labelled placeholder.
  */
-export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicle; pageIndex: PageIndexItem[] }) {
+export default function VehicleVisuals({
+  vehicle,
+  pageIndex,
+  heroSrc = null,
+  exteriorSrc = {},
+}: {
+  vehicle: Vehicle;
+  pageIndex: PageIndexItem[];
+  heroSrc?: string | null;
+  /** Keyed by `${viewSlug}-${colorSlug}`. */
+  exteriorSrc?: Record<string, string | null>;
+}) {
   const [colorIndex, setColorIndex] = useState(0);
-  const [extIndex, setExtIndex] = useState(3); // default to the "front 3/4" hero angle
+  const [extIndex, setExtIndex] = useState(1); // default to the "front 3/4" hero angle
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const color = vehicle.colors[colorIndex];
   const extView = vehicle.exteriorViews[extIndex];
   const extFile = `${vehicle.slug}-${extView.slug}-${color.slug}.webp`;
   const confirmedColors = vehicle.slug === 'porta' || vehicle.slug === 'darion';
+  const extMainSrc = exteriorSrc[`${extView.slug}-${color.slug}`] ?? null;
+  const extMainLabel = `${vehicle.shortName} · ${extView.label} · สี${color.name}`;
 
   const openLightbox = () => dialogRef.current?.showModal();
   const closeLightbox = () => dialogRef.current?.close();
@@ -71,23 +89,35 @@ export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicl
                 zIndex: 2,
                 width: '100%',
                 aspectRatio: '4 / 3',
+                overflow: 'hidden',
                 background: '#0b1730',
-                border: '1px dashed rgba(255,255,255,0.4)',
+                border: heroSrc ? 'none' : '1px dashed rgba(255,255,255,0.4)',
                 borderRadius: 'var(--radius-lg)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 textAlign: 'center',
-                padding: 'var(--space-4)',
+                padding: heroSrc ? 0 : 'var(--space-4)',
                 cursor: 'zoom-in',
                 font: 'inherit',
               }}
             >
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
-                {vehicle.shortName} · Exterior Front 3/4 · สี{color.name}
-                <br />
-                <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>{vehicle.slug}-front-34-{color.slug}.webp</span>
-              </span>
+              {heroSrc ? (
+                <Image
+                  src={heroSrc}
+                  alt={`WULING ${vehicle.shortName} มุมหน้า 3/4 — ${vehicle.positioning}`}
+                  fill
+                  priority
+                  sizes="(max-width: 820px) 100vw, 50vw"
+                  style={{ objectFit: 'cover' }}
+                />
+              ) : (
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
+                  {vehicle.shortName} · Exterior Front 3/4 · สี{color.name}
+                  <br />
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>{vehicle.slug}-front-34-{color.slug}.webp</span>
+                </span>
+              )}
             </button>
           </div>
         </div>
@@ -135,8 +165,10 @@ export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicl
           type="button"
           onClick={openLightbox}
           style={{
+            position: 'relative',
             width: '100%',
             aspectRatio: '16 / 9',
+            overflow: 'hidden',
             background: 'var(--color-neutral-200)',
             border: '1px solid var(--color-neutral-300)',
             borderRadius: 'var(--radius-md)',
@@ -149,31 +181,44 @@ export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicl
             font: 'inherit',
           }}
         >
-          <span style={{ fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            {vehicle.shortName} · {extView.label} · สี{color.name} — {extFile}
-          </span>
+          {extMainSrc ? (
+            <Image src={extMainSrc} alt={extMainLabel} fill sizes="(max-width: 1100px) 100vw, 1100px" style={{ objectFit: 'cover' }} />
+          ) : (
+            <span style={{ fontSize: 13, color: 'var(--color-neutral-700)' }}>
+              {extMainLabel} — {extFile}
+            </span>
+          )}
         </button>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'var(--space-2)', marginTop: 'var(--space-2)' }}>
-          {vehicle.exteriorViews.map((e, i) => (
-            <button
-              key={e.slug}
-              type="button"
-              onClick={() => setExtIndex(i)}
-              style={{
-                aspectRatio: '4 / 3',
-                background: 'var(--color-neutral-200)',
-                border: `1px solid ${i === extIndex ? 'var(--color-accent)' : 'var(--color-neutral-300)'}`,
-                borderRadius: 'var(--radius-md)',
-                cursor: 'pointer',
-                fontFamily: 'var(--font-body)',
-                fontSize: 11,
-                color: 'var(--color-neutral-700)',
-                padding: 'var(--space-2)',
-              }}
-            >
-              {e.label}
-            </button>
-          ))}
+          {vehicle.exteriorViews.map((e, i) => {
+            const thumbSrc = exteriorSrc[`${e.slug}-${color.slug}`] ?? null;
+            return (
+              <button
+                key={e.slug}
+                type="button"
+                onClick={() => setExtIndex(i)}
+                style={{
+                  position: 'relative',
+                  aspectRatio: '4 / 3',
+                  overflow: 'hidden',
+                  background: 'var(--color-neutral-200)',
+                  border: `1px solid ${i === extIndex ? 'var(--color-accent)' : 'var(--color-neutral-300)'}`,
+                  borderRadius: 'var(--radius-md)',
+                  cursor: 'pointer',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 11,
+                  color: 'var(--color-neutral-700)',
+                  padding: 'var(--space-2)',
+                }}
+              >
+                {thumbSrc ? (
+                  <Image src={thumbSrc} alt={e.label} fill sizes="160px" style={{ objectFit: 'cover' }} />
+                ) : (
+                  e.label
+                )}
+              </button>
+            );
+          })}
         </div>
       </section>
 
@@ -187,12 +232,14 @@ export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicl
       >
         <div className="dialog">
           <p className="dialog-title" style={{ margin: '0 0 var(--space-3)' }}>
-            {vehicle.shortName} · {extView.label} · สี{color.name} — {extFile}
+            {extMainLabel}
           </p>
           <div
             style={{
+              position: 'relative',
               aspectRatio: '16 / 9',
-              background: 'var(--color-neutral-200)',
+              overflow: 'hidden',
+              background: extMainSrc ? '#000' : 'var(--color-neutral-200)',
               border: '1px solid var(--color-neutral-300)',
               borderRadius: 'var(--radius-md)',
               display: 'flex',
@@ -202,7 +249,11 @@ export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicl
               color: 'var(--color-neutral-700)',
             }}
           >
-            FULL SCREEN GALLERY · รอไฟล์ภาพจริง
+            {extMainSrc ? (
+              <Image src={extMainSrc} alt={extMainLabel} fill sizes="1100px" style={{ objectFit: 'contain' }} />
+            ) : (
+              'FULL SCREEN GALLERY · รอไฟล์ภาพจริง'
+            )}
           </div>
           <div className="dialog-actions" style={{ marginTop: 'var(--space-4)', display: 'flex', justifyContent: 'flex-end' }}>
             <button type="button" className="btn btn-secondary" onClick={closeLightbox}>ปิด</button>
