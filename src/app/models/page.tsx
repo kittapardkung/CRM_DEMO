@@ -23,7 +23,7 @@ export default function ModelsPage() {
       <section style={{ paddingBottom: 'var(--space-8)', display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
         {vehicles.map((v) => (
           <article key={v.slug} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'var(--space-6)', alignItems: 'center' }}>
-            <ImageSlot aspectRatio="16 / 10" caption={`${v.shortName} · Exterior Front 3/4`} filename={`${v.slug}-front-34.webp`} />
+            <ImageSlot aspectRatio="16 / 10" caption={`${v.shortName} · Exterior Front 3/4`} filename={v.image ?? `${v.slug}-front-34.webp`} />
             <div>
               <p style={{ margin: '0 0 var(--space-2)', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>{v.positioning}</p>
               <h2 style={{ fontSize: 'clamp(24px,3.1vw,34px)', margin: '0 0 var(--space-2)' }}>{v.shortName}</h2>
