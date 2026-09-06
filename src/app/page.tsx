@@ -3,6 +3,7 @@ import Image from 'next/image';
 import type { Metadata } from 'next';
 import ImageSlot from '@/components/ImageSlot';
 import ModelCard from '@/components/ModelCard';
+import { resolveAsset } from '@/lib/assets';
 import ArticleCard from '@/components/ArticleCard';
 import PhoneLink from '@/components/PhoneLink';
 import { vehicles } from '@/lib/data/vehicles';
@@ -25,6 +26,7 @@ const leaseFacts = [
 
 export default function HomePage() {
   const topArticles = articles.slice(0, 3);
+  const heroSrc = resolveAsset('hero-wuling-front-34.webp');
 
   return (
     <div className="wrap">
@@ -58,15 +60,37 @@ export default function HomePage() {
             </div>
           </div>
           <div style={{ position: 'relative', zIndex: 2, paddingRight: 'clamp(18px,2vw,28px)' }}>
-            <div style={{ position: 'relative', aspectRatio: '4 / 3' }}>
-              <Image
-                src="/images/hero-wuling-front-34.webp"
-                alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
-                fill
-                priority
-                sizes="(max-width: 820px) 100vw, 50vw"
-                style={{ objectFit: 'cover', objectPosition: 'center 54%', borderRadius: 'var(--radius-lg)' }}
-              />
+            <div
+              style={{
+                position: 'relative',
+                aspectRatio: '4 / 3',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                background: heroSrc ? 'transparent' : 'rgba(255,255,255,0.06)',
+                border: heroSrc ? 'none' : '1px dashed rgba(255,255,255,0.4)',
+                display: heroSrc ? undefined : 'flex',
+                alignItems: heroSrc ? undefined : 'center',
+                justifyContent: heroSrc ? undefined : 'center',
+                textAlign: heroSrc ? undefined : 'center',
+                padding: heroSrc ? undefined : 'var(--space-4)',
+              }}
+            >
+              {heroSrc ? (
+                <Image
+                  src={heroSrc}
+                  alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
+                  fill
+                  priority
+                  sizes="(max-width: 820px) 100vw, 50vw"
+                  style={{ objectFit: 'cover', objectPosition: 'center 54%' }}
+                />
+              ) : (
+                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
+                  WULING Lineup · Hero
+                  <br />
+                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>hero-wuling-front-34.webp</span>
+                </span>
+              )}
             </div>
             <span
               aria-hidden
