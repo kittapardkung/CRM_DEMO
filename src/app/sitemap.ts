@@ -9,7 +9,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/models',
     '/lease',
     '/compare',
-    '/promotions',
     '/calculator',
     '/test-drive',
     '/articles',

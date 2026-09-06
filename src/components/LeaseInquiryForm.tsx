@@ -76,11 +76,11 @@ export default function LeaseInquiryForm() {
 
   if (sent) {
     return (
-      <div id="lease-form" style={{ border: '1px solid var(--color-accent)', padding: 'var(--space-6)', maxWidth: 620, scrollMarginTop: 96 }}>
+      <div id="lease-form" style={{ border: '1px solid var(--color-accent)', borderRadius: 'var(--radius-md)', padding: 'var(--space-6)', scrollMarginTop: 96 }}>
         <p style={{ margin: '0 0 var(--space-2)', fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>ส่งข้อมูลเรียบร้อย</p>
-        <h2 style={{ fontSize: 30, margin: '0 0 var(--space-3)' }}>ขอบคุณครับ คุณ{form.contact}</h2>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 28, margin: '0 0 var(--space-3)' }}>ได้รับข้อมูลเรียบร้อยแล้ว</h3>
         <p style={{ margin: '0 0 var(--space-4)', color: 'var(--color-neutral-800)' }}>
-          ทีมงาน WULING CHONBURI จะติดต่อกลับที่ {form.phone} เพื่อจัดทำข้อเสนอ Operating Lease สำหรับ {form.company}
+          ทีมงานจะตรวจสอบความต้องการและติดต่อกลับที่ {form.phone}
         </p>
         <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
           <button type="button" className="btn btn-secondary" onClick={() => setSent(false)}>ส่งข้อมูลอีกครั้ง</button>
@@ -91,7 +91,7 @@ export default function LeaseInquiryForm() {
   }
 
   return (
-    <div id="lease-form" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'var(--space-6)', maxWidth: 900, scrollMarginTop: 96 }}>
+    <div id="lease-form" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(260px,1fr))', gap: 'var(--space-4)', scrollMarginTop: 96 }}>
       <label className="field">
         <span>ชื่อบริษัท *</span>
         <input className="input" value={form.company} onChange={(e) => set('company', e.target.value)} placeholder="ชื่อบริษัท" />
@@ -101,11 +101,11 @@ export default function LeaseInquiryForm() {
         <input className="input" value={form.contact} onChange={(e) => set('contact', e.target.value)} placeholder="ชื่อ–นามสกุล" />
       </label>
       <label className="field">
-        <span>เบอร์โทรศัพท์ *</span>
+        <span>เบอร์โทร *</span>
         <input className="input" value={form.phone} onChange={(e) => set('phone', e.target.value)} placeholder="08X-XXX-XXXX" />
       </label>
       <label className="field">
-        <span>อีเมล</span>
+        <span>Email บริษัท</span>
         <input className="input" type="email" value={form.email} onChange={(e) => set('email', e.target.value)} placeholder="name@company.com" />
       </label>
       <label className="field">
@@ -117,7 +117,7 @@ export default function LeaseInquiryForm() {
         </select>
       </label>
       <label className="field">
-        <span>รุ่นที่สนใจ</span>
+        <span>รถที่สนใจ</span>
         <select className="input" value={form.model} onChange={(e) => set('model', e.target.value)}>
           {leaseModelOptions.map((v) => (
             <option key={v} value={v}>{v}</option>
@@ -125,7 +125,7 @@ export default function LeaseInquiryForm() {
         </select>
       </label>
       <label className="field">
-        <span>จำนวนรถใน Fleet</span>
+        <span>จำนวนรถ</span>
         <select className="input" value={form.fleetSize} onChange={(e) => set('fleetSize', e.target.value)}>
           {leaseFleetSizeOptions.map((v) => (
             <option key={v} value={v}>{v}</option>
@@ -133,7 +133,7 @@ export default function LeaseInquiryForm() {
         </select>
       </label>
       <label className="field">
-        <span>ระยะเวลาสัญญาที่สนใจ</span>
+        <span>ระยะเวลาที่สนใจ</span>
         <select className="input" value={form.period} onChange={(e) => set('period', e.target.value)}>
           {leasePeriodOptions.map((v) => (
             <option key={v} value={v}>{v}</option>
@@ -141,7 +141,7 @@ export default function LeaseInquiryForm() {
         </select>
       </label>
       <label className="field">
-        <span>ระยะทางใช้งานโดยประมาณ</span>
+        <span>ระยะทางใช้งานต่อเดือน</span>
         <select className="input" value={form.mileage} onChange={(e) => set('mileage', e.target.value)}>
           {leaseMileageOptions.map((v) => (
             <option key={v} value={v}>{v}</option>
@@ -149,19 +149,19 @@ export default function LeaseInquiryForm() {
         </select>
       </label>
       <label className="field">
-        <span>จังหวัด</span>
+        <span>จังหวัดที่ใช้งาน</span>
         <input className="input" value={form.province} onChange={(e) => set('province', e.target.value)} placeholder="เช่น ชลบุรี" />
       </label>
       <label className="field" style={{ gridColumn: '1 / -1' }}>
-        <span>ข้อความเพิ่มเติม</span>
+        <span>รายละเอียดเพิ่มเติม</span>
         <input className="input" value={form.message} onChange={(e) => set('message', e.target.value)} placeholder="รายละเอียดเพิ่มเติมเกี่ยวกับ Fleet ของคุณ" />
       </label>
       <label style={{ gridColumn: '1 / -1', display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 14, color: 'var(--color-neutral-800)' }}>
         <input type="checkbox" checked={form.consent} onChange={(e) => set('consent', e.target.checked)} style={{ marginTop: 3 }} />
-        <span>ยินยอมให้ WULING CHONBURI ติดต่อกลับเพื่อจัดทำข้อเสนอ Operating Lease *</span>
+        <span>ยินยอมให้เจ้าหน้าที่ติดต่อกลับเกี่ยวกับบริการสำหรับองค์กร</span>
       </label>
       <div style={{ gridColumn: '1 / -1', display: 'flex', gap: 'var(--space-3)', alignItems: 'center', flexWrap: 'wrap' }}>
-        <button type="button" className="btn btn-primary" onClick={submit}>ขอใบเสนอราคา Operating Lease</button>
+        <button type="button" className="btn btn-primary" onClick={submit}>ขอใบเสนอราคา</button>
         {error ? <span style={{ fontSize: 14, color: 'var(--color-accent-2-700)' }}>{error}</span> : null}
       </div>
     </div>

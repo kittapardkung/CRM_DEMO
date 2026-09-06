@@ -2,7 +2,6 @@ export const primaryNav = [
   { label: 'หน้าแรก', href: '/' },
   { label: 'รถยนต์', href: '/models' },
   { label: 'Operating Lease', href: '/lease' },
-  { label: 'โปรโมชั่น', href: '/promotions' },
   { label: 'เปรียบเทียบรถ', href: '/compare' },
   { label: 'บทความ', href: '/articles' },
   { label: 'ศูนย์บริการ', href: '/service' },
@@ -11,12 +10,19 @@ export const primaryNav = [
 
 export const footerServiceLinks = [
   { label: 'Operating Lease สำหรับองค์กร', href: '/lease' },
-  { label: 'โปรโมชั่น', href: '/promotions' },
   { label: 'เปรียบเทียบรถ', href: '/compare' },
   { label: 'คำนวณค่างวด', href: '/calculator' },
   { label: 'ทดลองขับ', href: '/test-drive' },
   { label: 'บทความ', href: '/articles' },
   { label: 'ติดต่อเรา', href: '/contact' },
+];
+
+/** Homepage quick-link rail, in the design's order. */
+export const quickLinks = [
+  { label: 'คำนวณค่างวด', href: '/calculator' },
+  { label: 'เปรียบเทียบรถทุกรุ่น', href: '/compare' },
+  { label: 'ศูนย์บริการและนัดหมาย', href: '/service' },
+  { label: 'Operating Lease สำหรับองค์กร', href: '/lease' },
 ];
 
 /** Given a pathname, which top-nav item should read as active. */

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { track } from '@/lib/analytics';
 
 /**
- * Click-to-load YouTube Shorts embed. Renders a static thumbnail + play
+ * Click-to-load YouTube Shorts embed. Shows the video thumbnail with a play
  * button until clicked, so the page doesn't pay iframe cost for videos the
  * visitor never plays.
  */
@@ -12,13 +12,14 @@ export default function VideoEmbed({ title, youtubeId }: { title: string; youtub
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
+    <figure style={{ margin: 0 }}>
       <div
         style={{
           position: 'relative',
           aspectRatio: '9 / 16',
-          background: '#0b1730',
-          borderRadius: 'var(--radius-lg)',
+          background: 'var(--color-neutral-200)',
+          border: '1px solid var(--color-neutral-300)',
+          borderRadius: 'var(--radius-md)',
           overflow: 'hidden',
         }}
       >
@@ -26,9 +27,9 @@ export default function VideoEmbed({ title, youtubeId }: { title: string; youtub
           <iframe
             src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&rel=0&playsinline=1`}
             title={title}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
             allowFullScreen
-            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 'none' }}
+            style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', border: 0, display: 'block' }}
           />
         ) : (
           <button
@@ -37,15 +38,19 @@ export default function VideoEmbed({ title, youtubeId }: { title: string; youtub
               track('view_article', { video: youtubeId });
               setPlaying(true);
             }}
-            aria-label={`เล่นวิดีโอ ${title}`}
+            aria-label={`เล่นคลิป ${title}`}
             style={{
               position: 'absolute',
               inset: 0,
               width: '100%',
               height: '100%',
-              background: `url(https://i.ytimg.com/vi/${youtubeId}/hq720.jpg) center/cover`,
-              border: 'none',
+              padding: 0,
+              border: 0,
               cursor: 'pointer',
+              backgroundColor: 'var(--color-neutral-200)',
+              backgroundImage: `url(https://i.ytimg.com/vi/${youtubeId}/hq720.jpg)`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -53,23 +58,27 @@ export default function VideoEmbed({ title, youtubeId }: { title: string; youtub
           >
             <span
               style={{
-                width: 56,
-                height: 56,
+                width: 64,
+                height: 64,
                 borderRadius: '50%',
-                background: 'var(--wl-lime)',
+                background: 'var(--color-accent)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 20,
-                color: 'var(--wl-ink)',
               }}
             >
-              ▶
+              <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+                <path d="M8 5.5v13l11-6.5z" fill="#fff" />
+              </svg>
             </span>
           </button>
         )}
       </div>
-      <p style={{ margin: 0, fontSize: 14, color: 'var(--color-neutral-800)' }}>{title}</p>
-    </div>
+      <figcaption style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'var(--color-neutral-800)' }}>
+        <a href={`https://www.youtube.com/shorts/${youtubeId}`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+          {title}
+        </a>
+      </figcaption>
+    </figure>
   );
 }

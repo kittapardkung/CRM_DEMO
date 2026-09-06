@@ -221,6 +221,11 @@ textarea:focus-visible {
   background: var(--color-accent-2-200);
   color: var(--color-accent-2-800);
 }
+.tag-outline {
+  background: transparent;
+  border: 1px solid var(--color-neutral-400);
+  color: var(--color-text);
+}
 
 .field {
   display: flex;
@@ -342,6 +347,39 @@ details[open] > summary::after {
   box-shadow: var(--shadow-lg);
 }
 
+/* Mobile-only blocks stay hidden until the 820px breakpoint switches them on. */
+.om-mob {
+  display: none;
+}
+
+/* PORTA accessory gallery / trade persona grids — fixed column counts per the design. */
+.om-acc-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-4);
+}
+.om-trade-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-6);
+}
+
+/* Article detail: main column + fixed 300px rail. */
+.om-art-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  column-gap: clamp(64px, 8vw, 96px);
+  row-gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .om-acc-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-4);
+  }
+}
+
 @media (max-width: 820px) {
   .om-desk {
     display: none !important;
@@ -349,7 +387,24 @@ details[open] > summary::after {
   .om-mob {
     display: flex !important;
   }
+  .om-trade-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+  .om-art-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+  .om-art-grid aside {
+    order: 1 !important;
+  }
   main {
     padding-bottom: calc(var(--space-8) + 72px) !important;
+  }
+}
+
+@media (max-width: 560px) {
+  .om-acc-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
   }
 }

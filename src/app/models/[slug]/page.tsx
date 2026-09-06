@@ -6,7 +6,6 @@ import VehicleVisuals from '@/components/VehicleVisuals';
 import VariantCard from '@/components/VariantCard';
 import SpecificationAccordion from '@/components/SpecificationAccordion';
 import CTASection from '@/components/CTASection';
-import PageIndexNav from '@/components/PageIndexNav';
 import PortaAccessoryShowcase from '@/components/PortaAccessoryShowcase';
 import CargoCapacitySection from '@/components/CargoCapacitySection';
 import VideoEmbed from '@/components/VideoEmbed';
@@ -118,9 +117,7 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
     <div className="wrap">
       <Breadcrumb items={[{ label: 'หน้าแรก', href: '/' }, { label: 'รถยนต์', href: '/models' }, { label: vehicle.shortName }]} />
 
-      <VehicleVisuals vehicle={vehicle} />
-
-      <PageIndexNav items={pageIndexItems} />
+      <VehicleVisuals vehicle={vehicle} pageIndex={pageIndexItems} />
 
       <section id="sec-highlights" className="section" style={{ scrollMarginTop: 140 }}>
         <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-6)' }}>ตัวเลขสำคัญ</h2>
@@ -175,9 +172,12 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           </section>
 
           <section id="sec-video" className="section" style={{ scrollMarginTop: 140 }}>
-            <p className="kicker kicker-2">งานจริง</p>
-            <h2 style={{ fontSize: 'clamp(24px,3.2vw,35px)', margin: '0 0 var(--space-6)' }}>คลิปการใช้งานจริงจากลูกค้า</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(200px,1fr))', gap: 'var(--space-4)', maxWidth: 900 }}>
+            <p className="kicker kicker-2" style={{ letterSpacing: '0.14em', fontSize: 13 }}>Video</p>
+            <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-3)' }}>คลิปจากการใช้งานจริง</h2>
+            <p style={{ margin: '0 0 var(--space-6)', maxWidth: '56ch', color: 'var(--color-neutral-800)' }}>
+              ดูรถคันจริง การจัดวางสินค้า และการใช้งานประจำวัน ก่อนตัดสินใจ — คลิปจะโหลดเมื่อกดเล่นเท่านั้น
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(240px,1fr))', gap: 'var(--space-4)' }}>
               {portaVideos.map((v) => (
                 <VideoEmbed key={v.id} title={v.title} youtubeId={v.youtubeId} />
               ))}

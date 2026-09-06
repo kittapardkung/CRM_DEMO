@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Vehicle } from '@/lib/data/types';
 import { money, priceNote } from '@/lib/format';
 import { track } from '@/lib/analytics';
+import PageIndexNav, { PageIndexItem } from './PageIndexNav';
 
 /**
  * Hero image + color selector + exterior gallery for a model detail page.
@@ -12,7 +13,7 @@ import { track } from '@/lib/analytics';
  * live in one client island; everything else on the page stays server
  * rendered.
  */
-export default function VehicleVisuals({ vehicle }: { vehicle: Vehicle }) {
+export default function VehicleVisuals({ vehicle, pageIndex }: { vehicle: Vehicle; pageIndex: PageIndexItem[] }) {
   const [colorIndex, setColorIndex] = useState(0);
   const [extIndex, setExtIndex] = useState(3); // default to the "front 3/4" hero angle
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -91,6 +92,8 @@ export default function VehicleVisuals({ vehicle }: { vehicle: Vehicle }) {
           </div>
         </div>
       </section>
+
+      <PageIndexNav items={pageIndex} />
 
       <section id="sec-colors" style={{ padding: 'var(--space-6) 0', scrollMarginTop: 140 }}>
         <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>Colors · {confirmedColors ? 'สีที่จำหน่ายจริง' : 'ตัวอย่างชุดสี (รอยืนยัน)'}</p>
