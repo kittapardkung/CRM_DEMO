@@ -1,6 +1,10 @@
 /** Real dealer contact info, confirmed by the dealer (2026-09). */
 export const dealer = {
   name: 'WULING CHONBURI',
+  /** Thai transliteration of the brand — customers search this spelling as often as "WULING". */
+  alternateName: 'วู่หลิง ชลบุรี',
+  /** Cities/region already promised test-drive delivery to (see PORTA metadata) — kept as one source of truth. */
+  serviceAreas: ['ชลบุรี', 'ภาคตะวันออก', 'ศรีราชา', 'พัทยา', 'อมตะนคร'],
   phoneDisplay: '082-324-7915',
   phoneHref: 'tel:0823247915',
   lineUrl: 'https://lin.ee/ZSQFaMd',

@@ -5,8 +5,8 @@ import { vehicles } from '@/lib/data/vehicles';
 import { money } from '@/lib/format';
 
 export const metadata: Metadata = {
-  title: 'รถยนต์ WULING ทุกรุ่น',
-  description: 'เปรียบเทียบรถยนต์ไฟฟ้า WULING ทุกรุ่น พร้อมราคาเริ่มต้นและรายละเอียด',
+  title: 'รถยนต์ WULING ทุกรุ่น | วู่หลิง ชลบุรี',
+  description: 'เปรียบเทียบรถยนต์ไฟฟ้าวู่หลิง (WULING) ทุกรุ่น พร้อมราคาเริ่มต้นและรายละเอียด จำหน่ายโดยตัวแทนอย่างเป็นทางการประจำชลบุรี',
   alternates: { canonical: '/models' },
 };
 

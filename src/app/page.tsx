@@ -13,8 +13,8 @@ import { quickLinks } from '@/lib/nav';
 import { SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
-  title: 'WULING CHONBURI | ศูนย์รถยนต์ไฟฟ้า WULING ชลบุรี',
-  description: 'ดูรถ WULING ทุกรุ่น ราคา สเปก โปรโมชั่น และลงทะเบียนทดลองขับที่ชลบุรี',
+  title: 'WULING CHONBURI | ตัวแทนจำหน่ายวู่หลิง ชลบุรี ภาคตะวันออก',
+  description: 'ตัวแทนจำหน่ายวู่หลิง (WULING) อย่างเป็นทางการ ประจำชลบุรีและภาคตะวันออก ดูรถทุกรุ่น ราคา สเปก โปรโมชั่น และลงทะเบียนทดลองขับ',
   alternates: { canonical: '/' },
 };
 
@@ -46,7 +46,7 @@ export default function HomePage() {
         >
           <div style={{ position: 'relative', zIndex: 2, maxWidth: '38ch' }}>
             <p style={{ margin: '0 0 var(--space-3)', fontSize: 12, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--wl-lime)' }}>
-              ผู้จำหน่ายอย่างเป็นทางการ · ชลบุรี
+              ตัวแทนจำหน่ายวู่หลิงอย่างเป็นทางการ · ชลบุรี ภาคตะวันออก
             </p>
             <h1 style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 'clamp(34px,4.6vw,58px)', lineHeight: 1.12, margin: '0 0 var(--space-3)', color: '#fff', letterSpacing: '-0.01em' }}>
               Find Your WULING

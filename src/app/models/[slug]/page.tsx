@@ -12,6 +12,7 @@ import VideoEmbed from '@/components/VideoEmbed';
 import { vehicles, getVehicle } from '@/lib/data/vehicles';
 import { cargoShots, portaVideos } from '@/lib/data/accessories';
 import { resolveAsset } from '@/lib/assets';
+import { dealer } from '@/lib/data/dealer';
 import { SITE_URL } from '@/lib/seo';
 
 export function generateStaticParams() {
@@ -88,7 +89,7 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
               '@type': 'Offer', price: '659000', priceCurrency: 'THB',
               availability: 'https://schema.org/InStock',
               url: `${SITE_URL}/models/porta`,
-              seller: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: 'ชลบุรี' },
+              seller: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: dealer.serviceAreas },
             },
           },
           {

@@ -6,6 +6,7 @@ import FleetCalculator from '@/components/FleetCalculator';
 import LeaseInquiryForm from '@/components/LeaseInquiryForm';
 import { leaseBenefits, leaseCompareRows, leasePeriods, leaseSteps, leaseVehicles } from '@/lib/data/lease';
 import { leaseArticles } from '@/lib/data/leaseArticles';
+import { dealer } from '@/lib/data/dealer';
 import { SITE_URL } from '@/lib/seo';
 
 export const metadata: Metadata = {
@@ -31,7 +32,7 @@ export default function LeasePage() {
       {
         '@type': 'Service',
         serviceType: 'Operating Lease',
-        provider: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: 'ชลบุรี' },
+        provider: { '@type': 'AutoDealer', name: 'WULING CHONBURI', telephone: '+66823247915', areaServed: dealer.serviceAreas },
         url: `${SITE_URL}/lease`,
       },
       {

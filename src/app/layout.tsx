@@ -18,10 +18,10 @@ const prompt = Prompt({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'WULING CHONBURI | ศูนย์รถยนต์ไฟฟ้า WULING ชลบุรี',
+    default: 'WULING CHONBURI | ตัวแทนจำหน่ายวู่หลิง ชลบุรี ภาคตะวันออก',
     template: '%s | WULING CHONBURI',
   },
-  description: 'ดูรถ WULING ทุกรุ่น ราคา สเปก โปรโมชั่น และลงทะเบียนทดลองขับที่ชลบุรี',
+  description: 'ตัวแทนจำหน่ายวู่หลิง (WULING) อย่างเป็นทางการ ประจำชลบุรีและภาคตะวันออก ดูรถทุกรุ่น ราคา สเปก โปรโมชั่น และลงทะเบียนทดลองขับ',
   openGraph: {
     type: 'website',
     locale: 'th_TH',
@@ -40,10 +40,11 @@ const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoDealer',
   name: dealer.name,
+  alternateName: dealer.alternateName,
   telephone: dealer.phoneDisplay,
   email: dealer.email,
   url: SITE_URL,
-  areaServed: 'ชลบุรี',
+  areaServed: dealer.serviceAreas,
   image: `${SITE_URL}/assets/wuling-chonburi-logo.jpg`,
   address: {
     '@type': 'PostalAddress',
