@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import StickyMobileBar from '@/components/StickyMobileBar';
 import { dealer } from '@/lib/data/dealer';
-import { SITE_URL } from '@/lib/seo';
+import { GA_MEASUREMENT_ID, SITE_URL } from '@/lib/seo';
 
 const prompt = Prompt({
   variable: '--font-prompt',
@@ -74,6 +74,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Script id="ld-local-business" type="application/ld+json" strategy="beforeInteractive">
           {JSON.stringify(localBusinessJsonLd)}
+        </Script>
+        <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
+        <Script id="ga4-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
         </Script>
         <Header />
         <main style={{ flex: '1 0 auto', width: '100%' }}>{children}</main>
