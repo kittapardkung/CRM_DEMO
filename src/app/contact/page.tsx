@@ -37,6 +37,9 @@ export default function ContactPage() {
             <Link href="/test-drive" className="btn btn-secondary">ทดลองขับ</Link>
             <a href={dealer.mapsUrl} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">นำทางมาที่ร้าน</a>
           </div>
+          <p style={{ margin: 0, fontSize: 14, color: 'var(--color-neutral-700)' }}>
+            อยู่นอกชลบุรีไหม? ดู<Link href="/areas" style={{ color: 'inherit' }}>พื้นที่ให้บริการ</Link>ทั้งหมด
+          </p>
         </div>
         <div
           style={{

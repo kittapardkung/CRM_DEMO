@@ -47,6 +47,7 @@ ${modelLines}
 
 - Operating Lease สำหรับบริษัทและองค์กร: ${SITE_URL}/lease
 - บริการหลังการขาย: ${SITE_URL}/service
+- พื้นที่ให้บริการ (${dealer.serviceAreas.slice(0, 3).join(', ')}): ${SITE_URL}/areas
 
 ## บทความ
 

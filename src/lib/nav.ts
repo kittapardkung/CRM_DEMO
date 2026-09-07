@@ -14,6 +14,7 @@ export const footerServiceLinks = [
   { label: 'คำนวณค่างวด', href: '/calculator' },
   { label: 'ทดลองขับ', href: '/test-drive' },
   { label: 'บทความ', href: '/articles' },
+  { label: 'พื้นที่ให้บริการ', href: '/areas' },
   { label: 'ติดต่อเรา', href: '/contact' },
 ];
 
