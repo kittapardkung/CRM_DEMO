@@ -35,7 +35,8 @@ export function isNavActive(href: string, pathname: string): boolean {
 /**
  * Resolves an article CTA/link's logical `goRoute` (as authored in the
  * content data — 'contact' | 'testdrive' | 'lease' | 'calculator' |
- * 'compare' | 'porta', or a bare vehicle slug) into a real route.
+ * 'compare' | 'service' | 'areas' | 'porta', or a bare vehicle slug) into
+ * a real route.
  */
 export function ctaHref(goRoute: string): string {
   switch (goRoute) {
@@ -50,6 +51,10 @@ export function ctaHref(goRoute: string): string {
       return '/calculator';
     case 'compare':
       return '/compare';
+    case 'service':
+      return '/service';
+    case 'areas':
+      return '/areas';
     case 'models':
       return '/models';
     case 'porta':
