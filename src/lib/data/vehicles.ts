@@ -137,7 +137,8 @@ const binguoSpecValues: Record<string, string> = {
   ระบบช่วยออกตัวบนทางลาด: 'Hill-Start Hold Control (HHC)', TPMS: 'มีระบบตรวจวัดแรงดันลมยาง', ISOFIX: 'มีจุดยึดเบาะนั่งสำหรับเด็ก',
   ระบบกุญแจ: 'Keyless เข้า-ออกและสตาร์ท พร้อมกุญแจรีโมท (LITE 1 ดอก / PRO 2 ดอก)',
   ระบบเชื่อมต่อ: 'Apple CarPlay และ Android Auto ผ่านจอคู่ LCD 10.25" (เฉพาะรุ่น PRO)',
-  รับประกันแบตเตอรี่: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน', รับประกันมอเตอร์: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน',
+  รับประกันตัวรถ: '3 ปี หรือ 100,000 กิโลเมตร', รับประกันแบตเตอรี่: '8 ปี หรือ 120,000 กิโลเมตร (เพิ่ม Passive Lifetime Warranty เฉพาะรุ่น PRO)',
+  รับประกันมอเตอร์: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน (เฉพาะรุ่น PRO)',
 };
 
 export const vehicles: Vehicle[] = [
@@ -238,11 +239,9 @@ export const vehicles: Vehicle[] = [
     // Seat count isn't stated anywhere in the confirmed brochure — left as
     // the Placeholder Rule value rather than guessed from the body style.
     seats: 'XX',
-    // No price appears in the brochure (brochures don't carry pricing), and
-    // the previous 399,000/449,000 here had no source at all — nulled per
-    // the Placeholder Rule (see EKXION) instead of carrying an unconfirmed
-    // number forward.
-    startingPrice: null,
+    // Confirmed price (LITE, the base trim) — dealer ordering-page
+    // screenshot, incl. reservation deposit ฿5,000 and Thai-assembled note.
+    startingPrice: 399000,
     image: 'binguo-front-34.jpg',
     colors: [
       { name: 'Milk Tea', code: '#e8dcc8', slug: 'milk-tea' },
@@ -264,14 +263,25 @@ export const vehicles: Vehicle[] = [
       {
         id: 'lite',
         name: 'LITE',
-        price: null,
-        features: ['กระจกมองข้างปรับไฟฟ้า (พับด้วยมือ)', 'กุญแจรีโมท 1 ดอก', 'เบาะหนังสังเคราะห์ สีภายใน Caramel Latte'],
+        price: 399000,
+        features: [
+          'กระจกมองข้างปรับไฟฟ้า (พับด้วยมือ)',
+          'กุญแจรีโมท 1 ดอก',
+          'เบาะหนังสังเคราะห์ สีภายใน Caramel Latte',
+          'รับประกันแบตเตอรี่ 8 ปี หรือ 120,000 กม. / รับประกันตัวรถ 3 ปี หรือ 100,000 กม.',
+        ],
       },
       {
         id: 'pro',
         name: 'PRO',
-        price: null,
-        features: ['จอคู่ LCD 10.25" รองรับ Apple CarPlay/Android Auto', 'กระจกมองข้างพับไฟฟ้าอัตโนมัติ', 'กล้องบันทึกภาพด้านหน้า 1080p FHD', 'กุญแจรีโมท 2 ดอก'],
+        price: 429000,
+        features: [
+          'จอคู่ LCD 10.25" รองรับ Apple CarPlay/Android Auto',
+          'กระจกมองข้างพับไฟฟ้าอัตโนมัติ',
+          'กล้องบันทึกภาพด้านหน้า 1080p FHD',
+          'กุญแจรีโมท 2 ดอก',
+          'เพิ่ม Passive Lifetime Warranty ตลอดอายุการใช้งาน (แบตเตอรี่/มอเตอร์/คอนโทรลเลอร์)',
+        ],
       },
     ],
   },
