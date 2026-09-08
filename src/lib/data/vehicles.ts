@@ -141,6 +141,21 @@ const binguoSpecValues: Record<string, string> = {
   รับประกันมอเตอร์: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน (เฉพาะรุ่น PRO)',
 };
 
+/**
+ * Real confirmed specs — dealer-provided battery/motor/charging figures.
+ * Dimensions, seat count and interior features aren't included here: they
+ * only ever appeared with explicit "(โดยประมาณ)" / "(สเปคต่างประเทศ)"
+ * caveats from a third-party preview article, and EKXION hasn't launched
+ * in Thailand yet — the dealer has not confirmed those, so they stay
+ * PLACEHOLDER rather than carrying over an overseas/estimated figure.
+ */
+const ekxionSpecValues: Record<string, string> = {
+  ชนิดแบตเตอรี่: 'Lithium Iron Phosphate (LFP)', ความจุแบตเตอรี่: '69.2 kWh',
+  กำลังสูงสุด: '152 kW (204 hp)', แรงบิดสูงสุด: '310 Nm',
+  ระยะทางต่อการชาร์จ: '530 กม. (มาตรฐาน CLTC) / 511 กม. (มาตรฐาน NEDC)',
+  'DC ชาร์จเร็ว': '20 นาที (30–80%)', 'AC ชาร์จปกติ': '9.7 ชม. (20–100%), กำลังชาร์จ 6.6 kW',
+};
+
 export const vehicles: Vehicle[] = [
   {
     slug: 'porta',
@@ -296,8 +311,14 @@ export const vehicles: Vehicle[] = [
     colors,
     exteriorViews,
     interiorViews,
-    highlights: genericHighlights,
-    specifications: genericSpecifications,
+    highlights: [
+      { value: '530', unit: 'KM (CLTC)', label: 'ระยะทางวิ่งสูงสุด' },
+      { value: 'X', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
+      { value: '69.2', unit: 'kWh', label: 'ความจุแบตเตอรี่' },
+      { value: '310', unit: 'Nm', label: 'แรงบิดสูงสุด' },
+    ],
+    specifications: buildSpecGroups(ekxionSpecValues),
+    specValues: ekxionSpecValues,
     variants: [
       {
         id: 'standard',
