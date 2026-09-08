@@ -119,6 +119,27 @@ const darionSpecValues: Record<string, string> = {
   รับประกันตัวรถ: '6 ปี / 150,000 กม.', รับประกันแบตเตอรี่: '8 ปี / 150,000 กม.',
 };
 
+/** Real confirmed specs — source: "NEW WULING BINGUO EV" official brochure. LITE/PRO differences noted inline where the sheet marks them "•" vs "–". */
+const binguoSpecValues: Record<string, string> = {
+  ความยาว: '3,950 มม.', ความกว้าง: '1,708 มม.', ความสูง: '1,580 มม.', ระยะฐานล้อ: '2,560 มม.', น้ำหนักรถ: '1,125 กก.',
+  ชนิดมอเตอร์: 'Permanent Magnet Synchronous Motor', กำลังสูงสุด: '50 kW', แรงบิดสูงสุด: '125 Nm', ระบบขับเคลื่อน: 'ขับเคลื่อนล้อหน้า',
+  ชนิดแบตเตอรี่: 'Lithium Iron Phosphate (LFP)', ความจุแบตเตอรี่: '31.9 kWh',
+  ระยะทางต่อการชาร์จ: '333 กม. (มาตรฐาน CLTC)',
+  'DC ชาร์จเร็ว': '35 นาที (30–80%), สูงสุด 50 kW', 'AC ชาร์จปกติ': '4.5 ชม. (20–100%), สูงสุด 6.6 kW', ชนิดหัวชาร์จ: 'Type 2',
+  ขนาดล้อ: 'ยาง 185/60 R15', ไฟหน้า: 'LED', ไฟท้าย: 'LED (ทรง X-shape ripple-like)',
+  กระจกมองข้าง: 'ปรับไฟฟ้า, พับไฟฟ้าอัตโนมัติ (เฉพาะรุ่น PRO — รุ่น LITE พับด้วยมือ)',
+  ระบบเบรก: 'ดิสก์เบรกหน้าและหลัง พร้อม Auto Hold', ระบบกันสะเทือน: 'หน้า McPherson อิสระ / หลัง Torsion Beam พร้อมคอยล์สปริง',
+  ระบบพวงมาลัย: 'พวงมาลัยเพาเวอร์ไฟฟ้า (EPS) มัลติฟังก์ชั่น ปรับสูง-ต่ำได้',
+  พื้นที่บรรทุก: '310–790 ลิตร (พับเบาะหลัง)',
+  หน้าจอกลาง: 'จอคู่ LCD 10.25" High Definition ระบบสัมผัส รองรับ Apple CarPlay/Android Auto (เฉพาะรุ่น PRO)',
+  วัสดุหุ้มเบาะ: 'หนังสังเคราะห์ สีภายใน Caramel Latte', เบาะแถวสอง: 'พับได้ (One-touch)', เบาะคนขับ: 'ปรับไฟฟ้า 6 ทิศทาง',
+  ถุงลมนิรภัย: 'คู่หน้า', 'ระบบเบรก ABS/EBD': 'มี ABS และ EBD', ระบบควบคุมเสถียรภาพ: 'ESC พร้อม TCS', กล้องมองหลัง: 'มี',
+  ระบบช่วยออกตัวบนทางลาด: 'Hill-Start Hold Control (HHC)', TPMS: 'มีระบบตรวจวัดแรงดันลมยาง', ISOFIX: 'มีจุดยึดเบาะนั่งสำหรับเด็ก',
+  ระบบกุญแจ: 'Keyless เข้า-ออกและสตาร์ท พร้อมกุญแจรีโมท (LITE 1 ดอก / PRO 2 ดอก)',
+  ระบบเชื่อมต่อ: 'Apple CarPlay และ Android Auto ผ่านจอคู่ LCD 10.25" (เฉพาะรุ่น PRO)',
+  รับประกันแบตเตอรี่: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน', รับประกันมอเตอร์: 'Passive Lifetime Warranty ตลอดอายุการใช้งาน',
+};
+
 export const vehicles: Vehicle[] = [
   {
     slug: 'porta',
@@ -214,28 +235,43 @@ export const vehicles: Vehicle[] = [
     tagline: 'รถไฟฟ้าขนาดกะทัดรัด คล่องตัวสำหรับการใช้งานในเมือง',
     positioning: 'Urban Electric Car',
     vehicleType: 'Urban EV',
+    // Seat count isn't stated anywhere in the confirmed brochure — left as
+    // the Placeholder Rule value rather than guessed from the body style.
     seats: 'XX',
-    startingPrice: 399000,
+    // No price appears in the brochure (brochures don't carry pricing), and
+    // the previous 399,000/449,000 here had no source at all — nulled per
+    // the Placeholder Rule (see EKXION) instead of carrying an unconfirmed
+    // number forward.
+    startingPrice: null,
     image: 'binguo-front-34.jpg',
-    colors,
+    colors: [
+      { name: 'Milk Tea', code: '#e8dcc8', slug: 'milk-tea' },
+      { name: 'Mousse Green', code: '#bcd0bd', slug: 'mousse-green' },
+      { name: 'Galaxy Blue', code: '#4f7ea8', slug: 'galaxy-blue' },
+      { name: 'Metallic Grey', code: '#8b8d91', slug: 'metallic-grey' },
+    ],
     exteriorViews,
     interiorViews,
-    highlights: genericHighlights,
-    specifications: genericSpecifications,
+    highlights: [
+      { value: '333', unit: 'KM (CLTC)', label: 'ระยะทางวิ่งสูงสุด' },
+      { value: 'X', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
+      { value: '31.9', unit: 'kWh', label: 'ความจุแบตเตอรี่' },
+      { value: '125', unit: 'Nm', label: 'แรงบิดสูงสุด' },
+    ],
+    specifications: buildSpecGroups(binguoSpecValues),
+    specValues: binguoSpecValues,
     variants: [
       {
-        id: 'standard',
-        name: 'Standard',
-        price: 399000,
-        features: ['ขนาดกะทัดรัด', 'ชาร์จ AC ที่บ้าน', 'จอกลางระบบสัมผัส'],
+        id: 'lite',
+        name: 'LITE',
+        price: null,
+        features: ['กระจกมองข้างปรับไฟฟ้า (พับด้วยมือ)', 'กุญแจรีโมท 1 ดอก', 'เบาะหนังสังเคราะห์ สีภายใน Caramel Latte'],
       },
       {
-        id: 'long-range',
-        name: 'Long Range',
-        price: 449000,
-        promotionLabel: 'ฟรีเครื่องชาร์จบ้าน',
-        recommended: true,
-        features: ['แบตเตอรี่ความจุสูง', 'ล้ออัลลอย', 'กล้องรอบคัน'],
+        id: 'pro',
+        name: 'PRO',
+        price: null,
+        features: ['จอคู่ LCD 10.25" รองรับ Apple CarPlay/Android Auto', 'กระจกมองข้างพับไฟฟ้าอัตโนมัติ', 'กล้องบันทึกภาพด้านหน้า 1080p FHD', 'กุญแจรีโมท 2 ดอก'],
       },
     ],
   },
