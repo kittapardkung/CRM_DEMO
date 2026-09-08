@@ -236,9 +236,7 @@ export const vehicles: Vehicle[] = [
     tagline: 'รถไฟฟ้าขนาดกะทัดรัด คล่องตัวสำหรับการใช้งานในเมือง',
     positioning: 'Urban Electric Car',
     vehicleType: 'Urban EV',
-    // Seat count isn't stated anywhere in the confirmed brochure — left as
-    // the Placeholder Rule value rather than guessed from the body style.
-    seats: 'XX',
+    seats: '4',
     // Confirmed price (LITE, the base trim) — dealer ordering-page
     // screenshot, incl. reservation deposit ฿5,000 and Thai-assembled note.
     startingPrice: 399000,
@@ -253,7 +251,7 @@ export const vehicles: Vehicle[] = [
     interiorViews,
     highlights: [
       { value: '333', unit: 'KM (CLTC)', label: 'ระยะทางวิ่งสูงสุด' },
-      { value: 'X', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
+      { value: '4', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
       { value: '31.9', unit: 'kWh', label: 'ความจุแบตเตอรี่' },
       { value: '125', unit: 'Nm', label: 'แรงบิดสูงสุด' },
     ],
