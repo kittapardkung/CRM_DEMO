@@ -4,7 +4,7 @@ import TestDriveForm from '@/components/TestDriveForm';
 
 export const metadata: Metadata = {
   title: 'ลงทะเบียนทดลองขับ WULING',
-  description: 'นัดทดลองขับรถยนต์ไฟฟ้า WULING ที่ชลบุรี',
+  description: 'ทดลองขับ WULING ทุกรุ่นได้ที่โชว์รูมชลบุรี หรือนัดทีมงานนำรถไปให้ลองถึงที่ทำงานในชลบุรี ระยอง และฉะเชิงเทรา กรอกฟอร์มแล้วทีมงานจะติดต่อกลับเพื่อนัดวันเวลา',
   alternates: { canonical: '/test-drive' },
 };
 

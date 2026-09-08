@@ -12,7 +12,7 @@ import { SITE_URL } from '@/lib/seo';
 export const metadata: Metadata = {
   title: 'Operating Lease รถ EV สำหรับองค์กร',
   description:
-    'บริการ Operating Lease รถยนต์ไฟฟ้าสำหรับบริษัท โรงงาน และองค์กร วางแผนค่าใช้จ่ายรถเป็นรายเดือน พร้อมบริการดูแลรถ ประกัน และบำรุงรักษาตามเงื่อนไข เลือก WULING PORTA EV และ DARION EV',
+    'บริการ Operating Lease รถยนต์ไฟฟ้าสำหรับบริษัท โรงงาน และองค์กร วางแผนค่าใช้จ่ายรถเป็นรายเดือน พร้อมบริการดูแลรถ ประกัน และบำรุงรักษาตามเงื่อนไข',
   alternates: { canonical: '/lease' },
 };
 

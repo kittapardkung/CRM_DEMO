@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     return {
       title: 'WULING PORTA EV รถตู้ทึบไฟฟ้าเพื่อธุรกิจ ราคา 659,000 | ชลบุรี',
       description:
-        'PORTA EV รถขนส่งไฟฟ้า ห้องบรรทุก 6.5 ลบ.ม. บรรทุกได้ 2 พาเลท วิ่งได้ 400 กม. ต่อการชาร์จ (CLTC) เหมาะกับงานขนส่งในเมืองและรอบส่งประจำ ราคาเริ่ม 659,000 บาท พร้อมกรุพื้นอลูมิเนียม แร็คหลังคา และแอร์ห้องบรรทุก ทดลองขับถึงที่ ชลบุรี ศรีราชา พัทยา อมตะนคร',
+        'PORTA EV รถขนส่งไฟฟ้า ห้องบรรทุก 6.5 ลบ.ม. บรรทุกได้ 2 พาเลท วิ่งได้ 400 กม. ต่อการชาร์จ (CLTC) ราคาเริ่ม 659,000 บาท ทดลองขับถึงที่ ชลบุรี ศรีราชา พัทยา อมตะนคร',
       alternates: { canonical: `/models/${vehicle.slug}` },
     };
   }
@@ -130,12 +130,19 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
             description: vehicle.tagline,
             vehicleConfiguration: vehicle.vehicleType,
             url: `${SITE_URL}/models/${vehicle.slug}`,
-            offers: {
-              '@type': 'Offer',
-              priceCurrency: 'THB',
-              price: vehicle.startingPrice,
-              availability: 'https://schema.org/InStock',
-            },
+            // Omit `offers` entirely when the price isn't confirmed yet (e.g.
+            // EKXION, pre-launch in Thailand) — `price: null` is invalid per
+            // schema.org, and claiming InStock with no real price is misleading.
+            ...(vehicle.startingPrice !== null
+              ? {
+                  offers: {
+                    '@type': 'Offer',
+                    priceCurrency: 'THB',
+                    price: vehicle.startingPrice,
+                    availability: 'https://schema.org/InStock',
+                  },
+                }
+              : {}),
           },
           {
             '@type': 'BreadcrumbList',
