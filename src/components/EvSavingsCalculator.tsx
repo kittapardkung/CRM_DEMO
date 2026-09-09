@@ -200,7 +200,7 @@ export default function EvSavingsCalculator() {
             gap: 'var(--space-4)',
           }}
         >
-          <span style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)' }}>ประหยัดสะสมใน {years} ปี</span>
+          <span style={{ fontSize: 'clamp(20px,2.6vw,28px)', fontWeight: 600, color: 'rgba(255,255,255,0.9)' }}>ประหยัดสะสมใน {years} ปี</span>
           <span
             className="tnum"
             style={{
@@ -215,7 +215,7 @@ export default function EvSavingsCalculator() {
           </span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-4)', marginTop: 'var(--space-5)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-4)', marginTop: 'var(--space-8)' }}>
           <div className="card" style={{ padding: 'var(--space-4)' }}>
             <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ค่าไฟ {ev.label} / เดือน</span>
             <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#1b3a6b' }}>{baht(result.evMonthlyCost)}</b>
