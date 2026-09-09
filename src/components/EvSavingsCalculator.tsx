@@ -13,7 +13,11 @@ interface EvOption {
   id: string;
   label: string;
   price: number;
-  /** kWh consumed per 100 km, derived from the confirmed battery capacity ÷ CLTC range. */
+  /** Confirmed battery capacity (kWh) — the numerator behind consumptionPer100km, kept so the panel can show the actual calculation, not just its result. */
+  battery: number;
+  /** Confirmed CLTC range (km) — the denominator behind consumptionPer100km. */
+  range: number;
+  /** kWh consumed per 100 km, derived from the confirmed battery capacity ÷ CLTC range. Not user-editable — it comes straight from the dealer's spec sheet. */
   consumptionPer100km: number;
 }
 
@@ -33,6 +37,8 @@ const evOptions: EvOption[] = vehicles.flatMap((v) => {
       id: `${v.slug}-${variant.id}`,
       label: v.variants.length > 1 ? `${v.shortName} (${variant.name})` : v.shortName,
       price: variant.price as number,
+      battery,
+      range,
       consumptionPer100km: Math.round((battery / range) * 1000) / 10,
     }));
 });
@@ -57,7 +63,6 @@ function baht(n: number): string {
 export default function EvSavingsCalculator() {
   const [evId, setEvId] = useState(evOptions[0]?.id ?? '');
   const [elecPrice, setElecPrice] = useState(4.5);
-  const [evConsumption, setEvConsumption] = useState(evOptions[0]?.consumptionPer100km ?? 15);
 
   const [fuelCarPrice, setFuelCarPrice] = useState(650000);
   const [fuelPresetId, setFuelPresetId] = useState('gasohol91');
@@ -71,7 +76,7 @@ export default function EvSavingsCalculator() {
 
   const result = useMemo(() => {
     if (!ev) return null;
-    const evKwhPerMonth = (kmPerMonth / 100) * evConsumption;
+    const evKwhPerMonth = (kmPerMonth / 100) * ev.consumptionPer100km;
     const litersPerMonth = fuelConsumption ? kmPerMonth / fuelConsumption : 0;
     const evMonthlyCost = evKwhPerMonth * elecPrice;
     const fuelMonthlyCost = litersPerMonth * fuelPrice;
@@ -81,18 +86,12 @@ export default function EvSavingsCalculator() {
     const netAfterYears = cumulativeSavings - priceDiff;
     const breakevenMonths = priceDiff > 0 && monthlySavings > 0 ? priceDiff / monthlySavings : null;
     return { evKwhPerMonth, litersPerMonth, evMonthlyCost, fuelMonthlyCost, monthlySavings, priceDiff, cumulativeSavings, netAfterYears, breakevenMonths };
-  }, [ev, elecPrice, evConsumption, fuelCarPrice, fuelConsumption, fuelPrice, kmPerMonth, years]);
+  }, [ev, elecPrice, fuelCarPrice, fuelConsumption, fuelPrice, kmPerMonth, years]);
 
   function onFuelPreset(id: string) {
     const preset = fuelPresets.find((p) => p.id === id);
     setFuelPresetId(id);
     if (preset) setFuelPrice(preset.pricePerLitre);
-  }
-
-  function onEvSelect(id: string) {
-    setEvId(id);
-    const option = evOptions.find((o) => o.id === id);
-    if (option) setEvConsumption(option.consumptionPer100km);
   }
 
   if (!ev || !result) return null;
@@ -139,7 +138,7 @@ export default function EvSavingsCalculator() {
           <p className="kicker" style={{ color: '#1b3a6b' }}>รถไฟฟ้าที่สนใจ</p>
           <label className="field">
             <span>รุ่น WULING EV</span>
-            <select className="input" value={ev.id} onChange={(e) => onEvSelect(e.target.value)}>
+            <select className="input" value={ev.id} onChange={(e) => setEvId(e.target.value)}>
               {evOptions.map((o) => (
                 <option key={o.id} value={o.id}>{o.label} — {money(o.price)}</option>
               ))}
@@ -149,15 +148,21 @@ export default function EvSavingsCalculator() {
             <span>ค่าไฟฟ้า (บาท/หน่วย)</span>
             <input className="input" type="number" step="0.1" min={0} value={elecPrice} onChange={(e) => setElecPrice(Number(e.target.value) || 0)} />
           </label>
-          <label className="field" style={{ marginTop: 'var(--space-4)' }}>
-            <span>อัตราสิ้นเปลือง (kWh/100กม.)</span>
-            <input className="input" type="number" step="0.1" min={0} value={evConsumption} onChange={(e) => setEvConsumption(Number(e.target.value) || 0)} />
-          </label>
-          <p style={{ margin: 'var(--space-2) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
-            ค่าเริ่มต้นอ้างอิงสเปกทางการ (มาตรฐาน CLTC) ของ {ev.label} — แก้เป็นตัวเลขที่ใช้จริงได้
-          </p>
+
+          <div style={{ marginTop: 'var(--space-4)', paddingTop: 'var(--space-4)', borderTop: `1px dashed ${EV_PANEL_BORDER}` }}>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>อัตราสิ้นเปลือง (คำนวณอัตโนมัติ ไม่สามารถแก้ไขเองได้)</span>
+            <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#1b3a6b' }}>{ev.consumptionPer100km} kWh/100กม.</b>
+            <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+              วิธีคำนวณ: แบตเตอรี่ {ev.battery} kWh ÷ ระยะทางวิ่งสูงสุด {ev.range} กม. × 100 ={' '}
+              <b className="tnum">{ev.consumptionPer100km}</b> kWh/100กม.
+            </p>
+            <p style={{ margin: 'var(--space-1) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
+              ตัวเลขจากสเปกทางการของ {ev.label} (มาตรฐาน CLTC) — การใช้งานจริงอาจสูงกว่านี้ตามสภาพถนนและรูปแบบการขับขี่
+            </p>
+          </div>
+
           <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            รายการคำนวณ: {kmPerMonth.toLocaleString('en-US')} กม. ÷ 100 × {evConsumption} kWh ={' '}
+            รายการคำนวณค่าไฟ: {kmPerMonth.toLocaleString('en-US')} กม./เดือน ÷ 100 × {ev.consumptionPer100km} kWh ={' '}
             <b className="tnum">{result.evKwhPerMonth.toLocaleString('en-US', { maximumFractionDigits: 1 })}</b> kWh/เดือน
           </p>
         </div>
