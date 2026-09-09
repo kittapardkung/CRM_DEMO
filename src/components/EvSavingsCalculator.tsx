@@ -66,15 +66,15 @@ function bahtPerKm(n: number): string {
 
 export default function EvSavingsCalculator() {
   const [evId, setEvId] = useState(evOptions[0]?.id ?? '');
-  const [elecPrice, setElecPrice] = useState(4.5);
+  const [elecPrice, setElecPrice] = useState(4);
   const [evOtherAnnual, setEvOtherAnnual] = useState(0);
   const [evInsuranceAnnual, setEvInsuranceAnnual] = useState(0);
   const [evTaxAnnual, setEvTaxAnnual] = useState(0);
 
   const [fuelCarPrice, setFuelCarPrice] = useState(650000);
-  const [fuelPresetId, setFuelPresetId] = useState('gasohol91');
-  const [fuelPrice, setFuelPrice] = useState(fuelPresets[0].pricePerLitre);
-  const [fuelConsumption, setFuelConsumption] = useState(12);
+  const [fuelPresetId, setFuelPresetId] = useState('');
+  const [fuelPrice, setFuelPrice] = useState(38);
+  const [fuelConsumption, setFuelConsumption] = useState(10);
   const [fuelOtherAnnual, setFuelOtherAnnual] = useState(0);
   const [fuelInsuranceAnnual, setFuelInsuranceAnnual] = useState(0);
   const [fuelTaxAnnual, setFuelTaxAnnual] = useState(0);
