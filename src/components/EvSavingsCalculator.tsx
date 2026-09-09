@@ -191,22 +191,22 @@ export default function EvSavingsCalculator() {
         <div
           style={{
             background: 'var(--wl-ink)',
-            borderRadius: 'var(--radius-md)',
-            padding: 'var(--space-5) var(--space-6)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'clamp(28px,4vw,48px) clamp(24px,4vw,52px)',
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'space-between',
-            alignItems: 'baseline',
-            gap: 'var(--space-3)',
+            alignItems: 'center',
+            gap: 'var(--space-4)',
           }}
         >
-          <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.82)' }}>ประหยัดสะสมใน {years} ปี</span>
+          <span style={{ fontSize: 17, color: 'rgba(255,255,255,0.85)' }}>ประหยัดสะสมใน {years} ปี</span>
           <span
             className="tnum"
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 700,
-              fontSize: 'clamp(40px,6vw,64px)',
+              fontSize: 'clamp(52px,9vw,92px)',
               lineHeight: 1,
               color: result.cumulativeSavings >= 0 ? 'var(--wl-lime)' : '#ff9d7a',
             }}
@@ -215,22 +215,22 @@ export default function EvSavingsCalculator() {
           </span>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-3)', marginTop: 'var(--space-5)' }}>
-          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
-            <span>ค่าไฟ {ev.label} / เดือน</span>
-            <b className="tnum" style={{ fontWeight: 600, color: '#1b3a6b' }}>{baht(result.evMonthlyCost)}</b>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-4)', marginTop: 'var(--space-5)' }}>
+          <div className="card" style={{ padding: 'var(--space-4)' }}>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ค่าไฟ {ev.label} / เดือน</span>
+            <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#1b3a6b' }}>{baht(result.evMonthlyCost)}</b>
           </div>
-          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
-            <span>ค่าน้ำมัน / เดือน</span>
-            <b className="tnum" style={{ fontWeight: 600, color: '#c2410c' }}>{baht(result.fuelMonthlyCost)}</b>
+          <div className="card" style={{ padding: 'var(--space-4)' }}>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ค่าน้ำมัน / เดือน</span>
+            <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#c2410c' }}>{baht(result.fuelMonthlyCost)}</b>
           </div>
-          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
-            <span>ประหยัดค่าพลังงาน / เดือน</span>
-            <b className="tnum" style={{ fontWeight: 600 }}>{baht(result.monthlySavings)}</b>
+          <div className="card" style={{ padding: 'var(--space-4)' }}>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ประหยัดค่าพลังงาน / เดือน</span>
+            <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700 }}>{baht(result.monthlySavings)}</b>
           </div>
-          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
-            <span>ส่วนต่างราคารถ (EV − น้ำมัน)</span>
-            <b className="tnum" style={{ fontWeight: 600 }}>{result.priceDiff > 0 ? baht(result.priceDiff) : `−${baht(Math.abs(result.priceDiff))}`}</b>
+          <div className="card" style={{ padding: 'var(--space-4)' }}>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ส่วนต่างราคารถ (EV − น้ำมัน)</span>
+            <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700 }}>{result.priceDiff > 0 ? baht(result.priceDiff) : `−${baht(Math.abs(result.priceDiff))}`}</b>
           </div>
         </div>
 
