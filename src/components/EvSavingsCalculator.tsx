@@ -60,6 +60,10 @@ function baht(n: number): string {
   return '฿' + Math.round(n).toLocaleString('en-US');
 }
 
+function bahtPerKm(n: number): string {
+  return '฿' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '/กม.';
+}
+
 export default function EvSavingsCalculator() {
   const [evId, setEvId] = useState(evOptions[0]?.id ?? '');
   const [elecPrice, setElecPrice] = useState(4.5);
@@ -80,12 +84,14 @@ export default function EvSavingsCalculator() {
     const litersPerMonth = fuelConsumption ? kmPerMonth / fuelConsumption : 0;
     const evMonthlyCost = evKwhPerMonth * elecPrice;
     const fuelMonthlyCost = litersPerMonth * fuelPrice;
+    const evCostPerKm = (ev.consumptionPer100km / 100) * elecPrice;
+    const fuelCostPerKm = fuelConsumption ? fuelPrice / fuelConsumption : 0;
     const monthlySavings = fuelMonthlyCost - evMonthlyCost;
     const priceDiff = ev.price - fuelCarPrice;
     const cumulativeSavings = monthlySavings * 12 * years;
     const netAfterYears = cumulativeSavings - priceDiff;
     const breakevenMonths = priceDiff > 0 && monthlySavings > 0 ? priceDiff / monthlySavings : null;
-    return { evKwhPerMonth, litersPerMonth, evMonthlyCost, fuelMonthlyCost, monthlySavings, priceDiff, cumulativeSavings, netAfterYears, breakevenMonths };
+    return { evKwhPerMonth, litersPerMonth, evMonthlyCost, fuelMonthlyCost, evCostPerKm, fuelCostPerKm, monthlySavings, priceDiff, cumulativeSavings, netAfterYears, breakevenMonths };
   }, [ev, elecPrice, fuelCarPrice, fuelConsumption, fuelPrice, kmPerMonth, years]);
 
   function onFuelPreset(id: string) {
@@ -156,6 +162,10 @@ export default function EvSavingsCalculator() {
               วิธีคำนวณ: แบตเตอรี่ {ev.battery} kWh ÷ ระยะทางวิ่งสูงสุด {ev.range} กม. × 100 ={' '}
               <b className="tnum">{ev.consumptionPer100km}</b> kWh/100กม.
             </p>
+            <p style={{ margin: 'var(--space-1) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+              คิดเป็นค่าไฟ: {(ev.consumptionPer100km / 100).toFixed(3)} kWh/กม. × ฿{elecPrice.toFixed(2)}/หน่วย ={' '}
+              <b className="tnum" style={{ color: '#1b3a6b' }}>{bahtPerKm(result.evCostPerKm)}</b>
+            </p>
             <p style={{ margin: 'var(--space-1) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
               ตัวเลขจากสเปกทางการของ {ev.label} (มาตรฐาน CLTC) — การใช้งานจริงอาจสูงกว่านี้ตามสภาพถนนและรูปแบบการขับขี่
             </p>
@@ -202,6 +212,10 @@ export default function EvSavingsCalculator() {
             <input className="input" type="number" min={1} value={fuelConsumption} onChange={(e) => setFuelConsumption(Number(e.target.value) || 0)} />
           </label>
           <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+            คิดเป็นค่าน้ำมัน: ฿{fuelPrice.toFixed(2)}/ลิตร ÷ {fuelConsumption || 0} กม./ลิตร ={' '}
+            <b className="tnum" style={{ color: '#c2410c' }}>{bahtPerKm(result.fuelCostPerKm)}</b>
+          </p>
+          <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
             รายการคำนวณ: {kmPerMonth.toLocaleString('en-US')} กม. ÷ {fuelConsumption || 0} กม./ลิตร ={' '}
             <b className="tnum">{result.litersPerMonth.toLocaleString('en-US', { maximumFractionDigits: 1 })}</b> ลิตร/เดือน
           </p>
