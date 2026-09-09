@@ -76,13 +76,22 @@ export default function TcoChart({
   const { xMax, valueAt, evEnd, fuelEnd, minY, maxY, scaleX, scaleY } = chart;
   const showBreakeven = breakevenMonths !== null && breakevenMonths >= 0 && breakevenMonths <= xMax;
 
-  function onMove(e: React.MouseEvent<SVGSVGElement>) {
+  function updateHover(clientX: number) {
     const svg = svgRef.current;
     if (!svg) return;
     const rect = svg.getBoundingClientRect();
-    const relX = ((e.clientX - rect.left) / rect.width) * VB_W;
+    const relX = ((clientX - rect.left) / rect.width) * VB_W;
     const m = ((relX - PAD_L) / (VB_W - PAD_L - PAD_R)) * xMax;
     setHoverMonth(Math.min(xMax, Math.max(0, m)));
+  }
+
+  function onMove(e: React.MouseEvent<SVGSVGElement>) {
+    updateHover(e.clientX);
+  }
+
+  function onTouch(e: React.TouchEvent<SVGSVGElement>) {
+    const touch = e.touches[0];
+    if (touch) updateHover(touch.clientX);
   }
 
   const gridValues = [minY, minY + (maxY - minY) / 2, maxY];
@@ -104,26 +113,38 @@ export default function TcoChart({
         </span>
       </div>
 
-      <svg
-        ref={svgRef}
-        viewBox={`0 0 ${VB_W} ${VB_H}`}
-        style={{ width: '100%', height: 'auto', aspectRatio: `${VB_W} / ${VB_H}`, display: 'block' }}
-        onMouseMove={onMove}
-        onMouseLeave={() => setHoverMonth(null)}
-        role="img"
-        aria-label={`กราฟเปรียบเทียบต้นทุนรวมสะสมระหว่าง ${evLabel} กับ ${fuelLabel} ตลอด ${Math.round(xMax / 12)} ปี`}
-      >
+      {/*
+        On a narrow phone, an SVG scaled to 100% width shrinks every font
+        size in it proportionally — a 640px-wide chart squeezed into a
+        340px screen makes 11px labels render at ~6px, unreadable. Instead
+        the SVG keeps a real minimum pixel width and this wrapper scrolls
+        horizontally on anything narrower, so text stays full-size and the
+        chart pans instead of shrinking into illegibility.
+      */}
+      <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+        <svg
+          ref={svgRef}
+          viewBox={`0 0 ${VB_W} ${VB_H}`}
+          style={{ width: '100%', minWidth: 480, height: 'auto', aspectRatio: `${VB_W} / ${VB_H}`, display: 'block', touchAction: 'pan-y' }}
+          onMouseMove={onMove}
+          onMouseLeave={() => setHoverMonth(null)}
+          onTouchStart={onTouch}
+          onTouchMove={onTouch}
+          onTouchEnd={() => setHoverMonth(null)}
+          role="img"
+          aria-label={`กราฟเปรียบเทียบต้นทุนรวมสะสมระหว่าง ${evLabel} กับ ${fuelLabel} ตลอด ${Math.round(xMax / 12)} ปี`}
+        >
         {gridValues.map((v, i) => (
           <g key={i}>
             <line x1={PAD_L} x2={VB_W - PAD_R} y1={scaleY(v)} y2={scaleY(v)} stroke="var(--color-divider)" strokeWidth={1} />
-            <text x={PAD_L - 8} y={scaleY(v)} textAnchor="end" dominantBaseline="middle" fontSize={11} fill="var(--color-neutral-600)">
+            <text x={PAD_L - 8} y={scaleY(v)} textAnchor="end" dominantBaseline="middle" fontSize={13} fill="var(--color-neutral-600)">
               {shortBaht(v)}
             </text>
           </g>
         ))}
 
         {xTicks.map((m) => (
-          <text key={m} x={scaleX(m)} y={VB_H - 8} textAnchor="middle" fontSize={11} fill="var(--color-neutral-600)">
+          <text key={m} x={scaleX(m)} y={VB_H - 8} textAnchor="middle" fontSize={13} fill="var(--color-neutral-600)">
             {m} ด.
           </text>
         ))}
@@ -141,7 +162,7 @@ export default function TcoChart({
               strokeDasharray="3 3"
               strokeWidth={1}
             />
-            <text x={scaleX(breakevenMonths)} y={PAD_T - 6} textAnchor="middle" fontSize={11} fill="var(--color-neutral-700)">
+            <text x={scaleX(breakevenMonths)} y={PAD_T - 6} textAnchor="middle" fontSize={13} fill="var(--color-neutral-700)">
               จุดคุ้มทุน
             </text>
           </g>
@@ -169,13 +190,13 @@ export default function TcoChart({
               return (
                 <g>
                   <rect x={bx} y={by} width={boxW} height={boxH} rx={8} fill="#fff" stroke="var(--color-neutral-300)" />
-                  <text x={bx + 10} y={by + 18} fontSize={11} fill="var(--color-neutral-600)">
+                  <text x={bx + 10} y={by + 18} fontSize={13} fill="var(--color-neutral-600)">
                     เดือนที่ {Math.round(hoverMonth)}
                   </text>
-                  <text x={bx + 10} y={by + 35} fontSize={12} fill={EV_COLOR} fontWeight={600}>
+                  <text x={bx + 10} y={by + 35} fontSize={13} fill={EV_COLOR} fontWeight={600}>
                     {evLabel.length > 16 ? 'EV' : evLabel}: {baht(hoverEv)}
                   </text>
-                  <text x={bx + 10} y={by + 51} fontSize={12} fill={FUEL_COLOR} fontWeight={600}>
+                  <text x={bx + 10} y={by + 51} fontSize={13} fill={FUEL_COLOR} fontWeight={600}>
                     น้ำมัน: {baht(hoverFuel)}
                   </text>
                 </g>
@@ -183,7 +204,8 @@ export default function TcoChart({
             })()}
           </g>
         ) : null}
-      </svg>
+        </svg>
+      </div>
     </div>
   );
 }
