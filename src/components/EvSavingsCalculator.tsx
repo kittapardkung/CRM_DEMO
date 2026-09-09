@@ -50,6 +50,7 @@ const fuelPresets = [
 ];
 
 const ownershipYears = [1, 3, 5];
+const loanTermOptions = [36, 48, 60, 72, 84];
 
 const EV_PANEL_BG = 'linear-gradient(180deg, rgba(27,58,107,0.07), rgba(27,58,107,0.02))';
 const EV_PANEL_BORDER = 'rgba(27,58,107,0.22)';
@@ -70,6 +71,10 @@ export default function EvSavingsCalculator() {
   const [evOtherAnnual, setEvOtherAnnual] = useState(0);
   const [evInsuranceAnnual, setEvInsuranceAnnual] = useState(0);
   const [evTaxAnnual, setEvTaxAnnual] = useState(0);
+  const [evMode, setEvMode] = useState<'cash' | 'credit'>('cash');
+  const [evDownPct, setEvDownPct] = useState(20);
+  const [evInterestRate, setEvInterestRate] = useState(2.99);
+  const [evTermMonths, setEvTermMonths] = useState(60);
 
   const [fuelCarPrice, setFuelCarPrice] = useState(650000);
   const [fuelPresetId, setFuelPresetId] = useState('');
@@ -78,6 +83,10 @@ export default function EvSavingsCalculator() {
   const [fuelOtherAnnual, setFuelOtherAnnual] = useState(0);
   const [fuelInsuranceAnnual, setFuelInsuranceAnnual] = useState(0);
   const [fuelTaxAnnual, setFuelTaxAnnual] = useState(0);
+  const [fuelMode, setFuelMode] = useState<'cash' | 'credit'>('cash');
+  const [fuelDownPct, setFuelDownPct] = useState(20);
+  const [fuelInterestRate, setFuelInterestRate] = useState(2.99);
+  const [fuelTermMonths, setFuelTermMonths] = useState(60);
 
   const [kmPerMonth, setKmPerMonth] = useState(3000);
   const [years, setYears] = useState<number>(3);
@@ -98,22 +107,36 @@ export default function EvSavingsCalculator() {
     const evExtraMonthly = evAnnualExtra / 12;
     const fuelExtraMonthly = fuelAnnualExtra / 12;
 
-    const evMonthlyCost = evEnergyMonthlyCost + evExtraMonthly;
-    const fuelMonthlyCost = fuelEnergyMonthlyCost + fuelExtraMonthly;
+    // Flat-rate installment — same formula as the site's own /calculator (InstallmentCalculator).
+    const evDown = ev.price * (evDownPct / 100);
+    const evFinance = Math.max(0, ev.price - evDown);
+    const evInstallment = evTermMonths ? (evFinance + evFinance * (evInterestRate / 100) * (evTermMonths / 12)) / evTermMonths : 0;
+    const evUpfront = evMode === 'credit' ? evDown : ev.price;
+    const evVehicleMonthly = evMode === 'credit' ? evInstallment : 0;
+
+    const fuelDown = fuelCarPrice * (fuelDownPct / 100);
+    const fuelFinance = Math.max(0, fuelCarPrice - fuelDown);
+    const fuelInstallment = fuelTermMonths ? (fuelFinance + fuelFinance * (fuelInterestRate / 100) * (fuelTermMonths / 12)) / fuelTermMonths : 0;
+    const fuelUpfront = fuelMode === 'credit' ? fuelDown : fuelCarPrice;
+    const fuelVehicleMonthly = fuelMode === 'credit' ? fuelInstallment : 0;
+
+    const evMonthlyCost = evEnergyMonthlyCost + evExtraMonthly + evVehicleMonthly;
+    const fuelMonthlyCost = fuelEnergyMonthlyCost + fuelExtraMonthly + fuelVehicleMonthly;
 
     const monthlySavings = fuelMonthlyCost - evMonthlyCost;
-    const priceDiff = ev.price - fuelCarPrice;
+    const priceDiff = evUpfront - fuelUpfront;
     const cumulativeSavings = monthlySavings * 12 * years;
     const netAfterYears = cumulativeSavings - priceDiff;
     const breakevenMonths = priceDiff > 0 && monthlySavings > 0 ? priceDiff / monthlySavings : null;
     return {
       evKwhPerMonth, litersPerMonth, evEnergyMonthlyCost, fuelEnergyMonthlyCost, evCostPerKm, fuelCostPerKm,
-      evAnnualExtra, fuelAnnualExtra, evMonthlyCost, fuelMonthlyCost,
-      monthlySavings, priceDiff, cumulativeSavings, netAfterYears, breakevenMonths,
+      evAnnualExtra, fuelAnnualExtra, evDown, evInstallment, evUpfront, fuelDown, fuelInstallment, fuelUpfront,
+      evMonthlyCost, fuelMonthlyCost, monthlySavings, priceDiff, cumulativeSavings, netAfterYears, breakevenMonths,
     };
   }, [
-    ev, elecPrice, evOtherAnnual, evInsuranceAnnual, evTaxAnnual,
+    ev, elecPrice, evOtherAnnual, evInsuranceAnnual, evTaxAnnual, evMode, evDownPct, evInterestRate, evTermMonths,
     fuelCarPrice, fuelConsumption, fuelPrice, fuelOtherAnnual, fuelInsuranceAnnual, fuelTaxAnnual,
+    fuelMode, fuelDownPct, fuelInterestRate, fuelTermMonths,
     kmPerMonth, years,
   ]);
 
@@ -176,6 +199,64 @@ export default function EvSavingsCalculator() {
               ))}
             </select>
           </label>
+
+          <div className="field" style={{ marginTop: 'var(--space-4)' }}>
+            <span>วิธีชำระเงิน</span>
+            <div className="seg" style={{ marginTop: 'var(--space-2)' }}>
+              <button
+                type="button"
+                className="seg-opt"
+                onClick={() => setEvMode('cash')}
+                style={{ cursor: 'pointer', background: evMode === 'cash' ? 'var(--color-accent-100)' : 'transparent', color: evMode === 'cash' ? 'var(--color-accent-800)' : 'var(--color-text)' }}
+              >
+                เงินสด
+              </button>
+              <button
+                type="button"
+                className="seg-opt"
+                onClick={() => setEvMode('credit')}
+                style={{ cursor: 'pointer', background: evMode === 'credit' ? 'var(--color-accent-100)' : 'transparent', color: evMode === 'credit' ? 'var(--color-accent-800)' : 'var(--color-text)' }}
+              >
+                ผ่อนชำระ (สินเชื่อ)
+              </button>
+            </div>
+          </div>
+
+          {evMode === 'credit' ? (
+            <div style={{ marginTop: 'var(--space-3)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'var(--space-3)' }}>
+                <label className="field">
+                  <span>เงินดาวน์ (%)</span>
+                  <input className="input" type="number" min={0} max={100} value={evDownPct} onChange={(e) => setEvDownPct(Number(e.target.value) || 0)} />
+                </label>
+                <label className="field">
+                  <span>ดอกเบี้ย (%/ปี)</span>
+                  <input className="input" type="number" step="0.01" min={0} value={evInterestRate} onChange={(e) => setEvInterestRate(Number(e.target.value) || 0)} />
+                </label>
+              </div>
+              <div className="field" style={{ marginTop: 'var(--space-3)' }}>
+                <span>ระยะเวลาผ่อน</span>
+                <div className="seg" style={{ marginTop: 'var(--space-2)', flexWrap: 'wrap' }}>
+                  {loanTermOptions.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className="seg-opt tnum"
+                      onClick={() => setEvTermMonths(t)}
+                      style={{ cursor: 'pointer', background: evTermMonths === t ? 'var(--color-accent-100)' : 'transparent', color: evTermMonths === t ? 'var(--color-accent-800)' : 'var(--color-text)' }}
+                    >
+                      {t} ด.
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+                เงินดาวน์ <b className="tnum">{baht(result.evDown)}</b> · ค่างวดโดยประมาณ{' '}
+                <b className="tnum" style={{ color: '#1b3a6b' }}>{baht(result.evInstallment)}</b>/เดือน
+              </p>
+            </div>
+          ) : null}
+
           <label className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>ค่าไฟฟ้า (บาท/หน่วย)</span>
             <input className="input" type="number" step="0.1" min={0} value={elecPrice} onChange={(e) => setElecPrice(Number(e.target.value) || 0)} />
@@ -233,6 +314,64 @@ export default function EvSavingsCalculator() {
             <span>ราคารถน้ำมัน (บาท)</span>
             <input className="input" type="number" min={0} value={fuelCarPrice} onChange={(e) => setFuelCarPrice(Number(e.target.value) || 0)} />
           </label>
+
+          <div className="field" style={{ marginTop: 'var(--space-4)' }}>
+            <span>วิธีชำระเงิน</span>
+            <div className="seg" style={{ marginTop: 'var(--space-2)' }}>
+              <button
+                type="button"
+                className="seg-opt"
+                onClick={() => setFuelMode('cash')}
+                style={{ cursor: 'pointer', background: fuelMode === 'cash' ? 'rgba(194,65,12,0.14)' : 'transparent', color: fuelMode === 'cash' ? '#9a3412' : 'var(--color-text)' }}
+              >
+                เงินสด
+              </button>
+              <button
+                type="button"
+                className="seg-opt"
+                onClick={() => setFuelMode('credit')}
+                style={{ cursor: 'pointer', background: fuelMode === 'credit' ? 'rgba(194,65,12,0.14)' : 'transparent', color: fuelMode === 'credit' ? '#9a3412' : 'var(--color-text)' }}
+              >
+                ผ่อนชำระ (สินเชื่อ)
+              </button>
+            </div>
+          </div>
+
+          {fuelMode === 'credit' ? (
+            <div style={{ marginTop: 'var(--space-3)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'var(--space-3)' }}>
+                <label className="field">
+                  <span>เงินดาวน์ (%)</span>
+                  <input className="input" type="number" min={0} max={100} value={fuelDownPct} onChange={(e) => setFuelDownPct(Number(e.target.value) || 0)} />
+                </label>
+                <label className="field">
+                  <span>ดอกเบี้ย (%/ปี)</span>
+                  <input className="input" type="number" step="0.01" min={0} value={fuelInterestRate} onChange={(e) => setFuelInterestRate(Number(e.target.value) || 0)} />
+                </label>
+              </div>
+              <div className="field" style={{ marginTop: 'var(--space-3)' }}>
+                <span>ระยะเวลาผ่อน</span>
+                <div className="seg" style={{ marginTop: 'var(--space-2)', flexWrap: 'wrap' }}>
+                  {loanTermOptions.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      className="seg-opt tnum"
+                      onClick={() => setFuelTermMonths(t)}
+                      style={{ cursor: 'pointer', background: fuelTermMonths === t ? 'rgba(194,65,12,0.14)' : 'transparent', color: fuelTermMonths === t ? '#9a3412' : 'var(--color-text)' }}
+                    >
+                      {t} ด.
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+                เงินดาวน์ <b className="tnum">{baht(result.fuelDown)}</b> · ค่างวดโดยประมาณ{' '}
+                <b className="tnum" style={{ color: '#c2410c' }}>{baht(result.fuelInstallment)}</b>/เดือน
+              </p>
+            </div>
+          ) : null}
+
           <div className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>ชนิดน้ำมัน</span>
             <div className="seg" style={{ marginTop: 'var(--space-2)', flexWrap: 'wrap' }}>
@@ -333,15 +472,27 @@ export default function EvSavingsCalculator() {
           <div className="card" style={{ padding: 'var(--space-4)' }}>
             <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ค่าใช้จ่ายรวม {ev.label} / เดือน</span>
             <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#1b3a6b' }}>{baht(result.evMonthlyCost)}</b>
-            {result.evAnnualExtra > 0 ? (
-              <span style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--color-neutral-600)' }}>ค่าไฟ {baht(result.evEnergyMonthlyCost)} + อื่นๆ {baht(result.evAnnualExtra / 12)}</span>
+            {result.evAnnualExtra > 0 || evMode === 'credit' ? (
+              <span style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--color-neutral-600)' }}>
+                {[
+                  `ค่าไฟ ${baht(result.evEnergyMonthlyCost)}`,
+                  evMode === 'credit' ? `ค่างวด ${baht(result.evInstallment)}` : null,
+                  result.evAnnualExtra > 0 ? `อื่นๆ ${baht(result.evAnnualExtra / 12)}` : null,
+                ].filter(Boolean).join(' + ')}
+              </span>
             ) : null}
           </div>
           <div className="card" style={{ padding: 'var(--space-4)' }}>
             <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ค่าใช้จ่ายรวมรถน้ำมัน / เดือน</span>
             <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700, color: '#c2410c' }}>{baht(result.fuelMonthlyCost)}</b>
-            {result.fuelAnnualExtra > 0 ? (
-              <span style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--color-neutral-600)' }}>ค่าน้ำมัน {baht(result.fuelEnergyMonthlyCost)} + อื่นๆ {baht(result.fuelAnnualExtra / 12)}</span>
+            {result.fuelAnnualExtra > 0 || fuelMode === 'credit' ? (
+              <span style={{ display: 'block', marginTop: 4, fontSize: 12, color: 'var(--color-neutral-600)' }}>
+                {[
+                  `ค่าน้ำมัน ${baht(result.fuelEnergyMonthlyCost)}`,
+                  fuelMode === 'credit' ? `ค่างวด ${baht(result.fuelInstallment)}` : null,
+                  result.fuelAnnualExtra > 0 ? `อื่นๆ ${baht(result.fuelAnnualExtra / 12)}` : null,
+                ].filter(Boolean).join(' + ')}
+              </span>
             ) : null}
           </div>
           <div className="card" style={{ padding: 'var(--space-4)' }}>
@@ -349,36 +500,38 @@ export default function EvSavingsCalculator() {
             <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700 }}>{baht(result.monthlySavings)}</b>
           </div>
           <div className="card" style={{ padding: 'var(--space-4)' }}>
-            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>ส่วนต่างราคารถ (EV − น้ำมัน)</span>
+            <span style={{ display: 'block', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+              {evMode === 'credit' || fuelMode === 'credit' ? 'ส่วนต่างเงินจ่ายตอนซื้อ (EV − น้ำมัน)' : 'ส่วนต่างราคารถ (EV − น้ำมัน)'}
+            </span>
             <b className="tnum" style={{ display: 'block', marginTop: 4, fontSize: 22, fontWeight: 700 }}>{result.priceDiff > 0 ? baht(result.priceDiff) : `−${baht(Math.abs(result.priceDiff))}`}</b>
           </div>
         </div>
 
         {result.breakevenMonths ? (
           <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            คุ้มทุนส่วนต่างราคารถใน <b className="tnum">{Math.ceil(result.breakevenMonths)}</b> เดือน
+            คุ้มทุนส่วนต่างเงินจ่ายตอนซื้อใน <b className="tnum">{Math.ceil(result.breakevenMonths)}</b> เดือน
             {result.netAfterYears >= 0 ? ` — ที่ ${years} ปี ประหยัดสุทธิ ${baht(result.netAfterYears)}` : ` — ยังไม่ถึงจุดคุ้มทุนภายใน ${years} ปีที่เลือก`}
           </p>
         ) : result.priceDiff <= 0 ? (
           <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            ราคา {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าใช้จ่ายทุกเดือน
+            เงินที่ต้องจ่ายตอนซื้อ {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าใช้จ่ายทุกเดือน
           </p>
         ) : (
           <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            ด้วยตัวเลขที่ตั้งไว้ ค่าใช้จ่ายยังไม่ประหยัดพอที่จะคุ้มส่วนต่างราคารถ ลองปรับระยะทาง/เดือนดู
+            ด้วยตัวเลขที่ตั้งไว้ ค่าใช้จ่ายยังไม่ประหยัดพอที่จะคุ้มส่วนต่างเงินจ่ายตอนซื้อ ลองปรับระยะทาง/เดือนดู
           </p>
         )}
 
         <div style={{ marginTop: 'var(--space-6)' }}>
           <p style={{ margin: '0 0 var(--space-3)', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
-            ต้นทุนรวมสะสม (ราคารถ + ค่าพลังงาน + ค่าใช้จ่ายอื่นๆ ต่อปี)
+            ต้นทุนรวมสะสม (เงินจ่ายตอนซื้อ + ค่าใช้จ่ายรายเดือนทั้งหมด)
           </p>
           <TcoChart
             evLabel={ev.label}
-            evPrice={ev.price}
+            evPrice={result.evUpfront}
             evMonthlyCost={result.evMonthlyCost}
             fuelLabel="รถน้ำมัน"
-            fuelPrice={fuelCarPrice}
+            fuelPrice={result.fuelUpfront}
             fuelMonthlyCost={result.fuelMonthlyCost}
             years={years}
             breakevenMonths={result.breakevenMonths}
@@ -386,7 +539,7 @@ export default function EvSavingsCalculator() {
         </div>
 
         <p style={{ margin: 'var(--space-5) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
-          ตัวเลขทั้งหมดเป็นการประมาณการเพื่อใช้เปรียบเทียบเท่านั้น อัตราสิ้นเปลืองไฟอ้างอิงสเปกทางการ (มาตรฐาน CLTC) การใช้งานจริงอาจแตกต่างกันไปตามสภาพถนนและรูปแบบการขับขี่ ค่าใช้จ่ายอื่นๆ/ค่าประกันภัย/ค่าภาษี เป็นตัวเลขที่ผู้ใช้ระบุเอง หากไม่กรอกระบบจะคำนวณเฉพาะค่าพลังงาน ไม่รวมค่าบำรุงรักษา
+          ตัวเลขทั้งหมดเป็นการประมาณการเพื่อใช้เปรียบเทียบเท่านั้น อัตราสิ้นเปลืองไฟอ้างอิงสเปกทางการ (มาตรฐาน CLTC) การใช้งานจริงอาจแตกต่างกันไปตามสภาพถนนและรูปแบบการขับขี่ ค่าใช้จ่ายอื่นๆ/ค่าประกันภัย/ค่าภาษี เป็นตัวเลขที่ผู้ใช้ระบุเอง หากไม่กรอกระบบจะคำนวณเฉพาะค่าพลังงาน ไม่รวมค่าบำรุงรักษา ค่างวดกรณีผ่อนชำระคำนวณแบบอัตราดอกเบี้ยคงที่ (Flat Rate) เช่นเดียวกับหน้าคำนวณค่างวด เพื่อการเปรียบเทียบเท่านั้น เงื่อนไขจริงขึ้นอยู่กับการอนุมัติของสถาบันการเงิน และกราฟยังคงคิดค่างวดต่อเนื่องตลอดช่วงเวลาที่เลือกแม้ผ่อนครบก่อนหน้านั้น
         </p>
       </div>
 
