@@ -18,6 +18,18 @@ const EXTENSIONS = ['jpg', 'jpeg', 'png', 'webp', 'avif'];
 export function resolveAsset(filename?: string): string | null {
   if (!filename) return null;
 
+  // Explicit public paths are already authoritative. This avoids stale
+  // build-cache results when an image is added after an article was first
+  // prerendered, while filename-only entries still retain placeholder checks.
+  const directPublicPath = filename.trim();
+  if (
+    (directPublicPath.startsWith('/images/') || directPublicPath.startsWith('/assets/')) &&
+    !directPublicPath.includes('..') &&
+    directPublicPath.slice(1).split('/').length === 2
+  ) {
+    return directPublicPath;
+  }
+
   // Captions sometimes carry a trailing note, e.g. "showroom.webp · แผนที่รอยืนยัน".
   const clean = filename.trim().split(/\s+/)[0];
   if (!clean || clean.includes('/') || clean.includes('..')) return null;

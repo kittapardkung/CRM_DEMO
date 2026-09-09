@@ -1507,7 +1507,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'cost-per-km-electric-van',
-    image: 'article-cost-per-km-electric-van.jpg',
+    image: '/images/article-cost-per-km-electric-van.jpg',
     category: 'เปรียบเทียบรถ',
     relatedVehicleSlug: 'porta',
     publishedAt: '9 ก.ย. 2569',
