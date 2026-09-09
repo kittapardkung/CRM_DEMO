@@ -7,6 +7,7 @@ import { dealer } from '@/lib/data/dealer';
 import { money } from '@/lib/format';
 import { track } from '@/lib/analytics';
 import PhoneLink from './PhoneLink';
+import TcoChart from './TcoChart';
 
 interface EvOption {
   id: string;
@@ -43,6 +44,11 @@ const fuelPresets = [
 ];
 
 const ownershipYears = [1, 3, 5];
+
+const EV_PANEL_BG = 'linear-gradient(180deg, rgba(27,58,107,0.07), rgba(27,58,107,0.02))';
+const EV_PANEL_BORDER = 'rgba(27,58,107,0.22)';
+const FUEL_PANEL_BG = 'linear-gradient(180deg, rgba(194,65,12,0.08), rgba(194,65,12,0.02))';
+const FUEL_PANEL_BORDER = 'rgba(194,65,12,0.25)';
 
 function baht(n: number): string {
   return '฿' + Math.round(n).toLocaleString('en-US');
@@ -83,10 +89,45 @@ export default function EvSavingsCalculator() {
   if (!ev || !result) return null;
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-8)' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'var(--space-8)', alignItems: 'start' }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
-          <p className="kicker">รถไฟฟ้าที่สนใจ</p>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
+      {/* Shared usage inputs — apply to both sides of the comparison. */}
+      <div
+        className="card"
+        style={{ padding: 'var(--space-4) var(--space-6)', display: 'flex', gap: 'var(--space-6)', flexWrap: 'wrap', alignItems: 'flex-end' }}
+      >
+        <label className="field" style={{ flex: '1 1 200px' }}>
+          <span>ระยะทางเฉลี่ย (กม./เดือน)</span>
+          <input className="input" type="number" min={0} value={kmPerMonth} onChange={(e) => setKmPerMonth(Number(e.target.value) || 0)} />
+        </label>
+        <div className="field" style={{ flex: '1 1 200px' }}>
+          <span>ระยะเวลาถือครอง</span>
+          <div className="seg" style={{ marginTop: 'var(--space-2)' }}>
+            {ownershipYears.map((y) => (
+              <button
+                key={y}
+                type="button"
+                className="seg-opt tnum"
+                onClick={() => {
+                  track('calculate_savings', { years: y, model: ev.id });
+                  setYears(y);
+                }}
+                style={{
+                  cursor: 'pointer',
+                  background: years === y ? 'var(--color-accent-100)' : 'transparent',
+                  color: years === y ? 'var(--color-accent-800)' : 'var(--color-text)',
+                }}
+              >
+                {y} ปี
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Two-column comparison: EV (left, navy tint) vs. fuel car (right, orange tint). */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(300px,1fr))', gap: 'var(--space-6)', alignItems: 'start' }}>
+        <div style={{ background: EV_PANEL_BG, border: `1px solid ${EV_PANEL_BORDER}`, borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+          <p className="kicker" style={{ color: '#1b3a6b' }}>รถไฟฟ้าที่สนใจ</p>
           <label className="field">
             <span>รุ่น WULING EV</span>
             <select className="input" value={ev.id} onChange={(e) => setEvId(e.target.value)}>
@@ -95,17 +136,22 @@ export default function EvSavingsCalculator() {
               ))}
             </select>
           </label>
-          <label className="field">
+          <label className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>ค่าไฟฟ้า (บาท/หน่วย)</span>
             <input className="input" type="number" step="0.1" min={0} value={elecPrice} onChange={(e) => setElecPrice(Number(e.target.value) || 0)} />
           </label>
+          <p style={{ margin: 'var(--space-4) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+            อัตราสิ้นเปลืองไฟโดยประมาณ <b className="tnum">{ev.consumptionPer100km}</b> kWh/100กม. (อ้างอิงสเปกทางการ CLTC)
+          </p>
+        </div>
 
-          <p className="kicker" style={{ marginTop: 'var(--space-4)' }}>รถน้ำมันที่จะเทียบ</p>
+        <div style={{ background: FUEL_PANEL_BG, border: `1px solid ${FUEL_PANEL_BORDER}`, borderRadius: 'var(--radius-lg)', padding: 'var(--space-6)' }}>
+          <p className="kicker" style={{ color: '#c2410c' }}>รถน้ำมันที่จะเทียบ</p>
           <label className="field">
             <span>ราคารถน้ำมัน (บาท)</span>
             <input className="input" type="number" min={0} value={fuelCarPrice} onChange={(e) => setFuelCarPrice(Number(e.target.value) || 0)} />
           </label>
-          <div className="field">
+          <div className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>ชนิดน้ำมัน</span>
             <div className="seg" style={{ marginTop: 'var(--space-2)', flexWrap: 'wrap' }}>
               {fuelPresets.map((p) => (
@@ -116,8 +162,8 @@ export default function EvSavingsCalculator() {
                   onClick={() => onFuelPreset(p.id)}
                   style={{
                     cursor: 'pointer',
-                    background: fuelPresetId === p.id ? 'var(--color-accent-100)' : 'transparent',
-                    color: fuelPresetId === p.id ? 'var(--color-accent-800)' : 'var(--color-text)',
+                    background: fuelPresetId === p.id ? 'rgba(194,65,12,0.14)' : 'transparent',
+                    color: fuelPresetId === p.id ? '#9a3412' : 'var(--color-text)',
                   }}
                 >
                   {p.label}
@@ -125,91 +171,103 @@ export default function EvSavingsCalculator() {
               ))}
             </div>
           </div>
-          <label className="field">
+          <label className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>ราคาน้ำมัน (บาท/ลิตร)</span>
             <input className="input" type="number" step="0.1" min={0} value={fuelPrice} onChange={(e) => setFuelPrice(Number(e.target.value) || 0)} />
           </label>
-          <label className="field">
+          <label className="field" style={{ marginTop: 'var(--space-4)' }}>
             <span>อัตราสิ้นเปลือง (กม./ลิตร)</span>
             <input className="input" type="number" min={1} value={fuelConsumption} onChange={(e) => setFuelConsumption(Number(e.target.value) || 0)} />
           </label>
+        </div>
+      </div>
 
-          <p className="kicker" style={{ marginTop: 'var(--space-4)' }}>การใช้งาน</p>
-          <label className="field">
-            <span>ระยะทางเฉลี่ย (กม./เดือน)</span>
-            <input className="input" type="number" min={0} value={kmPerMonth} onChange={(e) => setKmPerMonth(Number(e.target.value) || 0)} />
-          </label>
-          <div className="field">
-            <span>ระยะเวลาถือครอง</span>
-            <div className="seg" style={{ marginTop: 'var(--space-2)' }}>
-              {ownershipYears.map((y) => (
-                <button
-                  key={y}
-                  type="button"
-                  className="seg-opt tnum"
-                  onClick={() => {
-                    track('calculate_savings', { years: y, model: ev.id });
-                    setYears(y);
-                  }}
-                  style={{
-                    cursor: 'pointer',
-                    background: years === y ? 'var(--color-accent-100)' : 'transparent',
-                    color: years === y ? 'var(--color-accent-800)' : 'var(--color-text)',
-                  }}
-                >
-                  {y} ปี
-                </button>
-              ))}
-            </div>
-          </div>
+      {/* Results — the cumulative-savings figure is the headline; everything else supports it. */}
+      <div className="card" style={{ padding: 'var(--space-6)' }}>
+        <p style={{ margin: '0 0 var(--space-3)', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+          ผลการเปรียบเทียบ
+        </p>
+
+        <div
+          style={{
+            background: 'var(--wl-ink)',
+            borderRadius: 'var(--radius-md)',
+            padding: 'var(--space-5) var(--space-6)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            gap: 'var(--space-3)',
+          }}
+        >
+          <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.82)' }}>ประหยัดสะสมใน {years} ปี</span>
+          <span
+            className="tnum"
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 700,
+              fontSize: 'clamp(40px,6vw,64px)',
+              lineHeight: 1,
+              color: result.cumulativeSavings >= 0 ? 'var(--wl-lime)' : '#ff9d7a',
+            }}
+          >
+            {result.cumulativeSavings >= 0 ? '' : '−'}{baht(Math.abs(result.cumulativeSavings))}
+          </span>
         </div>
 
-        <div className="card" style={{ padding: 'var(--space-6)' }}>
-          <p style={{ margin: '0 0 var(--space-4)', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>ผลเปรียบเทียบต่อเดือน</p>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)', padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)' }}>
-            <span>ค่าไฟ {ev.label} ({ev.consumptionPer100km} kWh/100กม.)</span>
-            <b className="tnum" style={{ fontWeight: 600 }}>{baht(result.evMonthlyCost)}</b>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-3)', marginTop: 'var(--space-5)' }}>
+          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
+            <span>ค่าไฟ {ev.label} / เดือน</span>
+            <b className="tnum" style={{ fontWeight: 600, color: '#1b3a6b' }}>{baht(result.evMonthlyCost)}</b>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)', padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)' }}>
-            <span>ค่าน้ำมัน ({fuelConsumption || 0} กม./ลิตร)</span>
-            <b className="tnum" style={{ fontWeight: 600 }}>{baht(result.fuelMonthlyCost)}</b>
+          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
+            <span>ค่าน้ำมัน / เดือน</span>
+            <b className="tnum" style={{ fontWeight: 600, color: '#c2410c' }}>{baht(result.fuelMonthlyCost)}</b>
           </div>
-
-          <p style={{ margin: 'var(--space-6) 0 0', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-2-700)' }}>
-            ประหยัดค่าพลังงาน / เดือน
-          </p>
-          <p className="tnum" style={{ margin: 'var(--space-2) 0 0', fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px,5vw,50px)', lineHeight: 1, color: result.monthlySavings >= 0 ? 'var(--color-accent-700)' : 'var(--color-text)' }}>
-            {baht(result.monthlySavings)}
-          </p>
-
-          <div style={{ marginTop: 'var(--space-4)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)', padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)' }}>
-            <span>ประหยัดสะสมใน {years} ปี</span>
-            <b className="tnum" style={{ fontWeight: 600 }}>{baht(result.cumulativeSavings)}</b>
+          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
+            <span>ประหยัดค่าพลังงาน / เดือน</span>
+            <b className="tnum" style={{ fontWeight: 600 }}>{baht(result.monthlySavings)}</b>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)', padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)' }}>
+          <div style={{ padding: 'var(--space-2) 0', borderBottom: '1px solid var(--color-divider)', display: 'flex', justifyContent: 'space-between', gap: 'var(--space-3)' }}>
             <span>ส่วนต่างราคารถ (EV − น้ำมัน)</span>
             <b className="tnum" style={{ fontWeight: 600 }}>{result.priceDiff > 0 ? baht(result.priceDiff) : `−${baht(Math.abs(result.priceDiff))}`}</b>
           </div>
-
-          {result.breakevenMonths ? (
-            <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-              คุ้มทุนส่วนต่างราคารถใน <b className="tnum">{Math.ceil(result.breakevenMonths)}</b> เดือน
-              {result.netAfterYears >= 0 ? ` — ที่ ${years} ปี ประหยัดสุทธิ ${baht(result.netAfterYears)}` : ` — ยังไม่ถึงจุดคุ้มทุนภายใน ${years} ปีที่เลือก`}
-            </p>
-          ) : result.priceDiff <= 0 ? (
-            <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-              ราคา {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าพลังงานทุกเดือน
-            </p>
-          ) : (
-            <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-              ด้วยตัวเลขที่ตั้งไว้ ค่าพลังงานยังไม่ประหยัดพอที่จะคุ้มส่วนต่างราคารถ ลองปรับระยะทาง/เดือนดู
-            </p>
-          )}
-
-          <p style={{ margin: 'var(--space-4) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
-            ตัวเลขทั้งหมดเป็นการประมาณการเพื่อใช้เปรียบเทียบเท่านั้น อัตราสิ้นเปลืองไฟอ้างอิงสเปกทางการ (มาตรฐาน CLTC) การใช้งานจริงอาจแตกต่างกันไปตามสภาพถนนและรูปแบบการขับขี่ ไม่รวมค่าบำรุงรักษาและค่าประกันภัย
-          </p>
         </div>
+
+        {result.breakevenMonths ? (
+          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+            คุ้มทุนส่วนต่างราคารถใน <b className="tnum">{Math.ceil(result.breakevenMonths)}</b> เดือน
+            {result.netAfterYears >= 0 ? ` — ที่ ${years} ปี ประหยัดสุทธิ ${baht(result.netAfterYears)}` : ` — ยังไม่ถึงจุดคุ้มทุนภายใน ${years} ปีที่เลือก`}
+          </p>
+        ) : result.priceDiff <= 0 ? (
+          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+            ราคา {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าพลังงานทุกเดือน
+          </p>
+        ) : (
+          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
+            ด้วยตัวเลขที่ตั้งไว้ ค่าพลังงานยังไม่ประหยัดพอที่จะคุ้มส่วนต่างราคารถ ลองปรับระยะทาง/เดือนดู
+          </p>
+        )}
+
+        <div style={{ marginTop: 'var(--space-6)' }}>
+          <p style={{ margin: '0 0 var(--space-3)', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
+            ต้นทุนรวมสะสม (ราคารถ + ค่าพลังงาน)
+          </p>
+          <TcoChart
+            evLabel={ev.label}
+            evPrice={ev.price}
+            evMonthlyCost={result.evMonthlyCost}
+            fuelLabel="รถน้ำมัน"
+            fuelPrice={fuelCarPrice}
+            fuelMonthlyCost={result.fuelMonthlyCost}
+            years={years}
+            breakevenMonths={result.breakevenMonths}
+          />
+        </div>
+
+        <p style={{ margin: 'var(--space-5) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
+          ตัวเลขทั้งหมดเป็นการประมาณการเพื่อใช้เปรียบเทียบเท่านั้น อัตราสิ้นเปลืองไฟอ้างอิงสเปกทางการ (มาตรฐาน CLTC) การใช้งานจริงอาจแตกต่างกันไปตามสภาพถนนและรูปแบบการขับขี่ ไม่รวมค่าบำรุงรักษาและค่าประกันภัย
+        </p>
       </div>
 
       <section
