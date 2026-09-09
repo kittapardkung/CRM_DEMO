@@ -53,6 +53,12 @@ export default function Footer() {
             <a href={dealer.facebookUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
               Facebook
             </a>
+            <a href={dealer.tiktokUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
+              TikTok
+            </a>
+            <a href={dealer.youtubeUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
+              YouTube
+            </a>
             <a href={dealer.lineUrl} target="_blank" rel="noopener noreferrer" style={{ fontSize: 15, textDecoration: 'none', color: 'rgba(255,255,255,0.82)' }}>
               LINE
             </a>

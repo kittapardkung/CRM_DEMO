@@ -3,6 +3,7 @@ export const primaryNav = [
   { label: 'รถยนต์', href: '/models' },
   { label: 'Operating Lease', href: '/lease' },
   { label: 'เปรียบเทียบรถ', href: '/compare' },
+  { label: 'คำนวณความคุ้มค่า!!! เทียบรถน้ำมัน', href: '/savings' },
   { label: 'บทความ', href: '/articles' },
   { label: 'ศูนย์บริการ', href: '/service' },
   { label: 'ติดต่อเรา', href: '/contact' },
@@ -12,6 +13,7 @@ export const footerServiceLinks = [
   { label: 'Operating Lease สำหรับองค์กร', href: '/lease' },
   { label: 'เปรียบเทียบรถ', href: '/compare' },
   { label: 'คำนวณค่างวด', href: '/calculator' },
+  { label: 'คำนวณความคุ้มค่า เทียบรถน้ำมัน', href: '/savings' },
   { label: 'ทดลองขับ', href: '/test-drive' },
   { label: 'บทความ', href: '/articles' },
   { label: 'พื้นที่ให้บริการ', href: '/areas' },
@@ -20,6 +22,7 @@ export const footerServiceLinks = [
 
 /** Homepage quick-link rail, in the design's order. */
 export const quickLinks = [
+  { label: 'คำนวณความคุ้มค่า!!! เทียบรถน้ำมัน', href: '/savings' },
   { label: 'คำนวณค่างวด', href: '/calculator' },
   { label: 'เปรียบเทียบรถทุกรุ่น', href: '/compare' },
   { label: 'ศูนย์บริการและนัดหมาย', href: '/service' },
@@ -49,6 +52,8 @@ export function ctaHref(goRoute: string): string {
       return '/lease';
     case 'calculator':
       return '/calculator';
+    case 'savings':
+      return '/savings';
     case 'compare':
       return '/compare';
     case 'service':

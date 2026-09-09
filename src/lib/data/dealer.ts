@@ -23,6 +23,9 @@ export const dealer = {
   /** Real showroom pin — used for the "navigate here" link (no API key needed). */
   mapsUrl: 'https://maps.app.goo.gl/96HHoHDMUTiYHAwF7',
   facebookUrl: 'https://www.facebook.com/profile.php?id=61583789612737',
+  /** Same handle already cited as the social byline on several articles (`lib/data/articles.ts`). */
+  tiktokUrl: 'https://www.tiktok.com/@wuling_chonburi',
+  youtubeUrl: 'https://www.youtube.com/@WULINGChonburiJTGROUP',
 };
 
 /**

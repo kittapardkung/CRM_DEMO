@@ -39,7 +39,9 @@ export type TrackedEvent =
   | 'company_test_drive_click'
   | 'lease_form_submit'
   | 'submit_lease'
-  | 'calculate_fleet';
+  | 'calculate_fleet'
+  | 'calculate_savings'
+  | 'click_social';
 
 declare global {
   interface Window {
