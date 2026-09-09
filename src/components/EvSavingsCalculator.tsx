@@ -79,7 +79,7 @@ export default function EvSavingsCalculator() {
   const [fuelInsuranceAnnual, setFuelInsuranceAnnual] = useState(0);
   const [fuelTaxAnnual, setFuelTaxAnnual] = useState(0);
 
-  const [kmPerMonth, setKmPerMonth] = useState(1500);
+  const [kmPerMonth, setKmPerMonth] = useState(3000);
   const [years, setYears] = useState<number>(3);
 
   const ev = evOptions.find((o) => o.id === evId) ?? evOptions[0];
@@ -135,6 +135,9 @@ export default function EvSavingsCalculator() {
         <label className="field" style={{ flex: '1 1 200px' }}>
           <span>ระยะทางเฉลี่ย (กม./เดือน)</span>
           <input className="input" type="number" min={0} value={kmPerMonth} onChange={(e) => setKmPerMonth(Number(e.target.value) || 0)} />
+          <span style={{ fontSize: 12, color: 'var(--color-neutral-600)' }}>
+            เฉลี่ย <span className="tnum">{(kmPerMonth / 30).toLocaleString('en-US', { maximumFractionDigits: 1 })}</span> กม./วัน
+          </span>
         </label>
         <div className="field" style={{ flex: '1 1 200px' }}>
           <span>ระยะเวลาถือครอง</span>
