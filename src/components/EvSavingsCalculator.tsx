@@ -507,21 +507,6 @@ export default function EvSavingsCalculator() {
           </div>
         </div>
 
-        {result.breakevenMonths ? (
-          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            คุ้มทุนส่วนต่างเงินจ่ายตอนซื้อใน <b className="tnum">{Math.ceil(result.breakevenMonths)}</b> เดือน
-            {result.netAfterYears >= 0 ? ` — ที่ ${years} ปี ประหยัดสุทธิ ${baht(result.netAfterYears)}` : ` — ยังไม่ถึงจุดคุ้มทุนภายใน ${years} ปีที่เลือก`}
-          </p>
-        ) : result.priceDiff <= 0 ? (
-          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            เงินที่ต้องจ่ายตอนซื้อ {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าใช้จ่ายทุกเดือน
-          </p>
-        ) : (
-          <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>
-            ด้วยตัวเลขที่ตั้งไว้ ค่าใช้จ่ายยังไม่ประหยัดพอที่จะคุ้มส่วนต่างเงินจ่ายตอนซื้อ ลองปรับระยะทาง/เดือนดู
-          </p>
-        )}
-
         <div style={{ marginTop: 'var(--space-6)' }}>
           <p style={{ margin: '0 0 var(--space-3)', fontSize: 12, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-neutral-600)' }}>
             ต้นทุนรวมสะสม (เงินจ่ายตอนซื้อ + ค่าใช้จ่ายรายเดือนทั้งหมด)
@@ -536,6 +521,51 @@ export default function EvSavingsCalculator() {
             years={years}
             breakevenMonths={result.breakevenMonths}
           />
+        </div>
+
+        {/* Breakeven — the headline number under the chart, just as prominent as ประหยัดสะสม above. */}
+        <div
+          style={{
+            marginTop: 'var(--space-6)',
+            background: 'var(--wl-ink)',
+            borderRadius: 'var(--radius-lg)',
+            padding: 'clamp(24px,3.6vw,44px)',
+            textAlign: 'center',
+          }}
+        >
+          {result.breakevenMonths ? (
+            <>
+              <p style={{ margin: 0, fontSize: 'clamp(16px,2vw,20px)', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>จุดคุ้มทุน</p>
+              <p className="tnum" style={{ margin: 'var(--space-2) 0 0', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(48px,8vw,80px)', lineHeight: 1, color: 'var(--wl-lime)' }}>
+                {Math.ceil(result.breakevenMonths)} <span style={{ fontSize: '0.42em' }}>เดือน</span>
+              </p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'rgba(255,255,255,0.78)' }}>
+                {result.netAfterYears >= 0
+                  ? `ที่ ${years} ปี ประหยัดสุทธิ ${baht(result.netAfterYears)}`
+                  : `ยังไม่ถึงจุดคุ้มทุนภายใน ${years} ปีที่เลือก`}
+              </p>
+            </>
+          ) : result.priceDiff <= 0 ? (
+            <>
+              <p style={{ margin: 0, fontSize: 'clamp(16px,2vw,20px)', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>จุดคุ้มทุน</p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(36px,6vw,60px)', lineHeight: 1.1, color: 'var(--wl-lime)' }}>
+                คุ้มทันที
+              </p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'rgba(255,255,255,0.78)' }}>
+                เงินที่ต้องจ่ายตอนซื้อ {ev.label} ไม่สูงกว่ารถน้ำมันคันที่เทียบ แถมยังประหยัดค่าใช้จ่ายทุกเดือน
+              </p>
+            </>
+          ) : (
+            <>
+              <p style={{ margin: 0, fontSize: 'clamp(16px,2vw,20px)', fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>จุดคุ้มทุน</p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px,4.4vw,44px)', lineHeight: 1.2, color: '#ff9d7a' }}>
+                ยังไม่คุ้มทุนด้วยตัวเลขนี้
+              </p>
+              <p style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'rgba(255,255,255,0.78)' }}>
+                ค่าใช้จ่ายยังไม่ประหยัดพอที่จะคุ้มส่วนต่างเงินจ่ายตอนซื้อ ลองปรับระยะทาง/เดือนดู
+              </p>
+            </>
+          )}
         </div>
 
         <p style={{ margin: 'var(--space-5) 0 0', fontSize: 12, color: 'var(--color-neutral-600)' }}>
