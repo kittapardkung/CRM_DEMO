@@ -78,7 +78,7 @@ export default function VideoHub({
           </Link>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'var(--space-6)' }}>
+        <div className="om-video-grid">
           {filtered.map((v) => (
             <VideoCard key={v.id} video={v} />
           ))}

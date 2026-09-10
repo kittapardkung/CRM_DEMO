@@ -364,6 +364,13 @@ details[open] > summary::after {
   gap: var(--space-6);
 }
 
+/* Video Hub grid — 9:16 cards, auto-fit on desktop, fixed 2 columns on mobile (below). */
+.om-video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
 /* Article detail: main column + fixed 300px rail. */
 .om-art-grid {
   display: grid;
@@ -404,6 +411,10 @@ details[open] > summary::after {
 
 @media (max-width: 560px) {
   .om-acc-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+  .om-video-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-3);
   }
