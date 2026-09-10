@@ -215,9 +215,14 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 {/* "planned" videos (no file shot yet) are skipped silently — LEO's draft
                     articles carry [VIDEO PLACEHOLDER] sections before production finishes. */}
                 {s.video?.status === 'produced' && s.video.youtubeId ? (
-                  <div style={{ margin: 'var(--space-4) 0 0', maxWidth: 360 }}>
-                    <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
-                    <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13 }}>
+                  <div style={{ margin: 'var(--space-4) 0 0', background: 'var(--color-accent-100)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
+                    <p style={{ margin: '0 0 var(--space-3)', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 19 }}>
+                      วิดีโอ: {s.video.title}
+                    </p>
+                    <div style={{ maxWidth: 360, margin: '0 auto' }}>
+                      <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
+                    </div>
+                    <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, textAlign: 'center' }}>
                       <Link href={videosHubHref(article.relatedVehicleSlug, s.video.youtubeId)}>ดูวิดีโอเพิ่มเติมที่วิดีโอสาระน่ารู้ →</Link>
                     </p>
                   </div>
