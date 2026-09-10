@@ -173,6 +173,17 @@ export const videos: Video[] = [
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-agricultural-drone',
+    youtubeId: '8KLSPPmaDCc',
+    title: 'PORTA EV กับ โดรนการเกษตร ... จะรอดไหม ??',
+    description: 'PORTA EV ตอบโจทย์ธุรกิจโดรนการเกษตรแค่ไหน เช็กระยะวิ่งต่อวัน น้ำหนักบรรทุก และพื้นที่เก็บโดรน',
+    topic: 'biz',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'electric-van-agricultural-drone-business-chonburi',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
