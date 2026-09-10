@@ -112,7 +112,7 @@ export const videos: Video[] = [
     description: '10 ธุรกิจที่ใช้รถตู้ไฟฟ้าได้คุ้ม ตั้งแต่ E-commerce, Last Mile Delivery ไปจนถึงทีมช่างและ Mobile Service',
     topic: 'biz',
     relatedVehicleSlug: 'porta',
-    relatedArticleSlug: 'porta-ev-business-use',
+    relatedArticleSlug: '10-businesses-electric-van-chonburi',
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
