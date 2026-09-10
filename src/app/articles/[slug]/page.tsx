@@ -5,6 +5,7 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ImageSlot from '@/components/ImageSlot';
 import PhoneLink from '@/components/PhoneLink';
 import VideoEmbed from '@/components/VideoEmbed';
+import TikTokEmbed from '@/components/TikTokEmbed';
 import { allArticles, getArticle } from '@/lib/data/articles';
 import { getVehicle } from '@/lib/data/vehicles';
 import { videos } from '@/lib/data/videos';
@@ -21,10 +22,10 @@ export function generateStaticParams() {
 
 /**
  * Links a "produced" article video back to the Video Hub, filtered to the
- * same model and (when the youtubeId matches a Video Hub entry) topic.
+ * same model and (when the clip id matches a Video Hub entry) topic.
  */
-function videosHubHref(vehicleSlug: string, youtubeId: string): string {
-  const topic = videos.find((v) => v.youtubeId === youtubeId)?.topic;
+function videosHubHref(vehicleSlug: string, clipId: string): string {
+  const topic = videos.find((v) => v.youtubeId === clipId || v.tiktokId === clipId)?.topic;
   const params = new URLSearchParams({ model: vehicleSlug });
   if (topic) params.set('topic', topic);
   return `/videos?${params.toString()}`;
@@ -213,17 +214,23 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 ) : null}
 
                 {/* "planned" videos (no file shot yet) are skipped silently — LEO's draft
-                    articles carry [VIDEO PLACEHOLDER] sections before production finishes. */}
-                {s.video?.status === 'produced' && s.video.youtubeId ? (
+                    articles carry [VIDEO PLACEHOLDER] sections before production finishes.
+                    youtubeId is preferred (MILESTONE §5); tiktokId covers a clip that has
+                    shipped to TikTok but not yet to YouTube. */}
+                {s.video?.status === 'produced' && (s.video.youtubeId || s.video.tiktokId) ? (
                   <div style={{ margin: 'var(--space-4) 0 0', background: 'var(--color-accent-100)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
                     <p style={{ margin: '0 0 var(--space-3)', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 23, textAlign: 'center' }}>
                       วิดีโอ: {s.video.title}
                     </p>
                     <div style={{ maxWidth: 360, margin: '0 auto' }}>
-                      <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
+                      {s.video.youtubeId ? (
+                        <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
+                      ) : (
+                        <TikTokEmbed title={s.video.title} tiktokId={s.video.tiktokId!} />
+                      )}
                     </div>
                     <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, textAlign: 'center' }}>
-                      <Link href={videosHubHref(article.relatedVehicleSlug, s.video.youtubeId)}>ดูวิดีโอเพิ่มเติมที่วิดีโอสาระน่ารู้ →</Link>
+                      <Link href={videosHubHref(article.relatedVehicleSlug, s.video.youtubeId ?? s.video.tiktokId!)}>ดูวิดีโอเพิ่มเติมที่วิดีโอสาระน่ารู้ →</Link>
                     </p>
                   </div>
                 ) : null}

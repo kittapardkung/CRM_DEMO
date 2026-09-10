@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import VideoEmbed from '@/components/VideoEmbed';
+import TikTokEmbed from '@/components/TikTokEmbed';
 import { vehicles } from '@/lib/data/vehicles';
 import { videoTopics, videoTopicLabels, type Video, type VideoTopic } from '@/lib/data/videos';
 import { getArticle } from '@/lib/data/articles';
@@ -107,12 +108,16 @@ function FilterPill({ active, onClick, label }: { active: boolean; onClick: () =
 function VideoCard({ video }: { video: Video }) {
   const vehicle = vehicles.find((v) => v.slug === video.relatedVehicleSlug);
   const relatedArticle = video.relatedArticleSlug ? getArticle(video.relatedArticleSlug) : undefined;
-  const produced = video.status === 'produced' && !!video.youtubeId;
+  const produced = video.status === 'produced' && !!(video.youtubeId || video.tiktokId);
 
   return (
     <article style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
       {produced ? (
-        <VideoEmbed title={video.title} youtubeId={video.youtubeId!} />
+        video.youtubeId ? (
+          <VideoEmbed title={video.title} youtubeId={video.youtubeId} />
+        ) : (
+          <TikTokEmbed title={video.title} tiktokId={video.tiktokId!} />
+        )
       ) : (
         <div
           style={{

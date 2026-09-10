@@ -139,6 +139,13 @@ export interface ArticleLink {
 export interface ArticleSectionVideo {
   /** Empty/absent while status is 'planned' (no file shot yet). */
   youtubeId?: string;
+  /**
+   * Numeric TikTok video id (from tiktok.com/@handle/video/<id>), used only
+   * when no `youtubeId` exists yet. Per MILESTONE §5 YouTube is meant to be
+   * the site's single embeddable source — this exists because some clips
+   * ship to TikTok first, not as the preferred path.
+   */
+  tiktokId?: string;
   title: string;
   durationSec?: number;
   /** Short summary/spoken-line text so Google can index the content even before the video plays. */

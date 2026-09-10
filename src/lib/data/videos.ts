@@ -29,6 +29,8 @@ export interface Video {
   id: string;
   /** Empty while status is 'planned' — no file shot yet. */
   youtubeId?: string;
+  /** Numeric TikTok video id, used only when no `youtubeId` exists yet (see ArticleSectionVideo.tiktokId). */
+  tiktokId?: string;
   title: string;
   description: string;
   durationSec?: number;
@@ -62,12 +64,14 @@ export const videos: Video[] = [
   },
   {
     id: 'porta-payload',
-    title: 'PORTA EV บรรทุกได้กี่กิโล? เจาะความสามารถบรรทุก 1.2 ตัน',
+    tiktokId: '7644893678129138965',
+    title: 'PORTA EV แบกจริง 1.2 ตัน ไปไหวไหม !?',
     description: 'น้ำหนักบรรทุกสูงสุดประมาณ 1,249 กก. ครอบคลุมงานแบบไหนบ้าง',
     topic: 'load',
     relatedVehicleSlug: 'porta',
     relatedArticleSlug: 'porta-ev-payload',
-    status: 'planned',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
   },
   {
     id: 'porta-dimensions',
