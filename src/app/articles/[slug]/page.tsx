@@ -216,7 +216,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                     articles carry [VIDEO PLACEHOLDER] sections before production finishes. */}
                 {s.video?.status === 'produced' && s.video.youtubeId ? (
                   <div style={{ margin: 'var(--space-4) 0 0', background: 'var(--color-accent-100)', borderRadius: 'var(--radius-lg)', padding: 'var(--space-4)' }}>
-                    <p style={{ margin: '0 0 var(--space-3)', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 23 }}>
+                    <p style={{ margin: '0 0 var(--space-3)', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 23, textAlign: 'center' }}>
                       วิดีโอ: {s.video.title}
                     </p>
                     <div style={{ maxWidth: 360, margin: '0 auto' }}>
