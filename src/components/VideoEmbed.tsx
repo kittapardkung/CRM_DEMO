@@ -3,6 +3,16 @@
 import { useState } from 'react';
 import { track } from '@/lib/analytics';
 
+/** YouTube "play button" mark — identifies the clip link as going out to YouTube. */
+function YouTubeLogo() {
+  return (
+    <svg viewBox="0 0 28 20" width="20" height="14" aria-hidden="true" style={{ flex: '0 0 auto' }}>
+      <rect width="28" height="20" rx="6" fill="#FF0000" />
+      <path d="M11.5 5.7 19.5 10l-8 4.3z" fill="#fff" />
+    </svg>
+  );
+}
+
 /**
  * Click-to-load YouTube Shorts embed. Shows the video thumbnail with a play
  * button until clicked, so the page doesn't pay iframe cost for videos the
@@ -74,8 +84,14 @@ export default function VideoEmbed({ title, youtubeId }: { title: string; youtub
           </button>
         )}
       </div>
-      <figcaption style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'var(--color-neutral-800)' }}>
-        <a href={`https://www.youtube.com/shorts/${youtubeId}`} target="_blank" rel="noopener noreferrer" style={{ color: 'inherit' }}>
+      <figcaption style={{ margin: 'var(--space-2) 0 0', fontSize: 14, color: 'var(--color-neutral-800)', display: 'flex', justifyContent: 'center' }}>
+        <a
+          href={`https://www.youtube.com/shorts/${youtubeId}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: 'inherit', display: 'inline-flex', alignItems: 'center', gap: 6, textAlign: 'center' }}
+        >
+          <YouTubeLogo />
           {title}
         </a>
       </figcaption>
