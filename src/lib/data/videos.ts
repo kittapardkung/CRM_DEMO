@@ -132,6 +132,17 @@ export const videos: Video[] = [
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-industrial-estate-delivery',
+    youtubeId: '_0q5LvHvzTw',
+    title: 'ส่งมอบ PORTA EV 3 คัน ซื้อแล้ว ซื้อจริง !!',
+    description: 'ส่งมอบ Wuling PORTA EV ให้ลูกค้าธุรกิจในนิคมอุตสาหกรรม 3 คัน เคสจริงจากลูกค้าจริง',
+    topic: 'biz',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'electric-van-industrial-estate-chonburi',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
