@@ -146,6 +146,11 @@ export interface ArticleSectionVideo {
    * ship to TikTok first, not as the preferred path.
    */
   tiktokId?: string;
+  /**
+   * Full Facebook video/reel URL, used only when neither `youtubeId` nor
+   * `tiktokId` exists yet — same "YouTube preferred" rule (MILESTONE §5).
+   */
+  facebookUrl?: string;
   title: string;
   durationSec?: number;
   /** Short summary/spoken-line text so Google can index the content even before the video plays. */

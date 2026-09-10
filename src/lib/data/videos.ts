@@ -31,6 +31,8 @@ export interface Video {
   youtubeId?: string;
   /** Numeric TikTok video id, used only when no `youtubeId` exists yet (see ArticleSectionVideo.tiktokId). */
   tiktokId?: string;
+  /** Full Facebook video/reel URL, used only when neither youtubeId nor tiktokId exists yet. */
+  facebookUrl?: string;
   title: string;
   description: string;
   durationSec?: number;
@@ -146,6 +148,17 @@ export const videos: Video[] = [
     topic: 'usage',
     relatedVehicleSlug: 'porta',
     relatedArticleSlug: 'ev-cargo',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
+  },
+  {
+    id: 'commercial-ev-cargo-van-cost',
+    facebookUrl: 'https://www.facebook.com/share/r/1cLuHYLaNx/',
+    title: 'รถตู้ EV คุ้มไหม ลดต้นทุน จริงหรือ ??',
+    description: 'เทียบต้นทุนรถตู้ไฟฟ้ากับรถตู้น้ำมัน ลดต้นทุนค่าขนส่งได้จริงหรือไม่',
+    topic: 'cost',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'commercial-ev-cargo-van',
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
