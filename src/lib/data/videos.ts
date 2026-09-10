@@ -184,6 +184,17 @@ export const videos: Video[] = [
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-one-month-review',
+    tiktokId: '7683412670304865554',
+    title: 'เป็นอย่างไรเมื่อใช้ PORTA EV ไปแล้ว 1 เดือน ??',
+    description: 'รีวิวการใช้งานจริงหลังใช้ PORTA EV มาแล้ว 1 เดือน เหมาะกับธุรกิจแบบไหนบ้าง',
+    topic: 'biz',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'porta-ev-business-use',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
