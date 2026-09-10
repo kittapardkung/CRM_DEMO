@@ -135,6 +135,18 @@ export interface ArticleLink {
   toSlug: string;
 }
 
+/** Embedded video for an article section — see Video Hub (`@/lib/data/videos`). */
+export interface ArticleSectionVideo {
+  /** Empty/absent while status is 'planned' (no file shot yet). */
+  youtubeId?: string;
+  title: string;
+  durationSec?: number;
+  /** Short summary/spoken-line text so Google can index the content even before the video plays. */
+  transcript?: string;
+  /** 'planned' = no file yet — the page must skip rendering, not show a broken/empty placeholder. */
+  status: 'planned' | 'produced';
+}
+
 export interface ArticleSection {
   id: string;
   heading: string;
@@ -149,6 +161,7 @@ export interface ArticleSection {
   cta?: ArticleCta;
   link?: ArticleLink;
   note?: string;
+  video?: ArticleSectionVideo;
 }
 
 export interface ArticleFaq {

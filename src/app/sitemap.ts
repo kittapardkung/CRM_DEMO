@@ -13,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/savings',
     '/test-drive',
     '/articles',
+    '/videos',
     '/service',
     '/areas',
     '/contact',

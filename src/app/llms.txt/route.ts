@@ -1,5 +1,6 @@
 import { vehicles } from '@/lib/data/vehicles';
 import { allArticles } from '@/lib/data/articles';
+import { videos } from '@/lib/data/videos';
 import { dealer } from '@/lib/data/dealer';
 import { money } from '@/lib/format';
 import { SITE_URL } from '@/lib/seo';
@@ -17,6 +18,11 @@ export function GET() {
   const articleLines = allArticles
     .map((a) => `- [${a.title}](${SITE_URL}/articles/${a.slug})`)
     .join('\n');
+
+  const producedVideos = videos.filter((v) => v.status === 'produced' && v.youtubeId);
+  const videoLines = producedVideos.length
+    ? producedVideos.map((v) => `- [${v.title}](https://www.youtube.com/watch?v=${v.youtubeId})`).join('\n')
+    : '(อยู่ระหว่างผลิตวิดีโอ — ยังไม่มีคลิปเผยแพร่)';
 
   const body = `# WULING CHONBURI
 
@@ -52,6 +58,12 @@ ${modelLines}
 ## บทความ
 
 ${articleLines}
+
+## วิดีโอสาระน่ารู้
+
+${videoLines}
+
+ดูวิดีโอทั้งหมดพร้อมตัวกรองตามรุ่นรถและหัวข้อ: ${SITE_URL}/videos
 
 ## ติดต่อ / ทดลองขับ
 

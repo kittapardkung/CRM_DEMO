@@ -4,8 +4,10 @@ import { notFound } from 'next/navigation';
 import Breadcrumb from '@/components/Breadcrumb';
 import ImageSlot from '@/components/ImageSlot';
 import PhoneLink from '@/components/PhoneLink';
+import VideoEmbed from '@/components/VideoEmbed';
 import { allArticles, getArticle } from '@/lib/data/articles';
 import { getVehicle } from '@/lib/data/vehicles';
+import { videos } from '@/lib/data/videos';
 import { dealer } from '@/lib/data/dealer';
 import { renderInline } from '@/lib/inline';
 import { ctaHref } from '@/lib/nav';
@@ -15,6 +17,17 @@ import { toISODate } from '@/lib/format';
 
 export function generateStaticParams() {
   return allArticles.map((a) => ({ slug: a.slug }));
+}
+
+/**
+ * Links a "produced" article video back to the Video Hub, filtered to the
+ * same model and (when the youtubeId matches a Video Hub entry) topic.
+ */
+function videosHubHref(vehicleSlug: string, youtubeId: string): string {
+  const topic = videos.find((v) => v.youtubeId === youtubeId)?.topic;
+  const params = new URLSearchParams({ model: vehicleSlug });
+  if (topic) params.set('topic', topic);
+  return `/videos?${params.toString()}`;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
@@ -196,6 +209,17 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                     <p style={{ margin: '0 0 4px', fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: 19 }}>{s.cta.heading}</p>
                     <p style={{ margin: '0 0 var(--space-3)', fontSize: 14, color: 'var(--color-neutral-800)' }}>{s.cta.body}</p>
                     <Link href={ctaHref(s.cta.goRoute)} className="btn btn-primary">{s.cta.label}</Link>
+                  </div>
+                ) : null}
+
+                {/* "planned" videos (no file shot yet) are skipped silently — LEO's draft
+                    articles carry [VIDEO PLACEHOLDER] sections before production finishes. */}
+                {s.video?.status === 'produced' && s.video.youtubeId ? (
+                  <div style={{ margin: 'var(--space-4) 0 0', maxWidth: 360 }}>
+                    <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
+                    <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13 }}>
+                      <Link href={videosHubHref(article.relatedVehicleSlug, s.video.youtubeId)}>ดูวิดีโอเพิ่มเติมที่วิดีโอสาระน่ารู้ →</Link>
+                    </p>
                   </div>
                 ) : null}
               </section>

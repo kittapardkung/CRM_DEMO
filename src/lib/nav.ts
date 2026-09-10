@@ -5,6 +5,7 @@ export const primaryNav = [
   { label: 'เปรียบเทียบรถ', href: '/compare' },
   { label: 'คำนวณความคุ้มค่า', href: '/savings' },
   { label: 'บทความ', href: '/articles' },
+  { label: 'วิดีโอสาระน่ารู้', href: '/videos' },
   { label: 'ศูนย์บริการ', href: '/service' },
   { label: 'ติดต่อเรา', href: '/contact' },
 ];
@@ -16,6 +17,7 @@ export const footerServiceLinks = [
   { label: 'คำนวณความคุ้มค่า', href: '/savings' },
   { label: 'ทดลองขับ', href: '/test-drive' },
   { label: 'บทความ', href: '/articles' },
+  { label: 'วิดีโอสาระน่ารู้', href: '/videos' },
   { label: 'พื้นที่ให้บริการ', href: '/areas' },
   { label: 'ติดต่อเรา', href: '/contact' },
 ];
