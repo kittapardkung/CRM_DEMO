@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import EvSavingsCalculator from '@/components/EvSavingsCalculator';
+import { resolveAsset } from '@/lib/assets';
 
 export const metadata: Metadata = {
   title: 'คำนวณความคุ้มค่า เทียบรถน้ำมัน | WULING CHONBURI',
@@ -8,9 +10,23 @@ export const metadata: Metadata = {
 };
 
 export default function SavingsPage() {
+  const heroSrc = resolveAsset('savings-ev-vs-fuel-hero.webp');
+
   return (
     <div className="wrap">
       <section style={{ padding: 'var(--space-8) 0 var(--space-6)' }}>
+        {heroSrc ? (
+          <div style={{ position: 'relative', width: '100%', aspectRatio: '1672 / 941', borderRadius: 'var(--radius-lg)', overflow: 'hidden', marginBottom: 'var(--space-6)' }}>
+            <Image
+              src={heroSrc}
+              alt="เปรียบเทียบรถไฟฟ้า WULING กับรถยนต์น้ำมัน ใครจะคุ้มกว่า"
+              fill
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              style={{ objectFit: 'cover' }}
+              priority
+            />
+          </div>
+        ) : null}
         <p className="kicker">Savings Calculator</p>
         <h1 style={{ fontSize: 'clamp(29px,4vw,45px)', margin: '0 0 var(--space-3)' }}>
           คำนวณความคุ้มค่า!!! เทียบรถน้ำมัน
