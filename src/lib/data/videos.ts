@@ -107,12 +107,14 @@ export const videos: Video[] = [
   },
   {
     id: 'porta-business-use',
+    youtubeId: 'ZnW460R0rw0',
     title: 'PORTA EV เหมาะกับธุรกิจอะไร?',
     description: '10 ธุรกิจที่ใช้รถตู้ไฟฟ้าได้คุ้ม ตั้งแต่ E-commerce, Last Mile Delivery ไปจนถึงทีมช่างและ Mobile Service',
     topic: 'biz',
     relatedVehicleSlug: 'porta',
     relatedArticleSlug: 'porta-ev-business-use',
-    status: 'planned',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
   },
   {
     id: 'porta-delivery',
