@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import VideoEmbed from '@/components/VideoEmbed';
 import { vehicles } from '@/lib/data/vehicles';
 import { videoTopics, videoTopicLabels, type Video, type VideoTopic } from '@/lib/data/videos';
 import { getArticle } from '@/lib/data/articles';
@@ -110,52 +111,27 @@ function VideoCard({ video }: { video: Video }) {
 
   return (
     <article style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-2)' }}>
-      <div
-        style={{
-          position: 'relative',
-          aspectRatio: '16 / 9',
-          background: 'var(--color-neutral-200)',
-          border: '1px solid var(--color-neutral-300)',
-          borderRadius: 'var(--radius-md)',
-          overflow: 'hidden',
-          backgroundImage: produced ? `url(https://i.ytimg.com/vi/${video.youtubeId}/hq720.jpg)` : undefined,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        {produced ? (
-          <a
-            href={`https://www.youtube.com/watch?v=${video.youtubeId}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`เล่นวิดีโอ ${video.title}`}
-            style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <span
-              style={{
-                width: 56,
-                height: 56,
-                borderRadius: '50%',
-                background: 'var(--color-accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
-            >
-              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                <path d="M8 5.5v13l11-6.5z" fill="#fff" />
-              </svg>
-            </span>
-          </a>
-        ) : (
+      {produced ? (
+        <VideoEmbed title={video.title} youtubeId={video.youtubeId!} />
+      ) : (
+        <div
+          style={{
+            position: 'relative',
+            aspectRatio: '9 / 16',
+            background: 'var(--color-neutral-200)',
+            border: '1px solid var(--color-neutral-300)',
+            borderRadius: 'var(--radius-md)',
+            overflow: 'hidden',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <span className="pill-btn" style={{ background: 'var(--color-neutral-300)', color: 'var(--color-neutral-800)', border: 'none' }}>
             เร็ว ๆ นี้
           </span>
-        )}
-      </div>
+        </div>
+      )}
 
       <p style={{ margin: 'var(--space-1) 0 0', fontSize: 11, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-accent-700)' }}>
         {vehicle?.shortName ?? video.relatedVehicleSlug} · {videoTopicLabels[video.topic]}
