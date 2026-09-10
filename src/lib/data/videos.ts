@@ -138,6 +138,17 @@ export const videos: Video[] = [
     relatedArticleSlug: 'wuling-porta-ev-price',
     status: 'planned',
   },
+  {
+    id: 'ev-cargo-benefits',
+    youtubeId: 'O1G30y4m99o',
+    title: '3 ข้อดี ทำไมคนซื้อรถตู้ไฟฟ้า ??!',
+    description: 'สามเหตุผลหลักที่ธุรกิจเปลี่ยนมาใช้รถตู้ไฟฟ้า — ต้นทุนต่อเที่ยว พื้นที่บรรทุก และความคุ้มค่าระยะยาว',
+    topic: 'usage',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'ev-cargo',
+    publishedAt: '10 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
