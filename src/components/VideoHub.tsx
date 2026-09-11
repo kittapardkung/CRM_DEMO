@@ -18,10 +18,13 @@ export default function VideoHub({
   videos,
   initialModel,
   initialTopic,
+  tiktokThumbnails = {},
 }: {
   videos: Video[];
   initialModel?: string;
   initialTopic?: VideoTopic;
+  /** Resolved server-side via `getTiktokThumbnail()`, keyed by tiktokId. */
+  tiktokThumbnails?: Record<string, string | null>;
 }) {
   const [model, setModel] = useState<string | null>(
     initialModel && vehicles.some((v) => v.slug === initialModel) ? initialModel : null
@@ -80,7 +83,7 @@ export default function VideoHub({
       ) : (
         <div className="om-video-grid">
           {filtered.map((v) => (
-            <VideoCard key={v.id} video={v} />
+            <VideoCard key={v.id} video={v} tiktokThumbnail={v.tiktokId ? tiktokThumbnails[v.tiktokId] : undefined} />
           ))}
         </div>
       )}
@@ -106,7 +109,7 @@ function FilterPill({ active, onClick, label }: { active: boolean; onClick: () =
   );
 }
 
-function VideoCard({ video }: { video: Video }) {
+function VideoCard({ video, tiktokThumbnail }: { video: Video; tiktokThumbnail?: string | null }) {
   const vehicle = vehicles.find((v) => v.slug === video.relatedVehicleSlug);
   const relatedArticle = video.relatedArticleSlug ? getArticle(video.relatedArticleSlug) : undefined;
   const produced = video.status === 'produced' && !!(video.youtubeId || video.tiktokId || video.facebookUrl);
@@ -117,7 +120,7 @@ function VideoCard({ video }: { video: Video }) {
         video.youtubeId ? (
           <VideoEmbed title={video.title} youtubeId={video.youtubeId} />
         ) : video.tiktokId ? (
-          <TikTokEmbed title={video.title} tiktokId={video.tiktokId} />
+          <TikTokEmbed title={video.title} tiktokId={video.tiktokId} thumbnailUrl={tiktokThumbnail} />
         ) : (
           <FacebookEmbed title={video.title} facebookUrl={video.facebookUrl!} />
         )
