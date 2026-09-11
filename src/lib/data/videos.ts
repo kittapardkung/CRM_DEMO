@@ -143,6 +143,17 @@ export const videos: Video[] = [
     publishedAt: '10 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-rear-ac',
+    youtubeId: 'nMi98dwo9mw',
+    title: 'PORTA EV ติดแอร์หลังได้นะ รู้รึยัง ??',
+    description: 'ติดตั้งแอร์ด้านหลังตู้บรรทุก Wuling PORTA EV ช่วยลดความร้อนสำหรับขนส่งของสด ผัก ดอกไม้ อาหารแช่เย็น',
+    topic: 'accessories',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'rear-ac-installation-porta-ev-chonburi',
+    publishedAt: '11 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
