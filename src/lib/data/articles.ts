@@ -28,7 +28,6 @@ export const articles: Article[] = [
     readingTime: '7 นาที',
     title: 'Wuling PORTA EV วิ่งได้กี่กิโลเมตร? 400 กม. เพียงพอกับงานขนส่งหรือไม่',
     excerpt: 'ระยะทางสูงสุดประมาณ 400 กม. ตามมาตรฐาน CLTC หมายความว่าอะไร และเพียงพอกับรอบส่งของธุรกิจคุณหรือไม่',
-    social: { label: 'Facebook WULING CHONBURI', url: 'https://www.facebook.com/profile.php?id=61583789612737' },
     readNext: ['porta-ev-running-cost', 'porta-ev-charging', 'porta-ev-payload'],
     endCta: { heading: 'อยากรู้ว่ารถวิ่งไหวจริงไหม? ลองขับที่หน้างานของคุณ', body: 'ทีมงานนำรถไปให้ทดลองขับที่บ้านหรือบริษัท ตามพื้นที่ให้บริการและเงื่อนไขของบริษัท', label: 'นัดทดลองขับ PORTA EV', goRoute: 'testdrive' },
     sections: [
@@ -208,7 +207,6 @@ export const articles: Article[] = [
     readingTime: '5 นาที',
     title: 'Wuling PORTA EV ใหญ่ไหม? ขนาดตัวรถและการใช้งานในเมือง',
     excerpt: 'ยาว 5,010 กว้าง 1,800 สูง 1,975 มม. เข้าซอย จอด และเข้าโกดังได้แค่ไหน ควรตรวจอะไรก่อนตัดสินใจ',
-    social: { label: 'Facebook WULING CHONBURI', url: 'https://www.facebook.com/profile.php?id=61583789612737' },
     readNext: ['porta-ev-cargo-space', 'porta-ev-business-use', 'porta-ev-range'],
     endCta: { heading: 'ลองขับดูก่อน แล้วค่อยตัดสินใจ', body: 'ทีมงานนำรถไปให้ทดลองขับและวัดพื้นที่ที่บ้านหรือบริษัท ตามพื้นที่ให้บริการและเงื่อนไขของบริษัท', label: 'นัดทดลองขับ', goRoute: 'testdrive' },
     sections: [
@@ -375,7 +373,6 @@ export const articles: Article[] = [
     readingTime: '6 นาที',
     title: 'ค่าบำรุงรักษา Wuling PORTA EV แพงไหม?',
     excerpt: 'รายการที่รถไฟฟ้าตัดออกไป รายการที่ยังต้องดูแล และเหตุผลที่ตัวเลขลด 90% ไม่ใช่ค่าที่เกิดกับทุกคน',
-    social: { label: 'Facebook WULING CHONBURI', url: 'https://www.facebook.com/profile.php?id=61583789612737' },
     readNext: ['porta-ev-warranty', 'ev-van-vs-diesel', 'porta-ev-running-cost'],
     endCta: { heading: 'ปรึกษาแผนดูแลรถสำหรับ Fleet ของคุณ', body: 'ทีมงานช่วยวางตารางเช็กระยะและประเมินค่าดูแลรถตามจำนวนรถและระยะทางที่ใช้งาน', label: 'ปรึกษาทีมงาน', goRoute: 'contact' },
     sections: [
@@ -544,7 +541,6 @@ export const articles: Article[] = [
     readingTime: '5 นาที',
     title: 'Wuling PORTA EV รับประกันแบตเตอรี่กี่ปี? เจ้าของธุรกิจต้องรู้อะไรบ้าง',
     excerpt: 'แบตเตอรี่ 5 ปี หรือ 200,000 กม. ตัวรถ 3 ปี หรือ 100,000 กม. และเหตุผลที่เพดานระยะทางสำคัญกว่าจำนวนปี',
-    social: { label: 'Facebook WULING CHONBURI', url: 'https://www.facebook.com/profile.php?id=61583789612737' },
     readNext: ['porta-ev-maintenance', 'wuling-magic-battery', 'porta-ev-business-use'],
     endCta: { heading: 'ขอรายละเอียดเงื่อนไขรับประกันฉบับเต็ม', body: 'ทีมงานส่งเอกสารและอธิบายเงื่อนไขที่เกี่ยวข้องกับการใช้งานเชิงพาณิชย์ให้ได้', label: 'ติดต่อทีมขาย', goRoute: 'contact' },
     sections: [
@@ -1871,6 +1867,11 @@ export const articles: Article[] = [
         id: 'sec-0',
         heading: 'ปัญหาความร้อนในตู้บรรทุก ทำไมถึงสำคัญกับบางธุรกิจ',
         body: 'รถตู้บรรทุกทั่วไป (ทั้งรถน้ำมันและรถไฟฟ้า) ที่ไม่มีระบบทำความเย็นในตู้ท้าย จะสะสมความร้อนจากแสงแดดและอุณหภูมิภายนอกตลอดเส้นทางวิ่ง ซึ่งเป็นปัญหาโดยตรงกับสินค้าที่ไวต่ออุณหภูมิ เช่น ผักและของสดที่เหี่ยวหรือเน่าเสียเร็วขึ้นเมื่อโดนความร้อนสะสม ดอกไม้ที่คุณภาพและความสดลดลงถ้าตู้ร้อนเกินไป และอาหารแช่เย็นที่ต้องรักษาอุณหภูมิให้อยู่ในเกณฑ์ตลอดการขนส่ง ธุรกิจกลุ่มนี้จึงมักตัดสินใจยากเวลาจะเปลี่ยนมาใช้รถตู้ไฟฟ้า เพราะไม่แน่ใจว่าจะแก้ปัญหาความร้อนในตู้ได้เหมือนที่เคยดัดแปลงรถแบบอื่นมาก่อน',
+        video: {
+          status: 'produced',
+          youtubeId: 'nMi98dwo9mw',
+          title: 'PORTA EV ติดแอร์หลังได้นะ รู้รึยัง ??',
+        },
       },
       {
         id: 'sec-1',

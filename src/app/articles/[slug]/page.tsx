@@ -57,8 +57,8 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
     : allArticles.filter((a) => a.slug !== article.slug).slice(0, 3)) as typeof allArticles;
 
   const social = article.social ?? {
-    label: 'Facebook WULING CHONBURI',
-    url: 'https://www.facebook.com/profile.php?id=61583789612737',
+    label: `Facebook ${dealer.name}`,
+    url: dealer.facebookUrl,
   };
 
   const articleImage = resolveAsset(article.image);
