@@ -154,6 +154,17 @@ export const videos: Video[] = [
     publishedAt: '11 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-invite-test-drive',
+    youtubeId: 'yY8Swqy2udI',
+    title: 'สนใจ PORTA EV แล้ว มาทดลองขับกันรึยัง ??',
+    description: 'เชิญทีมงานธุรกิจมาทดลองขับ Wuling PORTA EV ที่บริษัท WULING ชลบุรี ขับจริงบนถนน พร้อมเอาสินค้าจริงวางท้ายรถเช็กขนาด',
+    topic: 'testdrive',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'invite-test-drive-at-wuling-chonburi',
+    publishedAt: '11 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
