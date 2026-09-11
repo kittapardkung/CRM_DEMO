@@ -22,7 +22,10 @@ export const dealer = {
   gbpUrl: 'https://share.google/YLW3gDhz6dfzp6kZY',
   /** Real showroom pin — used for the "navigate here" link (no API key needed). */
   mapsUrl: 'https://maps.app.goo.gl/96HHoHDMUTiYHAwF7',
-  facebookUrl: 'https://www.facebook.com/profile.php?id=61583789612737',
+  // Vanity URL (facebook.com/Wulingevchonburi) confirmed as the official
+  // page — this is also what actually surfaces in Google search results
+  // for "วู่หลิง ชลบุรี", unlike the numeric profile.php link it replaces.
+  facebookUrl: 'https://www.facebook.com/Wulingevchonburi',
   /** Same handle already cited as the social byline on several articles (`lib/data/articles.ts`). */
   tiktokUrl: 'https://www.tiktok.com/@wuling_chonburi',
   youtubeUrl: 'https://www.youtube.com/@WULINGChonburiJTGROUP',
