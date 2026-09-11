@@ -16,6 +16,7 @@ import { ctaHref } from '@/lib/nav';
 import { SITE_URL } from '@/lib/seo';
 import { resolveAsset } from '@/lib/assets';
 import { toISODate } from '@/lib/format';
+import { getTiktokThumbnail } from '@/lib/tiktok';
 
 export function generateStaticParams() {
   return allArticles.map((a) => ({ slug: a.slug }));
@@ -61,6 +62,12 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   };
 
   const articleImage = resolveAsset(article.image);
+
+  // Real thumbnails only exist for YouTube out of the box (i.ytimg.com);
+  // a TikTok-sourced section needs an oEmbed lookup to show one before play.
+  const tiktokThumbnails = await Promise.all(
+    article.sections.map((s) => (s.video?.tiktokId ? getTiktokThumbnail(s.video.tiktokId) : Promise.resolve(null)))
+  );
 
   const jsonLd = [
     {
@@ -143,7 +150,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
           </aside>
 
           <div style={{ order: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 'var(--space-6)' }}>
-            {article.sections.map((s) => (
+            {article.sections.map((s, sectionIndex) => (
               <section key={s.id} id={s.id}>
                 <h2 style={{ fontSize: 'clamp(21px,2.6vw,28px)', margin: '0 0 var(--space-3)', scrollMarginTop: 96 }}>{s.heading}</h2>
 
@@ -229,7 +236,11 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                       {s.video.youtubeId ? (
                         <VideoEmbed title={s.video.title} youtubeId={s.video.youtubeId} />
                       ) : s.video.tiktokId ? (
-                        <TikTokEmbed title={s.video.title} tiktokId={s.video.tiktokId} />
+                        <TikTokEmbed
+                          title={s.video.title}
+                          tiktokId={s.video.tiktokId}
+                          thumbnailUrl={tiktokThumbnails[sectionIndex]}
+                        />
                       ) : (
                         <FacebookEmbed title={s.video.title} facebookUrl={s.video.facebookUrl!} />
                       )}

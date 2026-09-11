@@ -48,6 +48,7 @@ ${modelLines}
 ดูรุ่นทั้งหมดพร้อมสเปกและราคา: ${SITE_URL}/models
 เปรียบเทียบรุ่น: ${SITE_URL}/compare
 คำนวณค่างวด: ${SITE_URL}/calculator
+คำนวณความคุ้มค่าเทียบรถน้ำมัน: ${SITE_URL}/savings
 
 ## บริการองค์กร
 

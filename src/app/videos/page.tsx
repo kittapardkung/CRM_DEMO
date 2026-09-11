@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import VideoHub from '@/components/VideoHub';
 import { videos, videoTopics, type VideoTopic } from '@/lib/data/videos';
 import { videoJsonLd, SITE_URL } from '@/lib/seo';
+import { getTiktokThumbnail } from '@/lib/tiktok';
 
 export const metadata: Metadata = {
   title: 'วิดีโอสาระน่ารู้',
@@ -16,6 +17,15 @@ export default async function VideosPage({
 }) {
   const { model, topic } = await searchParams;
   const initialTopic = topic && (videoTopics as readonly string[]).includes(topic) ? (topic as VideoTopic) : undefined;
+
+  // Real thumbnails only exist for YouTube out of the box (i.ytimg.com); a
+  // TikTok-sourced card needs an oEmbed lookup to show one before play.
+  const tiktokThumbnailEntries = await Promise.all(
+    videos
+      .filter((v) => v.tiktokId)
+      .map(async (v) => [v.tiktokId!, await getTiktokThumbnail(v.tiktokId!)] as const)
+  );
+  const tiktokThumbnails = Object.fromEntries(tiktokThumbnailEntries);
 
   const jsonLd = [
     {
@@ -38,7 +48,7 @@ export default async function VideosPage({
       </section>
 
       <section style={{ paddingBottom: 'var(--space-8)' }}>
-        <VideoHub videos={videos} initialModel={model} initialTopic={initialTopic} />
+        <VideoHub videos={videos} initialModel={model} initialTopic={initialTopic} tiktokThumbnails={tiktokThumbnails} />
       </section>
 
       {jsonLd.map((obj, i) => (

@@ -25,7 +25,16 @@ function TikTokLogo() {
  * preferred, schema-eligible source (MILESTONE §5); this exists because
  * some clips reach TikTok first.
  */
-export default function TikTokEmbed({ title, tiktokId }: { title: string; tiktokId: string }) {
+export default function TikTokEmbed({
+  title,
+  tiktokId,
+  thumbnailUrl,
+}: {
+  title: string;
+  tiktokId: string;
+  /** Resolved server-side via `getTiktokThumbnail()` — absent/null falls back to a plain box. */
+  thumbnailUrl?: string | null;
+}) {
   const [playing, setPlaying] = useState(false);
 
   return (
@@ -64,7 +73,10 @@ export default function TikTokEmbed({ title, tiktokId }: { title: string; tiktok
               padding: 0,
               border: 0,
               cursor: 'pointer',
-              background: '#111',
+              backgroundColor: '#111',
+              backgroundImage: thumbnailUrl ? `url(${thumbnailUrl})` : undefined,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
