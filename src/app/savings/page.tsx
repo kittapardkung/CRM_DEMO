@@ -4,7 +4,7 @@ import EvSavingsCalculator from '@/components/EvSavingsCalculator';
 import { resolveAsset } from '@/lib/assets';
 
 export const metadata: Metadata = {
-  title: 'คำนวณความคุ้มค่า เทียบรถน้ำมัน | WULING CHONBURI',
+  title: 'คำนวณความคุ้มค่า เทียบรถน้ำมัน',
   description: 'คำนวณเปรียบเทียบค่าพลังงานและความคุ้มค่าระหว่างรถยนต์ไฟฟ้า WULING กับรถน้ำมัน จากระยะทางและค่าไฟ/ค่าน้ำมันที่คุณกำหนดเอง',
   alternates: { canonical: '/savings' },
 };

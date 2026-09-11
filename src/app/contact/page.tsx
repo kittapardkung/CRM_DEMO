@@ -4,7 +4,7 @@ import PhoneLink from '@/components/PhoneLink';
 import { contactRows, dealer } from '@/lib/data/dealer';
 
 export const metadata: Metadata = {
-  title: 'ติดต่อ WULING CHONBURI',
+  title: 'ติดต่อเรา',
   description: 'ที่ตั้ง เบอร์โทร และช่องทางติดต่อผู้จำหน่าย WULING ชลบุรี',
   alternates: { canonical: '/contact' },
 };
