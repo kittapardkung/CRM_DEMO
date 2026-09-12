@@ -165,6 +165,17 @@ export const videos: Video[] = [
     publishedAt: '11 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-chonburi-rayong-chachoengsao-test-drive',
+    youtubeId: 'wx4JdSV3ack',
+    title: 'สนใจ PORTA EV แถว ชลบุรี-ระยอง-ฉะเชิงเทรา จะไปทดลองขับที่ไหน ??',
+    description: 'จุดทดลองขับ Wuling PORTA EV สำหรับลูกค้าในพื้นที่ชลบุรี ระยอง และฉะเชิงเทรา',
+    topic: 'testdrive',
+    relatedVehicleSlug: 'porta',
+    relatedArticleSlug: 'buy-electric-van-chonburi',
+    publishedAt: '12 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {

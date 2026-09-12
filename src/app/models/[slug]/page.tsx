@@ -201,6 +201,7 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
               aspectRatio="4 / 3"
               caption={i.label}
               filename={`${vehicle.slug}-interior-${i.slug}.webp`}
+              fit={vehicle.slug === 'darion' ? 'contain' : 'cover'}
               style={{ alignItems: 'flex-end', justifyContent: 'flex-start', textAlign: 'left' }}
             />
           ))}
