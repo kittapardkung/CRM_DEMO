@@ -35,6 +35,16 @@ export const interiorViews: VehicleImageSlot[] = [
   { slug: 'details', label: 'รายละเอียดภายใน' },
 ];
 
+/** Confirmed DARION interior photo set supplied by WULING CHONBURI. */
+const darionInteriorViews: VehicleImageSlot[] = [
+  { slug: 'dashboard', label: 'คอนโซลและแผงหน้าปัด' },
+  { slug: 'center-display', label: 'จอกลาง' },
+  { slug: 'front-seats', label: 'เบาะหน้า' },
+  { slug: 'rear-seats', label: 'เบาะแถวสอง Captain Seat' },
+  { slug: 'cargo-seats-folded', label: 'พื้นที่สัมภาระเมื่อพับเบาะ' },
+  { slug: 'cargo-seats-up', label: 'พื้นที่สัมภาระเมื่อกางเบาะ' },
+];
+
 /** PORTA has no rear seats / cargo area / center display / details interior shots — it's a 2-seat cargo van. */
 const portaInteriorViews = interiorViews.filter(
   (v) => !['rear-seats', 'cargo-area', 'details', 'center-display'].includes(v.slug),
@@ -237,7 +247,7 @@ export const vehicles: Vehicle[] = [
       { name: 'Starry Black', code: '#1c1c1e', slug: 'starry-black' },
     ],
     exteriorViews: darionExteriorViews,
-    interiorViews,
+    interiorViews: darionInteriorViews,
     highlights: [
       { value: '540', unit: 'KM', label: 'ระยะทางต่อการชาร์จ (CLTC)' },
       { value: '7', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
