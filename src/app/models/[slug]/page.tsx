@@ -198,7 +198,7 @@ export default async function ModelDetailPage({ params }: { params: Promise<{ sl
           {vehicle.interiorViews.map((i) => (
             <ImageSlot
               key={i.slug}
-              aspectRatio="4 / 3"
+              aspectRatio={vehicle.slug === 'darion' ? '1 / 1' : '4 / 3'}
               caption={i.label}
               filename={`${vehicle.slug}-interior-${i.slug}.webp`}
               fit={vehicle.slug === 'darion' ? 'contain' : 'cover'}
