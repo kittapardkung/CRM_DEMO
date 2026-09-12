@@ -16,6 +16,14 @@ export const exteriorViews: VehicleImageSlot[] = [
   { slug: 'rear-34', label: 'ท้าย 3/4' },
 ];
 
+/** DARION Haze Grey gallery order: the clean studio hero leads, followed by the three dealer photos. */
+const darionExteriorViews: VehicleImageSlot[] = [
+  { slug: 'front-34-featured', label: 'ภาพหลัก' },
+  { slug: 'front-34', label: 'หน้า 3/4' },
+  { slug: 'front', label: 'ด้านหน้า' },
+  { slug: 'rear-34', label: 'ท้าย 3/4' },
+];
+
 export const interiorViews: VehicleImageSlot[] = [
   { slug: 'dashboard', label: 'แผงหน้าปัด' },
   { slug: 'steering-wheel', label: 'พวงมาลัย' },
@@ -208,6 +216,7 @@ export const vehicles: Vehicle[] = [
     image: 'darion-hero.jpg',
     exteriorImages: {
       front: 'darion-front-34.jpg',
+      'front-34-featured-haze-grey': 'darion-front-34-featured-haze-grey.webp',
       'front-haze-grey': 'darion-front-haze-grey.webp',
       'front-34-haze-grey': 'darion-front-34-haze-grey.webp',
       'rear-34-haze-grey': 'darion-rear-34-haze-grey.webp',
@@ -221,7 +230,7 @@ export const vehicles: Vehicle[] = [
       { name: 'Orchid Purple', code: '#3b2440', slug: 'orchid-purple' },
       { name: 'Starry Black', code: '#1c1c1e', slug: 'starry-black' },
     ],
-    exteriorViews,
+    exteriorViews: darionExteriorViews,
     interiorViews,
     highlights: [
       { value: '540', unit: 'KM', label: 'ระยะทางต่อการชาร์จ (CLTC)' },

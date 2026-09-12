@@ -31,7 +31,7 @@ export default function VehicleVisuals({
   exteriorSrc?: Record<string, string | null>;
 }) {
   const [colorIndex, setColorIndex] = useState(0);
-  const [extIndex, setExtIndex] = useState(1); // default to the "front 3/4" hero angle
+  const [extIndex, setExtIndex] = useState(vehicle.slug === 'darion' ? 0 : 1); // DARION leads with its featured Haze Grey studio shot
   const dialogRef = useRef<HTMLDialogElement>(null);
 
   const color = vehicle.colors[colorIndex];
