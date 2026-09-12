@@ -40,6 +40,13 @@ export default function VehicleVisuals({
   const confirmedColors = vehicle.slug === 'porta' || vehicle.slug === 'darion';
   const extMainSrc = exteriorSrc[`${extView.slug}-${color.slug}`] ?? null;
   const extMainLabel = `${vehicle.shortName} · ${extView.label} · สี${color.name}`;
+  const visibleExteriorViews = vehicle.slug === 'darion'
+    ? vehicle.exteriorViews.filter((view, index, views) => {
+        const src = exteriorSrc[`${view.slug}-${color.slug}`];
+        if (!src) return false;
+        return views.findIndex((candidate) => exteriorSrc[`${candidate.slug}-${color.slug}`] === src) === index;
+      })
+    : vehicle.exteriorViews;
 
   const openLightbox = () => dialogRef.current?.showModal();
   const closeLightbox = () => dialogRef.current?.close();
@@ -135,6 +142,7 @@ export default function VehicleVisuals({
               onClick={() => {
                 track('select_color', { model: vehicle.shortName, color: c.slug });
                 setColorIndex(i);
+                setExtIndex(vehicle.slug === 'darion' ? 0 : 1);
               }}
               aria-pressed={i === colorIndex}
               aria-label={c.name}
@@ -190,7 +198,8 @@ export default function VehicleVisuals({
           )}
         </button>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'var(--space-2)', marginTop: 'var(--space-2)' }}>
-          {vehicle.exteriorViews.map((e, i) => {
+          {visibleExteriorViews.map((e) => {
+            const i = vehicle.exteriorViews.findIndex((view) => view.slug === e.slug);
             const thumbSrc = exteriorSrc[`${e.slug}-${color.slug}`] ?? null;
             return (
               <button
