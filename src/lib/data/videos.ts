@@ -176,6 +176,31 @@ export const videos: Video[] = [
     publishedAt: '12 ก.ย. 2569',
     status: 'produced',
   },
+  // The next 2 entries are a deliberate, user-approved exception to the
+  // "never ship produced without relatedArticleSlug" rule above — the
+  // matching articles don't exist yet and are coming later. Fill in
+  // relatedArticleSlug (and add the ArticleSection.video block) as soon as
+  // each article ships.
+  {
+    id: 'porta-aluminum-floor-lining',
+    youtubeId: 'NGlfFQraOuU',
+    title: 'กรุพื้นอลูมิเนียม PORTA EV ทำอย่างไร ??',
+    description: 'วิธีติดตั้งกรุพื้นอลูมิเนียมสำหรับห้องบรรทุก Wuling PORTA EV',
+    topic: 'accessories',
+    relatedVehicleSlug: 'porta',
+    publishedAt: '12 ก.ย. 2569',
+    status: 'produced',
+  },
+  {
+    id: 'porta-roof-rack',
+    youtubeId: 'pFBrJphDfxM',
+    title: 'RACK ติดหลังคา PORTA EV คืออะไร ติดตั้งอย่างไร ??',
+    description: 'แร็คหลังคา (Roof Rack) สำหรับ Wuling PORTA EV คืออะไร และติดตั้งอย่างไร',
+    topic: 'accessories',
+    relatedVehicleSlug: 'porta',
+    publishedAt: '12 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {
