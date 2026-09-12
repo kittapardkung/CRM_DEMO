@@ -238,7 +238,9 @@ export const vehicles: Vehicle[] = [
       'front-frosty-white': 'darion-front-frosty-white.webp',
       'rear-frosty-white': 'darion-rear-frosty-white.webp',
       'front-orchid-purple': 'darion-front-34-orchid-purple.jpg',
-      'front-starry-black': 'darion-front-34-starry-black.jpg',
+      'front-34-starry-black': 'darion-front-34-alt-starry-black.webp',
+      'front-starry-black': 'darion-front-starry-black.webp',
+      'rear-34-starry-black': 'darion-rear-34-starry-black.webp',
     },
     colors: [
       { name: 'Haze Grey', code: '#d8d6d0', slug: 'haze-grey' },
