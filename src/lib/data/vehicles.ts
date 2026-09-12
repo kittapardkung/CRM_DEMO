@@ -21,6 +21,7 @@ const darionExteriorViews: VehicleImageSlot[] = [
   { slug: 'front-34-featured', label: 'ภาพหลัก' },
   { slug: 'front-34', label: 'หน้า 3/4' },
   { slug: 'front', label: 'ด้านหน้า' },
+  { slug: 'rear', label: 'ด้านท้าย' },
   { slug: 'rear-34', label: 'ท้าย 3/4' },
 ];
 
@@ -223,7 +224,9 @@ export const vehicles: Vehicle[] = [
       'front-haze-grey': 'darion-front-haze-grey.webp',
       'front-34-haze-grey': 'darion-front-34-haze-grey.webp',
       'rear-34-haze-grey': 'darion-rear-34-haze-grey.webp',
-      'front-frosty-white': 'darion-front-34-frosty-white.jpg',
+      'front-34-frosty-white': 'darion-front-34-alt-frosty-white.webp',
+      'front-frosty-white': 'darion-front-frosty-white.webp',
+      'rear-frosty-white': 'darion-rear-frosty-white.webp',
       'front-orchid-purple': 'darion-front-34-orchid-purple.jpg',
       'front-starry-black': 'darion-front-34-starry-black.jpg',
     },
