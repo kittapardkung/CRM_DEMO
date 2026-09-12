@@ -208,7 +208,9 @@ export const vehicles: Vehicle[] = [
     image: 'darion-hero.jpg',
     exteriorImages: {
       front: 'darion-front-34.jpg',
-      'front-haze-grey': 'darion-front-34.jpg',
+      'front-haze-grey': 'darion-front-haze-grey.webp',
+      'front-34-haze-grey': 'darion-front-34-haze-grey.webp',
+      'rear-34-haze-grey': 'darion-rear-34-haze-grey.webp',
       'front-frosty-white': 'darion-front-34-frosty-white.jpg',
       'front-orchid-purple': 'darion-front-34-orchid-purple.jpg',
       'front-starry-black': 'darion-front-34-starry-black.jpg',
