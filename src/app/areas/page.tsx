@@ -107,7 +107,7 @@ export default async function AreasPage() {
           <p style={{ margin: '0 0 var(--space-6)', fontSize: 15, color: 'var(--color-neutral-800)', maxWidth: '62ch' }}>
             ไม่ต้องเดินทางมาโชว์รูม ทีมงานนำรถไปให้ทดลองขับถึงหน้าบริษัทหรือบ้านของคุณได้ ไม่ว่าจะอยู่ที่ไหนในพื้นที่ให้บริการ
           </p>
-          <div className="om-video-grid" style={{ maxWidth: 640 }}>
+          <div className="om-video-grid" style={{ maxWidth: 960 }}>
             {testDriveVideos.map((v) =>
               v!.youtubeId ? (
                 <VideoEmbed key={v!.id} title={v!.title} youtubeId={v!.youtubeId} />
