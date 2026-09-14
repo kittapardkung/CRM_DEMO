@@ -1,7 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import CTASection from '@/components/CTASection';
+import VideoEmbed from '@/components/VideoEmbed';
 import { serviceProvinces } from '@/lib/data/dealer';
+import { videos } from '@/lib/data/videos';
+
+const testDriveVideoIds = ['porta-invite-test-drive', 'porta-chonburi-rayong-chachoengsao-test-drive'];
+const testDriveVideos = testDriveVideoIds
+  .map((id) => videos.find((v) => v.id === id))
+  .filter((v) => v?.status === 'produced' && v.youtubeId);
 
 export const metadata: Metadata = {
   title: 'พื้นที่ให้บริการ WULING ชลบุรี ระยอง ฉะเชิงเทรา',
@@ -76,6 +83,24 @@ export default function AreasPage() {
           </div>
         </div>
       </section>
+
+      {testDriveVideos.length > 0 ? (
+        <section style={{ paddingBottom: 'var(--space-8)' }}>
+          <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>Test Drive</p>
+          <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 4px' }}>ทดลองขับได้ ไม่ว่าคุณจะอยู่ที่ไหน</h2>
+          <p style={{ margin: '0 0 var(--space-6)', fontSize: 15, color: 'var(--color-neutral-800)', maxWidth: '62ch' }}>
+            ไม่ต้องเดินทางมาโชว์รูม ทีมงานนำรถไปให้ทดลองขับถึงหน้าบริษัทหรือบ้านของคุณได้ ไม่ว่าจะอยู่ที่ไหนในพื้นที่ให้บริการ
+          </p>
+          <div className="om-video-grid" style={{ maxWidth: 640 }}>
+            {testDriveVideos.map((v) => (
+              <VideoEmbed key={v!.id} title={v!.title} youtubeId={v!.youtubeId!} />
+            ))}
+          </div>
+          <p style={{ margin: 'var(--space-4) 0 0', fontSize: 14 }}>
+            <Link href="/videos?topic=testdrive">ดูวิดีโอ Test Drive เพิ่มเติม →</Link>
+          </p>
+        </section>
+      ) : null}
 
       <section style={{ paddingBottom: 'var(--space-8)' }}>
         <CTASection
