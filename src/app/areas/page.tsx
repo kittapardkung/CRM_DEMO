@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import type { ReactNode } from 'react';
 import Link from 'next/link';
 import CTASection from '@/components/CTASection';
 import VideoEmbed from '@/components/VideoEmbed';
@@ -6,6 +7,64 @@ import TikTokEmbed from '@/components/TikTokEmbed';
 import { serviceProvinces } from '@/lib/data/dealer';
 import { videos } from '@/lib/data/videos';
 import { getTiktokThumbnail } from '@/lib/tiktok';
+
+/** Same line-icon convention as PersonaIcon in PortaAccessoryShowcase (viewBox 24, stroke 1.8, round caps). */
+function CoverageStepIcon({ icon }: { icon: 'testdrive' | 'delivery' | 'service' }) {
+  const common = {
+    viewBox: '0 0 24 24',
+    width: 24,
+    height: 24,
+    fill: 'none',
+    stroke: 'currentColor',
+    strokeWidth: 1.8,
+    strokeLinecap: 'round' as const,
+    strokeLinejoin: 'round' as const,
+  };
+  if (icon === 'testdrive') {
+    return (
+      <svg {...common}>
+        <circle cx="12" cy="12" r="9" />
+        <circle cx="12" cy="12" r="2.4" />
+        <path d="M12 5.6v3.9M6.7 15.3l3-1.9M17.3 15.3l-3-1.9" />
+      </svg>
+    );
+  }
+  if (icon === 'delivery') {
+    return (
+      <svg {...common}>
+        <path d="M12 21s7-7.4 7-12.4A7 7 0 1 0 5 8.6C5 13.6 12 21 12 21z" />
+        <circle cx="12" cy="8.6" r="2.4" />
+      </svg>
+    );
+  }
+  return (
+    <svg {...common}>
+      <path d="M14.7 6.3a4 4 0 0 0-5.4 5.4l-6.6 6.6 2.6 2.6 6.6-6.6a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.6-2.6z" />
+    </svg>
+  );
+}
+
+const coverageSteps: { icon: 'testdrive' | 'delivery' | 'service'; title: string; body: ReactNode }[] = [
+  {
+    icon: 'testdrive',
+    title: 'ทดลองขับถึงที่',
+    body: 'นัดหมายให้ทีมงานนำรถไปให้ทดลองขับที่บ้านหรือบริษัทของคุณในพื้นที่ให้บริการ',
+  },
+  {
+    icon: 'delivery',
+    title: 'ส่งมอบรถถึงหน้างาน',
+    body: 'ปิดการขายแล้วนัดรับรถได้ทั้งที่โชว์รูมชลบุรี หรือให้ทีมงานนำรถไปส่งถึงพื้นที่ของคุณ',
+  },
+  {
+    icon: 'service',
+    title: 'บริการหลังการขาย',
+    body: (
+      <>
+        เช็กระยะและซ่อมบำรุงที่ศูนย์บริการชลบุรี ดู<Link href="/service" style={{ color: 'inherit' }}>รายละเอียดศูนย์บริการ</Link>
+      </>
+    ),
+  },
+];
 
 const testDriveVideoIds = [
   'porta-invite-test-drive',
@@ -79,24 +138,39 @@ export default async function AreasPage() {
         <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>How It Works</p>
         <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-6)' }}>บริการที่ครอบคลุมทุกพื้นที่</h2>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(220px,1fr))', gap: 'var(--space-6)' }}>
-          <div style={{ borderTop: '1px solid var(--color-text)', paddingTop: 'var(--space-3)' }}>
-            <h3 style={{ fontSize: 19, margin: '0 0 var(--space-2)' }}>ทดลองขับถึงที่</h3>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--color-neutral-800)' }}>
-              นัดหมายให้ทีมงานนำรถไปให้ทดลองขับที่บ้านหรือบริษัทของคุณในพื้นที่ให้บริการ
-            </p>
-          </div>
-          <div style={{ borderTop: '1px solid var(--color-text)', paddingTop: 'var(--space-3)' }}>
-            <h3 style={{ fontSize: 19, margin: '0 0 var(--space-2)' }}>ส่งมอบรถถึงหน้างาน</h3>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--color-neutral-800)' }}>
-              ปิดการขายแล้วนัดรับรถได้ทั้งที่โชว์รูมชลบุรี หรือให้ทีมงานนำรถไปส่งถึงพื้นที่ของคุณ
-            </p>
-          </div>
-          <div style={{ borderTop: '1px solid var(--color-text)', paddingTop: 'var(--space-3)' }}>
-            <h3 style={{ fontSize: 19, margin: '0 0 var(--space-2)' }}>บริการหลังการขาย</h3>
-            <p style={{ margin: 0, fontSize: 15, color: 'var(--color-neutral-800)' }}>
-              เช็กระยะและซ่อมบำรุงที่ศูนย์บริการชลบุรี ดู<Link href="/service" style={{ color: 'inherit' }}>รายละเอียดศูนย์บริการ</Link>
-            </p>
-          </div>
+          {coverageSteps.map((s) => (
+            <div
+              key={s.title}
+              style={{
+                border: '1px solid var(--color-neutral-300)',
+                borderRadius: 'var(--radius-lg)',
+                padding: 'var(--space-4)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 'var(--space-3)',
+                background: 'var(--color-surface)',
+              }}
+            >
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 'var(--radius-md)',
+                  background: 'var(--color-accent-100)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: 'var(--color-accent-700)',
+                }}
+              >
+                <CoverageStepIcon icon={s.icon} />
+              </div>
+              <div>
+                <h3 style={{ fontSize: 19, margin: '0 0 6px' }}>{s.title}</h3>
+                <p style={{ margin: 0, fontSize: 15, color: 'var(--color-neutral-800)' }}>{s.body}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </section>
 
