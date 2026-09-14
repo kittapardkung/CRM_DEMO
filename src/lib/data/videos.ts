@@ -201,6 +201,16 @@ export const videos: Video[] = [
     publishedAt: '12 ก.ย. 2569',
     status: 'produced',
   },
+  {
+    id: 'porta-one-day-test-drive',
+    tiktokId: '7683417035094658312',
+    title: 'One Day With PORTA EV - หนึ่งวันทดลองขับ ทำอะไรบ้าง ??',
+    description: 'บันทึกหนึ่งวันทดลองขับ Wuling PORTA EV ทำอะไรบ้างระหว่างวัน',
+    topic: 'testdrive',
+    relatedVehicleSlug: 'porta',
+    publishedAt: '14 ก.ย. 2569',
+    status: 'produced',
+  },
 ];
 
 export function getVideo(id: string): Video | undefined {

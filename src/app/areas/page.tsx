@@ -1,7 +1,20 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import CTASection from '@/components/CTASection';
+import VideoEmbed from '@/components/VideoEmbed';
+import TikTokEmbed from '@/components/TikTokEmbed';
 import { serviceProvinces } from '@/lib/data/dealer';
+import { videos } from '@/lib/data/videos';
+import { getTiktokThumbnail } from '@/lib/tiktok';
+
+const testDriveVideoIds = [
+  'porta-invite-test-drive',
+  'porta-chonburi-rayong-chachoengsao-test-drive',
+  'porta-one-day-test-drive',
+];
+const testDriveVideos = testDriveVideoIds
+  .map((id) => videos.find((v) => v.id === id))
+  .filter((v) => v?.status === 'produced' && (v.youtubeId || v.tiktokId));
 
 export const metadata: Metadata = {
   title: 'พื้นที่ให้บริการ WULING ชลบุรี ระยอง ฉะเชิงเทรา',
@@ -9,7 +22,17 @@ export const metadata: Metadata = {
   alternates: { canonical: '/areas' },
 };
 
-export default function AreasPage() {
+export default async function AreasPage() {
+  // Real thumbnails only exist for YouTube out of the box (i.ytimg.com); a
+  // TikTok-sourced clip needs an oEmbed lookup to show one before play.
+  const tiktokThumbnails = Object.fromEntries(
+    await Promise.all(
+      testDriveVideos
+        .filter((v) => v!.tiktokId)
+        .map(async (v) => [v!.tiktokId!, await getTiktokThumbnail(v!.tiktokId!)] as const)
+    )
+  );
+
   return (
     <div className="wrap">
       <section style={{ padding: 'var(--space-8) 0 var(--space-6)' }}>
@@ -76,6 +99,33 @@ export default function AreasPage() {
           </div>
         </div>
       </section>
+
+      {testDriveVideos.length > 0 ? (
+        <section style={{ paddingBottom: 'var(--space-8)' }}>
+          <p className="kicker" style={{ margin: '0 0 var(--space-3)' }}>Test Drive</p>
+          <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 4px' }}>ทดลองขับได้ ไม่ว่าคุณจะอยู่ที่ไหน</h2>
+          <p style={{ margin: '0 0 var(--space-6)', fontSize: 15, color: 'var(--color-neutral-800)', maxWidth: '62ch' }}>
+            ไม่ต้องเดินทางมาโชว์รูม ทีมงานนำรถไปให้ทดลองขับถึงหน้าบริษัทหรือบ้านของคุณได้ ไม่ว่าจะอยู่ที่ไหนในพื้นที่ให้บริการ
+          </p>
+          <div className="om-video-grid" style={{ maxWidth: 960 }}>
+            {testDriveVideos.map((v) =>
+              v!.youtubeId ? (
+                <VideoEmbed key={v!.id} title={v!.title} youtubeId={v!.youtubeId} />
+              ) : (
+                <TikTokEmbed
+                  key={v!.id}
+                  title={v!.title}
+                  tiktokId={v!.tiktokId!}
+                  thumbnailUrl={tiktokThumbnails[v!.tiktokId!]}
+                />
+              )
+            )}
+          </div>
+          <p style={{ margin: 'var(--space-4) 0 0', fontSize: 14 }}>
+            <Link href="/videos?topic=testdrive">ดูวิดีโอ Test Drive เพิ่มเติม →</Link>
+          </p>
+        </section>
+      ) : null}
 
       <section style={{ paddingBottom: 'var(--space-8)' }}>
         <CTASection
