@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import CTASection from '@/components/CTASection';
 import VideoEmbed from '@/components/VideoEmbed';
@@ -102,6 +103,25 @@ export default async function AreasPage() {
           และให้บริการลูกค้าในพื้นที่ภาคตะวันออกครอบคลุม 3 จังหวัดหลัก ได้แก่ ชลบุรี ระยอง และฉะเชิงเทรา
           ทั้งการทดลองขับ การซื้อขาย และบริการหลังการขาย
         </p>
+        <div
+          style={{
+            marginTop: 'var(--space-6)',
+            overflow: 'hidden',
+            borderRadius: 'var(--radius-lg)',
+            border: '1px solid var(--color-neutral-300)',
+            background: 'var(--color-surface)',
+          }}
+        >
+          <Image
+            src="/images/areas-wuling-service-coverage-hero.jpg"
+            alt="พื้นที่ให้บริการ WULING ในเขต EEC ชลบุรี ระยอง และฉะเชิงเทรา"
+            width={1600}
+            height={900}
+            priority
+            sizes="(max-width: 768px) 100vw, 1200px"
+            style={{ width: '100%', height: 'auto', display: 'block' }}
+          />
+        </div>
       </section>
 
       <section style={{ paddingBottom: 'var(--space-8)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'var(--space-6)' }}>
