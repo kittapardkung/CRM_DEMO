@@ -95,7 +95,8 @@ export default async function AreasPage() {
 
   return (
     <div className="wrap">
-      <div
+      <div className="areas-hero-layout">
+      <div className="areas-hero"
         style={{
           margin: 'var(--space-5) 0 var(--space-6)',
           overflow: 'hidden',
@@ -115,7 +116,7 @@ export default async function AreasPage() {
         />
       </div>
 
-      <section style={{ padding: 'var(--space-8) 0 var(--space-6)' }}>
+      <section className="areas-intro" style={{ padding: 'var(--space-8) 0 var(--space-6)' }}>
         <p className="kicker">Coverage Area</p>
         <h1 style={{ fontSize: 'clamp(29px,4vw,45px)', margin: '0 0 var(--space-3)' }}>พื้นที่ให้บริการ</h1>
         <p style={{ margin: 0, maxWidth: '62ch', color: 'var(--color-neutral-800)', fontSize: 16 }}>
@@ -124,6 +125,7 @@ export default async function AreasPage() {
           ทั้งการทดลองขับ การซื้อขาย และบริการหลังการขาย
         </p>
       </section>
+      </div>
 
       <section style={{ paddingBottom: 'var(--space-8)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'var(--space-6)' }}>
         {serviceProvinces.map((p) => (

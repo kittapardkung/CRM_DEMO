@@ -419,3 +419,29 @@ details[open] > summary::after {
     gap: var(--space-3);
   }
 }
+
+
+/* Areas hero: desktop first, mobile after the introductory copy. */
+.areas-hero-layout {
+  display: flex;
+  flex-direction: column;
+}
+
+.areas-hero {
+  order: 1;
+}
+
+.areas-intro {
+  order: 2;
+}
+
+@media (max-width: 767px) {
+  .areas-intro {
+    order: 1;
+  }
+
+  .areas-hero {
+    order: 2;
+    margin-top: 0 !important;
+  }
+}
