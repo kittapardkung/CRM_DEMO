@@ -187,6 +187,8 @@ export interface Article {
   title: string;
   excerpt: string;
   publishedAt: string;
+  /** Set only when the article's content was genuinely revised after publish (not for image/video swaps) — falls back to publishedAt for dateModified schema when absent. */
+  updatedAt?: string;
   readingTime: string;
   relatedVehicleSlug: string;
   sections: ArticleSection[];

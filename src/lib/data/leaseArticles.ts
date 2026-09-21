@@ -72,7 +72,7 @@ export const leaseArticles: Article[] = [
     relatedVehicleSlug: 'porta',
     publishedAt: '25 ส.ค. 2569',
     readingTime: '7 นาที',
-    title: 'เปลี่ยนรถบริษัทเป็น EV คุ้มไหม? วิเคราะห์ต้นทุน Fleet สำหรับองค์กร',
+    title: 'เปลี่ยนรถบริษัทเป็น EV คุ้มไหม? วิเคราะห์ต้นทุน',
     excerpt: 'ต้นทุนรถบริษัทไม่ได้มีแค่ราคาซื้อ — วิธีประเมิน Total Cost of Ownership ก่อนปรับ Fleet เป็นรถไฟฟ้า',
     sections: [
       {

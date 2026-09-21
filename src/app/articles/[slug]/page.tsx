@@ -81,6 +81,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
       headline: article.title,
       description: article.excerpt,
       datePublished: toISODate(article.publishedAt),
+      dateModified: toISODate(article.updatedAt ?? article.publishedAt),
       url: `${SITE_URL}/articles/${article.slug}`,
       ...(articleImage ? { image: `${SITE_URL}${articleImage}` } : {}),
       author: { '@type': 'Organization', name: dealer.name, url: SITE_URL },
