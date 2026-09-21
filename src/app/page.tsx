@@ -6,11 +6,18 @@ import ModelCard from '@/components/ModelCard';
 import { resolveAsset } from '@/lib/assets';
 import ArticleCard from '@/components/ArticleCard';
 import PhoneLink from '@/components/PhoneLink';
+import VideoEmbed from '@/components/VideoEmbed';
+import TikTokEmbed from '@/components/TikTokEmbed';
 import { vehicles } from '@/lib/data/vehicles';
 import { articles } from '@/lib/data/articles';
+import { videos } from '@/lib/data/videos';
 import { dealer } from '@/lib/data/dealer';
 import { quickLinks } from '@/lib/nav';
 import { SITE_URL } from '@/lib/seo';
+import { getTiktokThumbnail } from '@/lib/tiktok';
+
+/** A small, varied sample for the homepage teaser — the full library lives at /videos. */
+const homeVideoIds = ['porta-payload', 'porta-business-use', 'porta-rear-ac', 'porta-invite-test-drive'];
 
 export const metadata: Metadata = {
   title: 'WULING CHONBURI | ตัวแทนจำหน่ายวู่หลิง ชลบุรี ภาคตะวันออก',
@@ -24,9 +31,23 @@ const leaseFacts = [
   { label: 'เหมาะกับ', value: 'บริษัท โรงงาน SME', tnum: false },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
   const topArticles = articles.slice(0, 3);
   const heroSrc = resolveAsset('hero-wuling-front-34.webp');
+
+  const homeVideos = homeVideoIds
+    .map((id) => videos.find((v) => v.id === id))
+    .filter((v) => v?.status === 'produced' && (v.youtubeId || v.tiktokId));
+
+  // Real thumbnails only exist for YouTube out of the box (i.ytimg.com); a
+  // TikTok-sourced clip needs an oEmbed lookup to show one before play.
+  const tiktokThumbnails = Object.fromEntries(
+    await Promise.all(
+      homeVideos
+        .filter((v) => v!.tiktokId)
+        .map(async (v) => [v!.tiktokId!, await getTiktokThumbnail(v!.tiktokId!)] as const)
+    )
+  );
 
   return (
     <div className="wrap">
@@ -172,6 +193,32 @@ export default function HomePage() {
           ))}
         </div>
       </section>
+
+      {homeVideos.length > 0 ? (
+        <section style={{ padding: 'var(--space-8) 0' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap', marginBottom: 'var(--space-6)' }}>
+            <div>
+              <p className="kicker" style={{ margin: '0 0 var(--space-2)' }}>Videos</p>
+              <h2 style={{ fontSize: 'clamp(23px,2.9vw,31px)', margin: 0 }}>วิดีโอสาระน่ารู้</h2>
+            </div>
+            <Link href="/videos" style={{ fontSize: 15 }}>ดูทั้งหมด →</Link>
+          </div>
+          <div className="om-video-grid">
+            {homeVideos.map((v) =>
+              v!.youtubeId ? (
+                <VideoEmbed key={v!.id} title={v!.title} youtubeId={v!.youtubeId} />
+              ) : (
+                <TikTokEmbed
+                  key={v!.id}
+                  title={v!.title}
+                  tiktokId={v!.tiktokId!}
+                  thumbnailUrl={tiktokThumbnails[v!.tiktokId!]}
+                />
+              )
+            )}
+          </div>
+        </section>
+      ) : null}
 
       <section style={{ padding: 'var(--space-8) 0 var(--space-4)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(280px,1fr))', gap: 'var(--space-6)', alignItems: 'start' }}>
         <div>
