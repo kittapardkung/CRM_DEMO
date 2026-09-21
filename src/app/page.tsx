@@ -6,8 +6,7 @@ import ModelCard from '@/components/ModelCard';
 import { resolveAsset } from '@/lib/assets';
 import ArticleCard from '@/components/ArticleCard';
 import PhoneLink from '@/components/PhoneLink';
-import VideoEmbed from '@/components/VideoEmbed';
-import TikTokEmbed from '@/components/TikTokEmbed';
+import VideoCard from '@/components/VideoCard';
 import { vehicles } from '@/lib/data/vehicles';
 import { articles } from '@/lib/data/articles';
 import { videos } from '@/lib/data/videos';
@@ -204,18 +203,9 @@ export default async function HomePage() {
             <Link href="/videos" style={{ fontSize: 15 }}>ดูทั้งหมด →</Link>
           </div>
           <div className="om-video-grid">
-            {homeVideos.map((v) =>
-              v!.youtubeId ? (
-                <VideoEmbed key={v!.id} title={v!.title} youtubeId={v!.youtubeId} />
-              ) : (
-                <TikTokEmbed
-                  key={v!.id}
-                  title={v!.title}
-                  tiktokId={v!.tiktokId!}
-                  thumbnailUrl={tiktokThumbnails[v!.tiktokId!]}
-                />
-              )
-            )}
+            {homeVideos.map((v) => (
+              <VideoCard key={v!.id} video={v!} tiktokThumbnail={v!.tiktokId ? tiktokThumbnails[v!.tiktokId] : undefined} />
+            ))}
           </div>
         </section>
       ) : null}
