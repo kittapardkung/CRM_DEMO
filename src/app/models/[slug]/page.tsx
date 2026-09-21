@@ -23,18 +23,22 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const vehicle = getVehicle(slug);
   if (!vehicle) return {};
+  const heroImage = resolveAsset(vehicle.image);
+  const openGraph = heroImage ? { images: [`${SITE_URL}${heroImage}`] } : undefined;
   if (vehicle.slug === 'porta') {
     return {
       title: 'WULING PORTA EV รถตู้ทึบไฟฟ้าเพื่อธุรกิจ ราคา 659,000 | ชลบุรี',
       description:
         'PORTA EV รถขนส่งไฟฟ้า ห้องบรรทุก 6.5 ลบ.ม. บรรทุกได้ 2 พาเลท วิ่งได้ 400 กม. ต่อการชาร์จ (CLTC) ราคาเริ่ม 659,000 บาท ทดลองขับถึงที่ ชลบุรี ศรีราชา พัทยา อมตะนคร',
       alternates: { canonical: `/models/${vehicle.slug}` },
+      ...(openGraph ? { openGraph } : {}),
     };
   }
   return {
     title: `${vehicle.name} | ราคาและสเปก`,
     description: `${vehicle.name} ${vehicle.tagline} ดูราคา รุ่นย่อย สี และสเปกทั้งหมด`,
     alternates: { canonical: `/models/${vehicle.slug}` },
+    ...(openGraph ? { openGraph } : {}),
   };
 }
 

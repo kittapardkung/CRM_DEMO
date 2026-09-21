@@ -39,10 +39,15 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return {};
+  const articleImage = resolveAsset(article.image);
   return {
     title: article.title,
     description: article.excerpt,
     alternates: { canonical: `/articles/${article.slug}` },
+    // Omitted (not set to undefined) when there's no real image yet, so the
+    // page falls back to the root layout's sitewide default OG image instead
+    // of an explicit empty one.
+    ...(articleImage ? { openGraph: { images: [`${SITE_URL}${articleImage}`] } } : {}),
   };
 }
 

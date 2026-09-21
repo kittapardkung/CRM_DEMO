@@ -26,6 +26,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'th_TH',
     siteName: 'WULING CHONBURI',
+    images: [`${SITE_URL}/assets/wuling-chonburi-logo.jpg`],
   },
   twitter: {
     card: 'summary_large_image',
@@ -72,9 +73,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="th" className={prompt.variable}>
       <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Script id="ld-local-business" type="application/ld+json" strategy="beforeInteractive">
-          {JSON.stringify(localBusinessJsonLd)}
-        </Script>
+        {/*
+          A plain literal <script> tag (not next/script strategy="beforeInteractive"),
+          so crawlers that only fetch raw HTML — not all of them execute JS, notably
+          several AEO/GEO answer-engine crawlers — can read the sitewide NAP/AutoDealer
+          schema without waiting on client-side hydration.
+        */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+        />
         <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`} />
         <Script id="ga4-init" strategy="afterInteractive">
           {`
