@@ -212,7 +212,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                 {s.image ? (
                   <div style={{ margin: 'var(--space-4) 0 0' }}>
                     <ImageSlot
-                      aspectRatio="4 / 3"
+                      aspectRatio={s.image === 'darion-ev-installment-table.webp' ? '4 / 5' : '4 / 3'}
                       caption={s.imageCaption ?? s.heading}
                       filename={s.image}
                       sizes="(max-width: 760px) 100vw, 760px"
