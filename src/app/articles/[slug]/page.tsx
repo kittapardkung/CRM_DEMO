@@ -209,6 +209,17 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
                   </div>
                 ) : null}
 
+                {s.image ? (
+                  <div style={{ margin: 'var(--space-4) 0 0' }}>
+                    <ImageSlot
+                      aspectRatio="4 / 3"
+                      caption={s.imageCaption ?? s.heading}
+                      filename={s.image}
+                      sizes="(max-width: 760px) 100vw, 760px"
+                    />
+                  </div>
+                ) : null}
+
                 {s.note ? (
                   <p style={{ margin: 'var(--space-3) 0 0', fontSize: 13, color: 'var(--color-neutral-700)' }}>{renderInline(s.note)}</p>
                 ) : null}
