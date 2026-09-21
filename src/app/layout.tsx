@@ -37,6 +37,21 @@ export const metadata: Metadata = {
   },
 };
 
+// Controls the site name Google shows next to the favicon in search results
+// (developers.google.com/search/docs/appearance/site-names) — Google reads
+// this ahead of og:site_name. "WULING JT GROUP" is listed as the preferred
+// name per the user's request; "WULING CHONBURI" is the alternate since
+// that's what the page content itself (logo alt text, H1) actually says —
+// Google checks the requested name against on-page consistency, so the
+// alternate is a real fallback if it declines the first choice, not padding.
+const websiteJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'WULING JT GROUP',
+  alternateName: ['WULING CHONBURI'],
+  url: SITE_URL,
+};
+
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'AutoDealer',
@@ -79,6 +94,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           several AEO/GEO answer-engine crawlers — can read the sitewide NAP/AutoDealer
           schema without waiting on client-side hydration.
         */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
