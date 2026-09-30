@@ -1,0 +1,47 @@
+:root {
+  --bg: #F1F3F6; --panel: #FFFFFF; --panel2: #F7F8FA; --raised: #E8EBF0;
+  --line: #C9D0DA; --lineSoft: #E1E6ED; --text: #16202B; --dim: #47525F; --faint: #6A7683;
+  --amber: #B36A00; --teal: #0E7A63; --red: #BE3A2B; --blue: #2A6C9A; --purple: #6B4FBB;
+  --fDisplay: 'Sora', sans-serif;
+  --fBody: 'IBM Plex Sans Thai', -apple-system, "Segoe UI", sans-serif;
+  --fMono: 'IBM Plex Mono', monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); min-height: 100%; }
+body { color: var(--text); font-family: var(--fBody); -webkit-font-smoothing: antialiased; }
+a { color: var(--teal); text-decoration: none; }
+input, select, textarea, button { font-family: var(--fBody); }
+::-webkit-scrollbar { height: 8px; width: 8px; }
+::-webkit-scrollbar-thumb { background: var(--lineSoft); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--line); }
+
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop { from { opacity: 0; transform: scale(.97) translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* replaces the reference's style-hover attributes */
+.h-line:hover { border-color: var(--line) !important; }
+.h-card:hover { border-color: var(--line) !important; box-shadow: 0 6px 18px rgba(22,32,43,.10); }
+.h-row:hover { background: rgba(22,32,43,.032); }
+.h-inbox:hover { background: #F0F6FB; }
+.h-dim:hover { color: var(--dim) !important; }
+.h-text:hover { color: var(--text) !important; }
+.h-fade:hover { opacity: .6; }
+.h-bright:hover { filter: brightness(1.07); }
+.h-raise:hover { background: #DDE2EA !important; border-color: var(--line) !important; }
+.h-close:hover { background: var(--raised); color: var(--text); }
+.pop { animation: pop .22s cubic-bezier(.2,.9,.3,1); }
+.fade { animation: fade .18s ease; }
+.btn-primary {
+  text-align: center; background: linear-gradient(145deg, #B36A00, #9A5B00); color: #fff;
+  border-radius: 10px; padding: 12px; font-size: 14px; font-weight: 700; cursor: pointer; border: 0; width: 100%;
+}
+.btn-primary:disabled { opacity: .6; cursor: default; }
+.field {
+  width: 100%; background: var(--bg); border: 1px solid var(--line); border-radius: 9px;
+  padding: 10px 11px; color: var(--text); font-size: 13.5px; outline: none;
+}
+.field-sm { background: var(--panel2); border-radius: 8px; padding: 8px 10px; font-size: 12.5px; }
+.card { background: var(--panel); border: 1px solid var(--lineSoft); border-radius: 14px; }
+.h3 { margin: 0; font-size: 13.5px; font-weight: 600; font-family: var(--fDisplay); }
+.eyebrow { font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--faint); font-family: var(--fDisplay); }
+.mono { font-family: var(--fMono); }
