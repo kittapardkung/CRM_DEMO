@@ -79,3 +79,13 @@ band (50+/83k/103-style numbers) from the reference screenshot.
 in `lib/data/types.ts`, then logs — there's no CRM connected yet, so the
 form always lands on the success screen regardless. Point the same handler
 at a real CRM endpoint when one exists; no form component needs to change.
+
+## Weekly sales report (`/sales-report`)
+
+Internal tool (noindex, passcode-protected) for the weekly sales meeting:
+each salesperson re-checks every open lead, updates status / temperature /
+next follow-up, flags real prospects, and submits. `/sales-report/meeting`
+shows who has not submitted, the prospects list, status changes and help
+requests. Leads are read from the `SHEET_1_TEL` tab; reports are appended to
+`WEEKLY_REPORT` / `WEEKLY_NOTES` tabs of the same sheet. See `.env.example`
+for the env vars; without them it runs on demo data.
