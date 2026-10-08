@@ -8,7 +8,10 @@ export function db(): SupabaseClient {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) throw new Error("SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are not set");
-  client = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+  client = createClient(url, key, {
+    db: { schema: "cashflow" },
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
   return client;
 }
 

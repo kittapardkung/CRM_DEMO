@@ -17,7 +17,7 @@ const dir = process.argv[2];
 if (!dir) { console.error("usage: node scripts/import-csv.mjs <csv-folder>"); process.exit(1); }
 const { SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY } = process.env;
 if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) { console.error("set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY"); process.exit(1); }
-const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
+const sb = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, { db: { schema: "cashflow" }, auth: { persistSession: false } });
 
 function parseCsv(text) {
   const rows = []; let row = [], cur = "", q = false;

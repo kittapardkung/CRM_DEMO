@@ -1,7 +1,15 @@
 -- Wuling Cash Flow — Supabase schema.
 -- Run once in Supabase → SQL Editor. Mirrors the 5 Google Sheets tabs.
+-- Everything lives in its own schema ("cashflow") so it can share a
+-- Supabase project with other apps without name clashes.
 -- RLS is enabled with NO policies: anon/authenticated keys can read
 -- nothing; only the server (service_role key) can access the data.
+--
+-- AFTER running this: Project Settings → API → "Exposed schemas" →
+-- add `cashflow` → Save. (Required, or the API can't see the tables.)
+
+create schema if not exists cashflow;
+set search_path to cashflow, public;
 
 create table if not exists products (
   id          uuid primary key default gen_random_uuid(),
@@ -85,3 +93,8 @@ alter table purchases    enable row level security;
 alter table transactions enable row level security;
 alter table stock        enable row level security;
 alter table balance      enable row level security;
+
+-- let the server key (service_role) use the schema
+grant usage on schema cashflow to service_role;
+grant all on all tables in schema cashflow to service_role;
+alter default privileges in schema cashflow grant all on tables to service_role;

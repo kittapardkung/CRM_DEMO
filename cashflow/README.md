@@ -14,7 +14,9 @@ scripts/import-csv.mjs one-off import of the existing Sheet data
 
 ## Setup
 
-1. **Supabase**: create a project → SQL Editor → run `supabase/schema.sql`.
+1. **Supabase**: create a project → SQL Editor → run `supabase/schema.sql`
+   (it creates a dedicated `cashflow` schema), then Project Settings → API →
+   **Exposed schemas** → add `cashflow` → Save.
 2. Copy `.env.example` to `.env.local` and fill in `SUPABASE_URL`,
    `SUPABASE_SERVICE_ROLE_KEY` (Project Settings → API), `APP_PASSWORD`,
    and `SESSION_SECRET` (`openssl rand -hex 32`).
