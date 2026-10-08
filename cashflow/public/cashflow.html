@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wuling Cash Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F1F4FA; --surface:#FFFFFF; --surface-2:#F7F9FD; --border:#E1E7F2;
+  --text:#0F1729; --text-dim:#5C6B84; --muted:#93A1B8;
+  --accent:#3D4FE0; --accent-ink:#FFFFFF; --accent-soft:#EBEEFD; --accent-soft-border:#D6DBFA;
+  --good:#0C9463; --good-soft:#E5FAF1; --good-border:#BFEEDA;
+  --bad:#DC3B41; --bad-soft:#FDECED; --bad-border:#F6C6C8;
+  --warn:#B4740E; --warn-soft:#FFF4E0; --warn-border:#F2DAA6;
+  --shadow:0 1px 2px rgba(16,24,39,.04),0 8px 20px rgba(16,24,39,.06);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);}
+body{font-family:"Inter",system-ui,sans-serif;padding-inline:16px;padding-block:18px 48px;}
+h1,h2,h3,.jakarta{font-family:"Plus Jakarta Sans",system-ui,sans-serif;}
+.num{font-family:"JetBrains Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums;font-weight:600;}
+#app{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px;}
+button{font-family:inherit;}
+input,select{font-family:inherit;}
+#topbar{position:sticky;top:0;z-index:50;background:var(--bg);padding-block:2px 4px;margin-inline:-16px;padding-inline:16px;}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-block:6px 12px;flex-wrap:wrap;}
+.brand-left{display:flex;align-items:center;gap:10px;}
+.brand-mark{width:38px;height:38px;border-radius:10px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden;font-weight:800;font-size:18px;font-family:"Plus Jakarta Sans",system-ui,sans-serif;}
+.brand-mark img{width:100%;height:100%;object-fit:cover;}
+.brand-name{font-size:15px;font-weight:800;letter-spacing:-.01em;}
+.brand-sub{font-size:10.5px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;}
+.tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;}
+.tab-btn{white-space:nowrap;padding:8px 13px;border-radius:9px;border:1px solid transparent;background:none;color:var(--text-dim);font-size:12.5px;font-weight:600;cursor:pointer;}
+.tab-btn:hover{background:var(--surface-2);}
+.tab-btn.active{background:var(--accent-soft);color:var(--accent);border-color:var(--accent-soft-border);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
+.section-title{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;}
+.empty{padding:26px 0;text-align:center;color:var(--muted);font-size:13.5px;}
+.errbox{color:var(--bad);font-size:12.5px;margin-bottom:12px;background:var(--bad-soft);border:1px solid var(--bad-border);padding:9px 13px;border-radius:9px;}
+.warnbox{color:var(--warn);font-size:11.5px;margin-bottom:14px;background:var(--warn-soft);border:1px solid var(--warn-border);padding:8px 12px;border-radius:9px;}
+.row{display:flex;gap:12px;flex-wrap:wrap;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media (max-width:520px){.grid2{grid-template-columns:1fr;}}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.field label{font-size:11.5px;font-weight:600;color:var(--text-dim);}
+.field .hint{font-size:10.5px;color:var(--muted);}
+.input{padding:9px 11px;border-radius:9px;border:1px solid var(--border);font-size:13.5px;background:var(--surface);color:var(--text);width:100%;outline:none;}
+.input:focus{border-color:var(--accent);}
+.btn{padding:9px 16px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;border:1px solid transparent;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:var(--accent);color:var(--accent-ink);}
+.btn-secondary{background:var(--surface);color:var(--text);border-color:var(--border);}
+.btn-ghost{background:transparent;color:var(--text-dim);border-color:var(--border);}
+.btn-good{background:var(--good);color:#fff;}
+.btn-sm{padding:5px 10px;font-size:11.5px;border-radius:7px;}
+.btn:disabled{opacity:.55;cursor:default;}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.01em;}
+.toggle-row{display:flex;gap:6px;background:var(--surface-2);padding:4px;border-radius:10px;width:fit-content;}
+.toggle-btn{padding:8px 14px;border-radius:7px;border:none;background:transparent;color:var(--text-dim);font-size:12.5px;font-weight:600;cursor:pointer;}
+.toggle-btn.active{background:var(--surface);color:var(--accent);box-shadow:var(--shadow);font-weight:700;}
+table{width:100%;border-collapse:collapse;font-size:12.5px;}
+th{padding:9px 8px;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;text-align:left;border-bottom:2px solid var(--border);}
+th.num-col,td.num-col{text-align:right;}
+td{padding:9px 8px;border-bottom:1px solid var(--border);vertical-align:top;}
+.table-wrap{overflow-x:auto;}
+.muted{color:var(--muted);}
+.dim{color:var(--text-dim);}
+.kpi{flex:1 1 150px;padding:0;overflow:hidden;}
+.kpi .bar{height:3px;}
+.kpi .body{padding:15px 16px;}
+.kpi .label{font-size:10.5px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase;margin-bottom:7px;}
+.kpi .val{font-size:21px;}
+.kpi .sub{font-size:11.5px;color:var(--muted);margin-top:4px;}
+.hero{background:linear-gradient(135deg,#1B1F6B 0%,#2C33A0 55%,#3D4FE0 100%);color:#fff;padding:26px 26px;}
+.hero .val{font-size:36px;}
+.icon-btn{border:none;background:none;cursor:pointer;color:var(--muted);font-size:15px;line-height:1;padding:3px 5px;border-radius:6px;}
+.icon-btn:hover{background:var(--surface-2);}
+.list-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border);gap:10px;}
+.list-row:last-child{border-bottom:none;}
+.chip{padding:2px 8px;border-radius:6px;font-size:10.5px;font-weight:700;}
+.sparkwrap{width:100%;overflow-x:auto;}
+.chart-readout{font-size:12.5px;color:var(--text-dim);background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:7px 12px;margin-bottom:10px;}
+[hidden]{display:none!important;}
+.bank{display:flex;flex-direction:column;gap:6px;padding:20px;text-align:center;color:var(--text-dim);font-size:13px;}
+#sync-note{font-size:10.5px;color:var(--muted);max-width:260px;}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,12px);background:var(--good);color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-weight:700;box-shadow:var(--shadow);opacity:0;transition:opacity .2s,transform .2s;z-index:200;max-width:90vw;text-align:center;}
+.toast.show{opacity:1;transform:translate(-50%,0);}
+.modal-back{position:fixed;inset:0;z-index:300;background:rgba(15,23,41,.45);display:flex;align-items:center;justify-content:center;padding:16px;}
+.modal{background:var(--surface);border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,.25);width:min(640px,100%);max-height:90vh;overflow-y:auto;padding:24px;}
+.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px;}
+.modal-title{font-size:15px;font-weight:800;font-family:"Plus Jakarta Sans",system-ui,sans-serif;}
+.modal-close{border:none;background:none;font-size:22px;line-height:1;color:var(--muted);cursor:pointer;padding:0 4px;}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+.ledger-in{color:var(--good);}
+.ledger-out{color:var(--bad);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="topbar">
+    <div class="brand">
+      <div class="brand-left">
+        <!-- drop your logo at public/logo.jpg to replace the "W" mark -->
+        <div class="brand-mark"><span id="brand-w">W</span><img src="/logo.jpg" alt="Wuling Cash Flow logo" onload="document.getElementById('brand-w').hidden=true" onerror="this.remove()"></div>
+        <div>
+          <div class="brand-name">Wuling Cash Flow</div>
+          <div class="brand-sub">Automotive Dealer Management</div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <button class="btn btn-secondary btn-sm" onclick="document.dispatchEvent(new Event('cf-refresh'))">↻ รีเฟรช</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.dispatchEvent(new Event('cf-logout'))">ออกจากระบบ</button>
+        <a id="db-link" href="#" target="_blank" rel="noopener" hidden style="font-size:10.5px;color:var(--accent);text-decoration:none;font-weight:600;display:block;margin-top:3px;">📄 เปิดฐานข้อมูล (Supabase)</a>
+        <div id="sync-note">กำลังโหลด…</div>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs"></nav>
+  </div>
+  <main id="view"></main>
+</div>
+<div id="toast" class="toast" hidden></div>
+<div id="modal-root" hidden></div>
+
+<script>
+(function(){
+"use strict";
+
+/* ───────────────────────── helpers ───────────────────────── */
+function thb(n){ return (Number(n)||0).toLocaleString("th-TH",{minimumFractionDigits:0,maximumFractionDigits:0}); }
+function todayStr(){ return new Date().toISOString().slice(0,10); }
+function addDays(ds,n){ var d=new Date(ds+"T00:00:00"); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
+function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
+function byDateDesc(a,b){ return a.date<b.date?1:a.date>b.date?-1:0; }
+
+/* Server calls: POST /api/rpc {fn,args} -> Promise. A 401 means the
+   session expired, so go back to the login page. */
+function gs(fnName){
+  var args = Array.prototype.slice.call(arguments, 1);
+  return fetch("/api/rpc", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({fn:fnName,args:args}),
+    credentials:"same-origin"
+  }).then(function(res){
+    if(res.status===401){ location.href="/login"; return new Promise(function(){}); }
+    return res.json().catch(function(){ return {error:"HTTP "+res.status}; }).then(function(d){
+      if(!res.ok || d.error) throw new Error(d.error || ("HTTP "+res.status));
+      return d.result;
+    });
+  });
+}
+
+/* ───────────────────────── state ───────────────────────── */
+var products=[], purchases=[], stock=[], transactions=[], balance={value:0,asOfDate:todayStr()};
+var firstLoadDone=false, loadFailed=false;
+var activeTab="dashboard";
+var saleErr="", purchaseErr="", productErr="";
+var chartDays=30;
+var cfPoints=[], cfDims={w:1,h:1,padL:0,padR:0}, cfDefaultIdx=0;
+
+var TABS=[
+  {id:"dashboard",label:"ภาพรวม"},
+  {id:"cashflow",label:"กระแสเงินสด & ธุรกรรม"},
+  {id:"sales",label:"การขาย"},
+  {id:"purchases",label:"การซื้อ"},
+  {id:"receivables",label:"ค้างรับ"},
+  {id:"stock",label:"สต๊อกสินค้า"},
+  {id:"settings",label:"ตั้งค่า"},
+];
+
+/* view must exist before any code below registers listeners on it */
+var view = document.getElementById("view");
+
+/* ───────────────────────── load / refresh ───────────────────────── */
+/* Don't yank the DOM out from under someone mid-keystroke: a background
+   refresh (poll or another viewer's edit) skips the re-render while an
+   input/select/textarea inside #view is focused, and fires once focus
+   leaves it. An explicit user action (force=true) always renders right
+   away, since that's the expected, deliberate result of their own click. */
+var pendingBackgroundRender = false;
+function isTypingInView(){
+  var el = document.activeElement;
+  return !!el && /^(INPUT|SELECT|TEXTAREA)$/.test(el.tagName);
+}
+/* An open edit dialog must never be blown away by a background refresh. */
+function isModalOpen(){
+  var root=document.getElementById("modal-root");
+  return !!root && !root.hidden;
+}
+function refreshAll(force){
+  var note=document.getElementById("sync-note");
+  if(note) note.textContent="กำลังซิงค์…";
+  return gs("getAllData").then(function(d){
+    d = d || {};
+    products=(d.products||[]).slice().sort(function(a,b){return (a.code||"").localeCompare(b.code||"");});
+    purchases=(d.purchases||[]).slice().sort(byDateDesc);
+    stock=d.stock||[];
+    transactions=(d.transactions||[]).slice().sort(byDateDesc);
+    balance=(d.balance&&d.balance.asOfDate) ? d.balance : {value:(d.balance?d.balance.value:0)||0,asOfDate:todayStr()};
+    firstLoadDone=true; loadFailed=false;
+    if((force && !isModalOpen()) || (!isTypingInView() && !isModalOpen())){
+      pendingBackgroundRender=false;
+      if(note){
+        if(d.errors && d.errors.length) note.textContent="ซิงค์บางส่วนล้มเหลว: "+d.errors.join(" | ");
+        else note.textContent="ซิงค์ล่าสุด "+new Date().toLocaleTimeString("th-TH");
+      }
+      render();
+    } else {
+      pendingBackgroundRender=true;
+      if(note) note.textContent="มีข้อมูลใหม่ — จะอัปเดตหลังพิมพ์เสร็จ";
+    }
+  }).catch(function(err){
+    loadFailed=true;
+    var msg = err && err.message ? err.message : String(err);
+    if(note) note.textContent="ซิงค์ล้มเหลว: "+msg;
+    console.error(err);
+    if(force) render();
+  });
+}
+setInterval(function(){ if(firstLoadDone) refreshAll(false); }, 30000);
+document.addEventListener("cf-refresh", function(){ refreshAll(true); });
+document.addEventListener("cf-logout", function(){
+  fetch("/api/logout",{method:"POST",credentials:"same-origin"}).finally(function(){ location.href="/login"; });
+});
+view.addEventListener("focusout", function(){
+  setTimeout(function(){
+    if(pendingBackgroundRender && !isTypingInView()){
+      pendingBackgroundRender=false;
+      render();
+    }
+  }, 0);
+});
+
+/* ───────────────────────── derived data ───────────────────────── */
+function productById(id){ return products.find(function(p){return p.id===id;}); }
+function cashEvents(){
+  var ev=[];
+  transactions.forEach(function(t){
+    if(t.type==="installment"){
+      if(t.downPayment>0) ev.push({date:t.date,amount:t.downPayment,label:"เงินดาวน์",customer:t.customer,car:t.car});
+      if(t.financingStatus==="received"){
+        if(t.financingFee>0) ev.push({date:t.financingReceivedDate||t.date,amount:t.financingFee,label:"ค่าจัดสินเชื่อ",customer:t.customer,car:t.car});
+        if(t.commissionFee>0) ev.push({date:t.financingReceivedDate||t.date,amount:t.commissionFee,label:"ค่าคอมไฟแนนซ์",customer:t.customer,car:t.car});
+      }
+    } else if(t.cashAmount>0){ ev.push({date:t.date,amount:t.cashAmount,label:"เงินสด",customer:t.customer,car:t.car}); }
+  });
+  return ev.sort(byDateDesc);
+}
+function pendingList(){ return transactions.filter(function(t){ return t.type==="installment" && t.financingStatus==="pending"; }); }
+function stockUnitLabel(s){
+  var siblings = stock.filter(function(x){ return x.purchaseId===s.purchaseId; });
+  var idx = siblings.findIndex(function(x){ return x.id===s.id; })+1;
+  return "คันที่ "+idx+"/"+siblings.length;
+}
+function totals(){
+  var ev=cashEvents(), pend=pendingList();
+  var now=new Date();
+  function sameMonth(d){ var x=new Date(d); return x.getFullYear()===now.getFullYear() && x.getMonth()===now.getMonth(); }
+  return {
+    totalIn: ev.reduce(function(s,e){return s+e.amount;},0),
+    totalPending: pend.reduce(function(s,t){return s+t.financingFee+t.commissionFee;},0),
+    totalOut: purchases.reduce(function(s,p){return s+(Number(p.totalAmount)||0);},0),
+    thisMonthIn: ev.filter(function(e){return sameMonth(e.date);}).reduce(function(s,e){return s+e.amount;},0),
+    thisMonthOut: purchases.filter(function(p){return sameMonth(p.date);}).reduce(function(s,p){return s+(Number(p.totalAmount)||0);},0),
+    overdueCount: pend.filter(function(t){return t.financingExpectedDate && t.financingExpectedDate<todayStr();}).length,
+  };
+}
+function forecast(days){
+  var start = balance.asOfDate || todayStr();
+  var map={};
+  for(var i=0;i<=days;i++){ var d=addDays(start,i); map[d]={date:d,inn:0,out:0}; }
+  pendingList().forEach(function(t){ var d=t.financingExpectedDate; if(d && map[d]) map[d].inn += (t.financingFee+t.commissionFee); });
+  transactions.forEach(function(t){
+    if(t.date>=start && map[t.date]){
+      if(t.type==="installment" && t.downPayment>0) map[t.date].inn += t.downPayment;
+      if(t.type==="cash" && t.cashAmount>0) map[t.date].inn += t.cashAmount;
+    }
+  });
+  purchases.forEach(function(p){ if(map[p.date]) map[p.date].out += (Number(p.totalAmount)||0); });
+  var run = Number(balance.value)||0;
+  return Object.keys(map).sort().map(function(d){ var e=map[d]; run += e.inn-e.out; return {date:d,inn:Math.round(e.inn),out:Math.round(e.out),balance:Math.round(run)}; });
+}
+function monthlyBuckets(){
+  var map={};
+  cashEvents().forEach(function(e){ var k=e.date.slice(0,7); map[k]=map[k]||{month:k,inn:0,out:0}; map[k].inn+=e.amount; });
+  purchases.forEach(function(p){ var k=(p.date||"").slice(0,7); if(!k) return; map[k]=map[k]||{month:k,inn:0,out:0}; map[k].out+=(Number(p.totalAmount)||0); });
+  return Object.keys(map).sort().map(function(k){ return map[k]; }).slice(-6);
+}
+function stockSummaryByProduct(){
+  var map={};
+  stock.forEach(function(s){
+    var key=s.productId||"_unlinked_";
+    map[key]=map[key]||{productId:s.productId,code:s.code,name:s.name,inStock:0,reserved:0,delivered:0};
+    if(s.status==="in_stock") map[key].inStock++;
+    else if(s.status==="reserved") map[key].reserved++;
+    else if(s.status==="delivered") map[key].delivered++;
+  });
+  return Object.keys(map).map(function(k){return map[k];}).sort(function(a,b){return (b.inStock+b.reserved)-(a.inStock+a.reserved);});
+}
+
+/* ───────────────────────── cash-flow chart interaction ───────────────────────── */
+function cfNearestIndex(clientX, svgEl){
+  var rect=svgEl.getBoundingClientRect();
+  if(rect.width<=0 || cfPoints.length===0) return -1;
+  var xFrac=(clientX-rect.left)/rect.width;
+  var vbX=xFrac*cfDims.w;
+  var plotW=(cfDims.w-cfDims.padL-cfDims.padR)||1;
+  var t=(vbX-cfDims.padL)/plotW;
+  var idx=Math.round(t*(cfPoints.length-1));
+  return Math.max(0, Math.min(cfPoints.length-1, idx));
+}
+function updateChartReadout(idx){
+  if(idx<0 || idx>=cfPoints.length) return;
+  var p=cfPoints[idx];
+  var readout=document.getElementById("cf-readout");
+  var dot=document.getElementById("cf-hover-dot");
+  var line=document.getElementById("cf-hover-line");
+  if(readout) readout.innerHTML = '<span class="dim">'+p.date+'</span> &nbsp;·&nbsp; คงเหลือ <span class="num" style="color:'+(p.balance<0?"var(--bad)":"var(--accent)")+';font-weight:700;">฿'+thb(p.balance)+'</span>';
+  if(dot){ dot.setAttribute("cx",p.px); dot.setAttribute("cy",p.py); dot.setAttribute("opacity","1"); }
+  if(line){ line.setAttribute("x1",p.px); line.setAttribute("x2",p.px); line.setAttribute("opacity","1"); }
+}
+
+/* ───────────────────────── event delegation ───────────────────────── */
+document.getElementById("tabs").addEventListener("click", function(e){
+  var b=e.target.closest(".tab-btn"); if(!b) return;
+  activeTab=b.dataset.tab; render();
+});
+
+view.addEventListener("mousemove", function(e){
+  var svg=e.target.closest("#cf-svg"); if(!svg) return;
+  var idx=cfNearestIndex(e.clientX, svg);
+  if(idx>=0) updateChartReadout(idx);
+});
+view.addEventListener("touchmove", function(e){
+  var svg=e.target.closest("#cf-svg"); if(!svg) return;
+  var touch=e.touches && e.touches[0]; if(!touch) return;
+  var idx=cfNearestIndex(touch.clientX, svg);
+  if(idx>=0) updateChartReadout(idx);
+}, {passive:true});
+
+/* The dialog lives outside #view, so it needs its own delegated handler. */
+document.getElementById("modal-root").addEventListener("click", function(e){
+  var t;
+  if((t=e.target.closest('[data-action="modal-save"]'))){ saveModal(t); return; }
+  if(e.target.closest('[data-action="modal-close"]')){ closeModal(); return; }
+  if(e.target.matches('[data-action="modal-backdrop"]')){ closeModal(); return; }
+});
+document.addEventListener("keydown", function(e){
+  if(e.key==="Escape" && isModalOpen()) closeModal();
+});
+
+view.addEventListener("click", function(e){
+  var t;
+  if((t=e.target.closest('[data-action="edit-tx"]'))){ openEditModal("tx", t.dataset.id); return; }
+  if((t=e.target.closest('[data-action="edit-pu"]'))){ openEditModal("pu", t.dataset.id); return; }
+  if((t=e.target.closest("#cf-svg"))){
+    var idx=cfNearestIndex(e.clientX, t);
+    if(idx>=0) updateChartReadout(idx);
+    return;
+  }
+  if((t=e.target.closest('[data-action="sale-type"]'))){
+    var wrap=t.closest(".toggle-row");
+    wrap.querySelectorAll(".toggle-btn").forEach(function(x){x.classList.remove("active");});
+    t.classList.add("active");
+    document.getElementById("sale-type-val").value=t.dataset.value;
+    view.querySelectorAll(".sale-installment-only").forEach(function(el){ el.hidden = t.dataset.value!=="installment"; });
+    view.querySelectorAll(".sale-cash-only").forEach(function(el){ el.hidden = t.dataset.value!=="cash"; });
+    return;
+  }
+  if((t=e.target.closest('[data-action="submit-sale"]'))){ e.preventDefault(); submitSale(t); return; }
+  if((t=e.target.closest('[data-action="submit-purchase"]'))){ e.preventDefault(); submitPurchase(t); return; }
+  if((t=e.target.closest('[data-action="submit-product"]'))){ e.preventDefault(); submitProduct(t); return; }
+  if((t=e.target.closest('[data-action="mark-received"]'))){ busy(t); gs("markReceived",t.dataset.id).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); }); return; }
+  if((t=e.target.closest('[data-action="tx-delete"]'))){ if(confirm("ลบรายการขายนี้?")){ busy(t); gs("deleteTransaction",t.dataset.id).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });} return; }
+  if((t=e.target.closest('[data-action="pu-delete"]'))){ if(confirm("ลบการซื้อชุดนี้ทั้งหมด? (ลบทุกคันในสต๊อกที่มาจากการซื้อครั้งนี้ด้วย)")){ busy(t); gs("deletePurchase",t.dataset.id).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });} return; }
+  if((t=e.target.closest('[data-action="product-delete"]'))){ if(confirm("ลบรุ่นรถนี้?")){ busy(t); gs("deleteProduct",t.dataset.id).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });} return; }
+  if((t=e.target.closest('[data-action="product-toggle"]'))){ var p=productById(t.dataset.id); busy(t); gs("updateProduct",t.dataset.id,{active:!(p&&p.active)}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); }); return; }
+  if((t=e.target.closest('[data-action="stock-deliver"]'))){ busy(t); gs("updateStock",t.dataset.id,{status:"delivered",deliveredDate:todayStr()}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); }); return; }
+  if((t=e.target.closest('[data-action="stock-reserve"]'))){ busy(t); gs("updateStock",t.dataset.id,{status:"in_stock",txId:"",customer:""}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); }); return; }
+  if((t=e.target.closest('[data-action="stock-delete"]'))){ if(confirm("ลบคันนี้ออกจากสต๊อก?")){ busy(t); gs("deleteStock",t.dataset.id).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });} return; }
+  if((t=e.target.closest('[data-action="edit-balance"]'))){
+    document.getElementById("bal-display").hidden=true;
+    document.getElementById("bal-editor").hidden=false;
+    document.getElementById("bal-input").value=String(balance.value);
+    document.getElementById("bal-input").focus();
+    return;
+  }
+  if((t=e.target.closest('[data-action="save-balance"]'))){
+    busy(t); gs("saveBalance",document.getElementById("bal-input").value).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+  if((t=e.target.closest('[data-action="cancel-balance"]'))){
+    document.getElementById("bal-display").hidden=false;
+    document.getElementById("bal-editor").hidden=true;
+    return;
+  }
+  if((t=e.target.closest('[data-chart-days]'))){
+    chartDays=Number(t.dataset.chartDays); render(); return;
+  }
+});
+
+view.addEventListener("change", function(e){
+  var t=e.target;
+  if(t.matches('[data-action="apply-product-sale"]')){
+    var p=productById(t.value);
+    document.getElementById("sale-car").value = p ? (p.code+" · "+p.name) : "";
+    document.getElementById("sale-price").value = p ? p.sellPrice : "";
+    recalcTotal("sale");
+    renderStockUnitOptions();
+    return;
+  }
+  if(t.matches('[data-action="apply-product-purchase"]')){
+    var p=productById(t.value);
+    document.getElementById("pu-car").value = p ? (p.code+" · "+p.name) : "";
+    document.getElementById("pu-price").value = p ? p.buyPrice : "";
+    recalcTotal("pu");
+    return;
+  }
+  if(t.matches('[data-action="stock-set-delivery"]')){
+    gs("updateStock",t.dataset.id,{deliveryPlanDate:t.value}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+  if(t.matches('[data-action="stock-set-purchasedate"]')){
+    gs("updateStock",t.dataset.id,{purchaseDate:t.value}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+  if(t.matches('[data-action="tx-set-date"]')){
+    gs("updateTransaction",t.dataset.id,{date:t.value}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+  if(t.matches('[data-action="pu-set-date"]')){
+    gs("updatePurchase",t.dataset.id,{date:t.value}).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+  if(t.matches('[data-action="product-update"]')){
+    var field=t.dataset.field, val = field==="buyPrice"||field==="sellPrice" ? (Number(t.value)||0) : t.value;
+    var patch={}; patch[field]=val;
+    gs("updateProduct",t.dataset.id,patch).then(function(){ return refreshAll(true); }).catch(function(err){ showErr(err); });
+    return;
+  }
+});
+
+view.addEventListener("input", function(e){
+  if(e.target.id==="sale-price" || e.target.id==="sale-qty") recalcTotal("sale");
+  if(e.target.id==="pu-price" || e.target.id==="pu-qty") recalcTotal("pu");
+});
+
+function busy(el){ el.disabled=true; }
+function showErr(err){
+  console.error(err);
+  var msg = err && err.message ? err.message : String(err);
+  alert("เกิดข้อผิดพลาด: "+msg);
+  render();
+}
+
+function recalcTotal(prefix){
+  var price=Number(document.getElementById(prefix+"-price").value)||0;
+  var qty=Number(document.getElementById(prefix+"-qty").value)||0;
+  var el=document.getElementById(prefix+"-total");
+  if(el) el.textContent = "฿"+thb(price*qty);
+}
+
+function renderStockUnitOptions(){
+  var sel=document.getElementById("sale-stock-unit"); if(!sel) return;
+  var pid=document.getElementById("sale-product") ? document.getElementById("sale-product").value : "";
+  var avail = stock.filter(function(s){ return s.status==="in_stock" && (!pid || s.productId===pid); });
+  sel.innerHTML = '<option value="">— ไม่ผูกกับสต๊อก —</option>' + avail.map(function(s){
+    return '<option value="'+s.id+'">'+esc(s.code||s.car)+" · "+esc(stockUnitLabel(s))+'</option>';
+  }).join("");
+}
+
+/* ───────────────────────── form submit handlers ───────────────────────── */
+/* A validation failure must NEVER rebuild the form (that wipes every field
+   the person already typed) — it only writes into that form's own
+   dedicated error slot, leaving every input untouched. */
+function setFormError(slotId, msg){
+  var el=document.getElementById(slotId);
+  if(el) el.innerHTML = msg ? '<div class="errbox">'+esc(msg)+'</div>' : "";
+}
+var toastTimer=null;
+function showToast(msg){
+  var el=document.getElementById("toast");
+  if(!el) return;
+  el.textContent=msg;
+  el.hidden=false;
+  requestAnimationFrame(function(){ el.classList.add("show"); });
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){
+    el.classList.remove("show");
+    setTimeout(function(){ el.hidden=true; }, 200);
+  }, 2400);
+}
+
+function submitSale(btn){
+  setFormError("sale-err-slot","");
+  var f={
+    date: val("sale-date"), customer: val("sale-customer"), productId: val("sale-product"),
+    car: val("sale-car"), type: document.getElementById("sale-type-val").value,
+    pricePerUnit: Number(val("sale-price"))||0, quantity: Number(val("sale-qty"))||1,
+    downPayment: Number(val("sale-down"))||0, financingFee: Number(val("sale-finfee"))||0,
+    commissionFee: Number(val("sale-comfee"))||0, financingExpectedDate: val("sale-findate"),
+    cashAmount: Number(val("sale-cash"))||0, notes: val("sale-notes"),
+    deliveryPlanDate: val("sale-deliverydate"), stockId: val("sale-stock-unit"),
+  };
+  if(!f.customer.trim() || !f.car.trim()){ setFormError("sale-err-slot","กรุณากรอกชื่อลูกค้าและสินค้า"); return; }
+  if(f.type==="installment" && !f.downPayment && !f.financingFee && !f.commissionFee){ setFormError("sale-err-slot","กรุณากรอกยอดเงินอย่างน้อยหนึ่งช่อง"); return; }
+  if(f.type==="cash" && !f.cashAmount){ setFormError("sale-err-slot","กรุณากรอกยอดเงินสด"); return; }
+  var total=f.pricePerUnit*f.quantity;
+  var rec={
+    date:f.date, customer:f.customer.trim(), car:f.car.trim(), productId:f.productId||"", type:f.type,
+    pricePerUnit:f.pricePerUnit, quantity:f.quantity, totalAmount:total,
+    downPayment: f.type==="installment"?f.downPayment:0,
+    financingFee: f.type==="installment"?f.financingFee:0,
+    commissionFee: f.type==="installment"?f.commissionFee:0,
+    financingExpectedDate: f.type==="installment"?f.financingExpectedDate:"",
+    financingStatus: f.type==="installment" && (f.financingFee+f.commissionFee)>0 ? "pending":"n/a",
+    financingReceivedDate:"",
+    cashAmount: f.type==="cash" ? (f.cashAmount||total) : 0,
+    notes:f.notes.trim(),
+    stockId:f.stockId||"", deliveryPlanDate:f.deliveryPlanDate||"",
+  };
+  busy(btn);
+  gs("addTransaction",rec).then(function(created){
+    if(f.stockId && created && created.id){
+      return gs("updateStock",f.stockId,{status:"reserved",txId:created.id,customer:rec.customer,deliveryPlanDate:f.deliveryPlanDate||f.date});
+    }
+  }).then(function(){
+    activeTab="sales";
+    return refreshAll(true);
+  }).then(function(){ showToast("บันทึกการขายเรียบร้อย ✓"); }).catch(function(err){ btn.disabled=false; showErr(err); });
+}
+function submitPurchase(btn){
+  setFormError("pu-err-slot","");
+  var price=Number(val("pu-price"))||0, qty=Number(val("pu-qty"))||1;
+  var car=val("pu-car");
+  if(!car.trim()){ setFormError("pu-err-slot","กรุณากรอกรุ่นรถ"); return; }
+  if(!price){ setFormError("pu-err-slot","กรุณากรอกราคาต่อหน่วย"); return; }
+  var rec={
+    date:val("pu-date"), car:car.trim(), productId:val("pu-product")||"",
+    pricePerUnit:price, quantity:qty,
+    notes:val("pu-notes").trim(),
+  };
+  busy(btn);
+  gs("addPurchase",rec).then(function(){
+    activeTab="purchases";
+    return refreshAll(true);
+  }).then(function(){ showToast("บันทึกการซื้อเรียบร้อย ✓ (เพิ่มเข้าสต๊อก "+qty+" คัน)"); }).catch(function(err){ btn.disabled=false; showErr(err); });
+}
+function submitProduct(btn){
+  setFormError("prod-err-slot","");
+  var code=val("prod-code"), name=val("prod-name");
+  if(!code.trim() || !name.trim()){ setFormError("prod-err-slot","กรุณากรอกรหัสและชื่อรุ่นรถ"); return; }
+  if(products.some(function(p){return (p.code||"").toLowerCase()===code.trim().toLowerCase();})){ setFormError("prod-err-slot","รหัสรุ่นนี้มีอยู่แล้ว"); return; }
+  busy(btn);
+  gs("addProduct",{code:code.trim(), name:name.trim(), buyPrice:Number(val("prod-buy"))||0, sellPrice:Number(val("prod-sell"))||0})
+    .then(function(){ return refreshAll(true); })
+    .then(function(){ showToast("เพิ่มรุ่นรถเรียบร้อย ✓"); })
+    .catch(function(err){ btn.disabled=false; showErr(err); });
+}
+function val(id){ var el=document.getElementById(id); return el?el.value:""; }
+
+/* ───────────────────────── render ───────────────────────── */
+function render(){
+  document.getElementById("tabs").innerHTML = TABS.map(function(t){
+    return '<button class="tab-btn'+(activeTab===t.id?" active":"")+'" data-tab="'+t.id+'">'+t.label+'</button>';
+  }).join("");
+  renderTab();
+}
+
+function renderTab(){
+  if(!firstLoadDone){
+    view.innerHTML = loadFailed
+      ? '<div class="card bank">⚠️<div><b>โหลดข้อมูลไม่สำเร็จ</b></div><div>ลองกด "รีเฟรช" อีกครั้ง หรือดูข้อความ error มุมขวาบน</div></div>'
+      : '<div class="card bank">⏳ กำลังโหลดข้อมูล…</div>';
+    return;
+  }
+  var html="";
+  if(activeTab==="dashboard") html=renderDashboard();
+  else if(activeTab==="cashflow") html=renderCashflow();
+  else if(activeTab==="sales") html=renderSales();
+  else if(activeTab==="purchases") html=renderPurchases();
+  else if(activeTab==="receivables") html=renderReceivables();
+  else if(activeTab==="stock") html=renderStock();
+  else if(activeTab==="settings") html=renderSettings();
+  view.innerHTML=html;
+  if(activeTab==="sales"){ recalcTotal("sale"); renderStockUnitOptions(); }
+  if(activeTab==="purchases"){ recalcTotal("pu"); }
+  if(activeTab==="cashflow"){ updateChartReadout(cfDefaultIdx); }
+}
+
+function kpi(label,value,opts){
+  opts=opts||{};
+  var color=opts.color||"var(--text)";
+  return '<div class="card kpi"><div class="bar" style="background:'+(opts.top||color)+'"></div>'+
+    '<div class="body"><div class="label">'+label+'</div><div class="val num" style="color:'+color+'">'+value+'</div>'+
+    (opts.sub?'<div class="sub">'+opts.sub+'</div>':'')+'</div></div>';
+}
+
+function renderDashboard(){
+  var tt=totals(), net=tt.totalIn-tt.totalOut;
+  var monthly=monthlyBuckets();
+  var maxAbs = Math.max(1, monthly.reduce(function(m,r){return Math.max(m,r.inn,r.out);},0));
+  var combined = cashEvents().map(function(e){return Object.assign({kind:"in"},e);})
+    .concat(purchases.map(function(p){return {date:p.date,amount:p.totalAmount,label:"ซื้อรถ",customer:p.car,car:(p.quantity||1)+" คัน",kind:"out"};}))
+    .sort(byDateDesc).slice(0,8);
+
+  return '<div class="row" style="flex-direction:column;gap:20px;">'+
+    '<div class="card hero">'+
+      '<div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px;">'+
+      '<div>'+
+        '<div style="font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:6px;">เงินสดคงเหลือปัจจุบัน</div>'+
+        '<div id="bal-display"><div class="num val">฿'+thb(balance.value)+'</div><div style="font-size:11.5px;color:rgba(255,255,255,.5);margin-top:6px;">อัปเดตล่าสุด '+(balance.asOfDate||"-")+'</div></div>'+
+        '<div id="bal-editor" hidden style="display:flex;gap:8px;align-items:center;margin-top:4px;">'+
+          '<input id="bal-input" type="number" class="input" style="width:170px;font-weight:700;color:#111;">'+
+          '<button class="btn btn-good btn-sm" data-action="save-balance">บันทึก</button>'+
+          '<button class="btn btn-ghost btn-sm" data-action="cancel-balance" style="color:#fff;border-color:rgba(255,255,255,.35);">ยกเลิก</button>'+
+        '</div>'+
+      '</div>'+
+      '<button class="btn btn-sm" data-action="edit-balance" style="background:rgba(255,255,255,.14);color:#fff;border-color:rgba(255,255,255,.25);">อัปเดตยอด</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="row">'+
+      kpi("รับเงินสะสม","฿"+thb(tt.totalIn),{color:"var(--good)",top:"var(--good)"})+
+      kpi("จ่ายซื้อรถสะสม","฿"+thb(tt.totalOut),{color:"var(--bad)",top:"var(--bad)"})+
+      kpi("สุทธิ (รับ−จ่าย)","฿"+thb(net),{color:net>=0?"var(--good)":"var(--bad)",top:net>=0?"var(--good)":"var(--bad)"})+
+      kpi("ยอดค้างรับ","฿"+thb(tt.totalPending),{color:"var(--warn)",top:"var(--warn)",sub:tt.overdueCount>0?"⚠ เกินกำหนด "+tt.overdueCount+" รายการ":"ไม่มีเกินกำหนด"})+
+    '</div>'+
+    '<div class="row">'+
+      kpi("รับเงินเดือนนี้","฿"+thb(tt.thisMonthIn),{color:"var(--accent)",top:"var(--accent)"})+
+      kpi("จ่ายซื้อเดือนนี้","฿"+thb(tt.thisMonthOut),{color:"var(--bad)",top:"var(--bad)"})+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">กระแสเงินสดรายเดือน (6 เดือนล่าสุด)</div>'+
+      (monthly.length===0?'<div class="empty">ยังไม่มีข้อมูล</div>':
+        '<div style="display:flex;flex-direction:column;gap:10px;">'+monthly.map(function(r){
+          var inW=Math.round(r.inn/maxAbs*100), outW=Math.round(r.out/maxAbs*100);
+          return '<div>'+
+            '<div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:4px;"><span class="dim">'+r.month+'</span>'+
+            '<span class="num">+฿'+thb(r.inn)+' / -฿'+thb(r.out)+'</span></div>'+
+            '<div style="height:8px;border-radius:4px;background:var(--good-soft);overflow:hidden;margin-bottom:3px;"><div style="height:100%;width:'+inW+'%;background:var(--good);"></div></div>'+
+            '<div style="height:8px;border-radius:4px;background:var(--bad-soft);overflow:hidden;"><div style="height:100%;width:'+outW+'%;background:var(--bad);"></div></div>'+
+            '</div>';
+        }).join("")+'</div>')+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">รายการล่าสุด</div>'+
+      (combined.length===0?'<div class="empty">ยังไม่มีรายการ</div>':
+        combined.map(function(e){
+          return '<div class="list-row"><div style="display:flex;gap:10px;align-items:center;min-width:0;">'+
+            '<div style="width:32px;height:32px;border-radius:9px;flex-shrink:0;background:'+(e.kind==="in"?"var(--good-soft)":"var(--bad-soft)")+';display:flex;align-items:center;justify-content:center;font-size:14px;">'+(e.kind==="in"?"↑":"↓")+'</div>'+
+            '<div style="min-width:0;"><div style="font-size:13px;font-weight:600;">'+esc(e.customer)+'</div><div style="font-size:11.5px;color:var(--muted);">'+esc(e.car)+' · '+esc(e.label)+'</div></div></div>'+
+            '<div style="text-align:right;flex-shrink:0;"><div class="num" style="font-size:13.5px;color:'+(e.kind==="in"?"var(--good)":"var(--bad)")+';">'+(e.kind==="in"?"+":"-")+'฿'+thb(e.amount)+'</div><div style="font-size:10.5px;color:var(--muted);">'+e.date+'</div></div></div>';
+        }).join(""))+
+    '</div>'+
+  '</div>';
+}
+
+/* short "D/M" label from a "YYYY-MM-DD" date string */
+function shortDate(ds){ var p=ds.split("-"); return Number(p[2])+"/"+Number(p[1]); }
+/* "nice" round numbers for axis ticks instead of raw fractions */
+function niceStep(rough){
+  var mag=Math.pow(10,Math.floor(Math.log(rough)/Math.LN10));
+  var n=rough/mag;
+  var step= n<1.5?1:n<3?2:n<7?5:10;
+  return step*mag;
+}
+
+function renderCashflow(){
+  var f=forecast(chartDays);
+  var end=f[f.length-1], minBal=Math.min.apply(null,f.map(function(x){return x.balance;}));
+  var minDay=f.find(function(x){return x.balance===minBal;});
+  var w=960,h=360,padL=68,padR=16,padT=16,padB=34;
+  var vals=f.map(function(x){return x.balance;});
+  var lo=Math.min.apply(null,vals.concat([0])), hi=Math.max.apply(null,vals.concat([0]));
+  if(lo===hi){ lo-=1; hi+=1; }
+  var span=(hi-lo)||1;
+  function px(i){ return padL + (i/(f.length-1||1))*(w-padL-padR); }
+  function py(v){ return padT + (1-(v-lo)/span)*(h-padT-padB); }
+  var pts=f.map(function(x,i){return px(i)+","+py(x.balance);}).join(" ");
+  var zeroY=py(0);
+  var dayOpts=[7,14,30,60];
+
+  // y-axis: 4 evenly spaced "nice" ticks covering [lo,hi]
+  var rawStep=(hi-lo)/3, step=niceStep(rawStep)||1;
+  var tickStart=Math.floor(lo/step)*step;
+  var yTicks=[];
+  for(var v=tickStart; v<=hi+step*0.001; v+=step){ if(v>=lo-step*0.001) yTicks.push(Math.round(v)); }
+
+  // x-axis: label ~6 points evenly across the range
+  var xLabelCount=Math.min(6,f.length);
+  var xTickIdx=[];
+  for(var i=0;i<xLabelCount;i++){ xTickIdx.push(Math.round(i*(f.length-1)/(xLabelCount-1||1))); }
+  xTickIdx=Array.from(new Set(xTickIdx));
+
+  cfPoints = f.map(function(x,i){ return {date:x.date, balance:x.balance, px:px(i), py:py(x.balance)}; });
+  cfDims = {w:w,h:h,padL:padL,padR:padR};
+  cfDefaultIdx = cfPoints.length-1;
+
+  var axisSvg =
+    yTicks.map(function(v){
+      var y=py(v);
+      return '<line x1="'+padL+'" y1="'+y+'" x2="'+(w-padR)+'" y2="'+y+'" stroke="var(--border)" stroke-width="1"/>'+
+        '<text x="'+(padL-8)+'" y="'+(y+3)+'" text-anchor="end" font-size="13" fill="var(--muted)">'+(v/1000).toFixed(v%1000===0?0:1)+'k</text>';
+    }).join("")+
+    xTickIdx.map(function(i){
+      var x=px(i);
+      return '<text x="'+x+'" y="'+(h-padB+16)+'" text-anchor="middle" font-size="13" fill="var(--muted)">'+shortDate(f[i].date)+'</text>';
+    }).join("");
+
+  return '<div class="row" style="flex-direction:column;gap:18px;">'+
+    '<div class="row">'+
+      kpi("เงินสดคงเหลือ (ตั้งต้น)","฿"+thb(balance.value),{sub:"ณ "+(balance.asOfDate||"-")})+
+      kpi("ประมาณการณ์ ("+chartDays+" วัน)", end?"฿"+thb(end.balance):"-", {color:end&&end.balance>=balance.value?"var(--good)":"var(--bad)", top:end&&end.balance>=balance.value?"var(--good)":"var(--bad)"})+
+      kpi("จุดต่ำสุด","฿"+thb(minBal),{color:minBal<0?"var(--bad)":"var(--text)", top:minBal<0?"var(--bad)":"var(--accent)", sub:minDay?"วันที่ "+minDay.date:""})+
+    '</div>'+
+    '<div class="card">'+
+      '<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:8px;">'+
+        '<div class="section-title" style="margin-bottom:0;">เส้นทางเงินสดคงเหลือ</div>'+
+        '<div class="row" style="gap:6px;">'+dayOpts.map(function(d){
+          return '<button class="btn btn-sm '+(chartDays===d?"btn-primary":"btn-secondary")+'" data-chart-days="'+d+'">'+d+' วัน</button>';
+        }).join("")+'</div>'+
+      '</div>'+
+      '<div id="cf-readout" class="chart-readout">แตะหรือคลิกที่กราฟ เพื่อดูยอดคงเหลือ ณ วันนั้น</div>'+
+      '<div class="sparkwrap"><svg id="cf-svg" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" style="width:100%;height:min(60vh,420px);touch-action:pan-y;">'+
+        axisSvg+
+        '<line x1="'+padL+'" y1="'+zeroY+'" x2="'+(w-padR)+'" y2="'+zeroY+'" stroke="var(--bad)" stroke-dasharray="4 3" stroke-width="1"/>'+
+        '<polyline points="'+pts+'" fill="none" stroke="var(--accent)" stroke-width="3.5"/>'+
+        '<line id="cf-hover-line" x1="0" y1="'+padT+'" x2="0" y2="'+(h-padB)+'" stroke="var(--accent)" stroke-width="1" stroke-dasharray="3 3" opacity="0"/>'+
+        '<circle id="cf-hover-dot" r="6.5" fill="var(--accent)" stroke="var(--surface)" stroke-width="2" opacity="0"/>'+
+        '<rect x="'+padL+'" y="'+padT+'" width="'+(w-padL-padR)+'" height="'+(h-padT-padB)+'" fill="transparent" style="cursor:pointer;"/>'+
+      '</svg></div>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">สรุปรายวัน (เฉพาะวันที่มีรายการ)</div>'+
+      (f.filter(function(x){return x.inn>0||x.out>0;}).length===0 ? '<div class="empty">ยังไม่มีข้อมูล</div>' :
+      '<div class="table-wrap"><table><thead><tr><th>วันที่</th><th class="num-col">เงินเข้า</th><th class="num-col">เงินออก</th><th class="num-col">คงเหลือ</th></tr></thead><tbody>'+
+        f.filter(function(x){return x.inn>0||x.out>0;}).map(function(r){
+          return '<tr><td class="num">'+r.date+'</td>'+
+            '<td class="num-col num" style="color:var(--good);">'+(r.inn>0?"+฿"+thb(r.inn):"-")+'</td>'+
+            '<td class="num-col num" style="color:var(--bad);">'+(r.out>0?"-฿"+thb(r.out):"-")+'</td>'+
+            '<td class="num-col num" style="color:'+(r.balance<0?"var(--bad)":"var(--text)")+';">฿'+thb(r.balance)+'</td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>'+
+    ledgerSection()+
+  '</div>';
+}
+
+function productOptions(selected,priceField){
+  return '<option value="">— ไม่เลือก / กรอกเอง —</option>'+products.filter(function(p){return p.active!==false;}).map(function(p){
+    return '<option value="'+p.id+'"'+(selected===p.id?" selected":"")+'>'+esc(p.code)+" · "+esc(p.name)+"  ·  ฿"+thb(priceField==="buy"?p.buyPrice:p.sellPrice)+'</option>';
+  }).join("");
+}
+
+function renderSales(){
+  return '<div class="row" style="flex-direction:column;gap:20px;">'+
+    '<div class="card" style="max-width:680px;">'+
+      '<div class="section-title">บันทึกการขายใหม่</div>'+
+      '<input type="hidden" id="sale-type-val" value="installment">'+
+      '<div class="toggle-row" style="margin-bottom:18px;">'+
+        '<button type="button" class="toggle-btn active" data-action="sale-type" data-value="installment">เงินดาวน์ + ผ่อน (ไฟแนนซ์)</button>'+
+        '<button type="button" class="toggle-btn" data-action="sale-type" data-value="cash">เงินสด</button>'+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("วันที่ส่งรถ / วันที่ขาย",'<input type="date" id="sale-date" class="input" value="'+todayStr()+'">')+
+        field("ชื่อลูกค้า",'<input id="sale-customer" class="input" placeholder="คุณสมชาย ใจดี">')+
+      '</div>'+
+      (products.length>0? field("เลือกรุ่นรถ (จากสมุดสินค้า)", '<select id="sale-product" class="input" data-action="apply-product-sale">'+productOptions("","sell")+'</select>', "margin-bottom:12px;") : "")+
+      '<div style="margin-bottom:12px;">'+field("รุ่นรถ / สินค้า",'<input id="sale-car" class="input" placeholder="Wuling Starlight Darion EV Premium">')+'</div>'+
+      priceRow("sale")+
+      '<div class="sale-installment-only">'+
+        '<div class="grid2" style="margin-bottom:12px;">'+
+          field("เงินดาวน์ (รับวันส่งรถ)",'<input type="number" id="sale-down" class="input" placeholder="0">')+
+          field("วันที่คาดรับ (ค่าจัดสินเชื่อ+คอม)",'<input type="date" id="sale-findate" class="input">')+
+        '</div>'+
+        '<div class="grid2" style="margin-bottom:12px;background:var(--warn-soft);padding:12px;border-radius:10px;border:1px solid var(--warn-border);">'+
+          field("ค่าจัดสินเชื่อ",'<input type="number" id="sale-finfee" class="input" placeholder="0">')+
+          field("ค่าคอมไฟแนนซ์",'<input type="number" id="sale-comfee" class="input" placeholder="0">')+
+        '</div>'+
+      '</div>'+
+      '<div class="sale-cash-only" hidden style="margin-bottom:12px;">'+
+        field("ยอดเงินสดที่ได้รับ",'<input type="number" id="sale-cash" class="input" placeholder="0">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("ผูกกับคันในสต๊อก (ถ้ามี)",'<select id="sale-stock-unit" class="input"><option value="">— ไม่ผูกกับสต๊อก —</option></select>')+
+        field("วันที่นัดส่งมอบ",'<input type="date" id="sale-deliverydate" class="input">')+
+      '</div>'+
+      '<div style="margin-bottom:18px;">'+field("หมายเหตุ",'<input id="sale-notes" class="input" placeholder="...">')+'</div>'+
+      '<div id="sale-err-slot">'+(saleErr?'<div class="errbox">'+esc(saleErr)+'</div>':"")+'</div>'+
+      '<button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;" data-action="submit-sale">บันทึกการขาย</button>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">รายการขายทั้งหมด ('+transactions.length+')</div>'+
+      (transactions.length===0?'<div class="empty">ยังไม่มีรายการขาย</div>':
+      '<div class="table-wrap"><table><thead><tr><th>วันที่</th><th>ลูกค้า / สินค้า</th><th>ประเภท</th><th class="num-col">ดาวน์/เงินสด</th><th class="num-col">จัดสินเชื่อ</th><th class="num-col">คอม</th><th>สถานะ</th><th></th></tr></thead><tbody>'+
+        transactions.map(function(t){
+          return '<tr><td><input type="date" class="input" style="width:140px;" value="'+t.date+'" data-action="tx-set-date" data-id="'+t.id+'"></td>'+
+            '<td><div style="font-weight:600;">'+esc(t.customer)+'</div><div style="font-size:11px;color:var(--muted);">'+esc(t.car)+'</div></td>'+
+            '<td><span class="badge" style="background:'+(t.type==="installment"?"var(--accent-soft)":"var(--good-soft)")+';color:'+(t.type==="installment"?"var(--accent)":"var(--good)")+';">'+(t.type==="installment"?"ผ่อน/ไฟแนนซ์":"เงินสด")+'</span></td>'+
+            '<td class="num-col num">฿'+thb(t.type==="installment"?t.downPayment:t.cashAmount)+'</td>'+
+            '<td class="num-col num">'+(t.financingFee>0?"฿"+thb(t.financingFee):"-")+'</td>'+
+            '<td class="num-col num">'+(t.commissionFee>0?"฿"+thb(t.commissionFee):"-")+'</td>'+
+            '<td>'+(t.type==="installment"&&(t.financingFee>0||t.commissionFee>0) ? (t.financingStatus==="received"?'<span class="badge" style="background:var(--good-soft);color:var(--good);">รับแล้ว ✓</span>':'<button class="btn btn-sm" style="background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn-border);" data-action="mark-received" data-id="'+t.id+'">รอรับ</button>') : '<span class="muted">—</span>')+'</td>'+
+            '<td><div style="display:flex;gap:4px;justify-content:flex-end;">'+
+              '<button class="btn btn-sm btn-secondary" data-action="edit-tx" data-id="'+t.id+'" title="แก้ไข">✏️</button>'+
+              '<button class="icon-btn" data-action="tx-delete" data-id="'+t.id+'" title="ลบ">×</button>'+
+            '</div></td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>'+
+  '</div>';
+}
+
+/* ───────────────────────── ธุรกรรม (one combined ledger) ─────────────────────────
+   Sales and purchases live in separate tables, but day to day they're one
+   stream of money moving in and out — so this tab merges them into a single
+   chronological list where every row can be edited or deleted in place. */
+function ledgerRows(){
+  var rows=[];
+  transactions.forEach(function(t){
+    var received = t.type==="installment" ? (Number(t.downPayment)||0) : (Number(t.cashAmount)||0);
+    var pending = t.type==="installment" ? ((Number(t.financingFee)||0)+(Number(t.commissionFee)||0)) : 0;
+    rows.push({
+      kind:"tx", id:t.id, date:t.date,
+      title:t.customer||"(ไม่ระบุลูกค้า)", sub:t.car||"",
+      typeLabel: t.type==="installment"?"ขาย · ผ่อน/ไฟแนนซ์":"ขาย · เงินสด",
+      inAmt:received, outAmt:0,
+      pending:pending, pendingDone:(t.financingStatus==="received"),
+    });
+  });
+  purchases.forEach(function(p){
+    rows.push({
+      kind:"pu", id:p.id, date:p.date,
+      title:p.car||"(ไม่ระบุรุ่น)", sub:(p.quantity||1)+" คัน · ฿"+thb(p.pricePerUnit)+"/คัน",
+      typeLabel:"ซื้อรถ", inAmt:0, outAmt:(Number(p.totalAmount)||0),
+      pending:0, pendingDone:false,
+    });
+  });
+  return rows.sort(byDateDesc);
+}
+
+/* Rendered inside the cash-flow tab, directly under the forecast: the
+   chart says where the money is going, this says which records got it
+   there — and every one of them is editable right here. */
+function ledgerSection(){
+  var rows=ledgerRows();
+  var totalIn=rows.reduce(function(s,r){return s+r.inAmt;},0);
+  var totalOut=rows.reduce(function(s,r){return s+r.outAmt;},0);
+  var totalPending=rows.reduce(function(s,r){return s+(r.pendingDone?0:r.pending);},0);
+
+  return '<div class="row">'+
+      kpi("รับแล้ว","฿"+thb(totalIn),{color:"var(--good)",top:"var(--good)"})+
+      kpi("จ่ายแล้ว","฿"+thb(totalOut),{color:"var(--bad)",top:"var(--bad)"})+
+      kpi("รอรับ","฿"+thb(totalPending),{color:"var(--warn)",top:"var(--warn)"})+
+      kpi("สุทธิ","฿"+thb(totalIn-totalOut),{color:(totalIn-totalOut)>=0?"var(--good)":"var(--bad)",top:(totalIn-totalOut)>=0?"var(--good)":"var(--bad)"})+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">ธุรกรรมทั้งหมด — รายรับ &amp; รายจ่าย ('+rows.length+' รายการ) · แก้วันที่ได้ในตาราง หรือกด ✏️ เพื่อแก้ทุกช่อง</div>'+
+      (rows.length===0?'<div class="empty">ยังไม่มีธุรกรรม</div>':
+      '<div class="table-wrap"><table><thead><tr><th>วันที่</th><th>ประเภท</th><th>รายละเอียด</th><th class="num-col">เงินเข้า</th><th class="num-col">เงินออก</th><th class="num-col">รอรับ</th><th></th></tr></thead><tbody>'+
+        rows.map(function(r){
+          var dateAction = r.kind==="tx" ? "tx-set-date" : "pu-set-date";
+          return '<tr>'+
+            '<td><input type="date" class="input" style="width:140px;" value="'+(r.date||"")+'" data-action="'+dateAction+'" data-id="'+r.id+'"></td>'+
+            '<td><span class="badge" style="background:'+(r.kind==="tx"?"var(--good-soft)":"var(--bad-soft)")+';color:'+(r.kind==="tx"?"var(--good)":"var(--bad)")+';white-space:nowrap;">'+r.typeLabel+'</span></td>'+
+            '<td><div style="font-weight:600;">'+esc(r.title)+'</div><div style="font-size:11px;color:var(--muted);">'+esc(r.sub)+'</div></td>'+
+            '<td class="num-col num ledger-in">'+(r.inAmt>0?"+฿"+thb(r.inAmt):"-")+'</td>'+
+            '<td class="num-col num ledger-out">'+(r.outAmt>0?"-฿"+thb(r.outAmt):"-")+'</td>'+
+            '<td class="num-col num" style="color:var(--warn);">'+(r.pending>0?(r.pendingDone?'<span class="muted">รับแล้ว</span>':"฿"+thb(r.pending)):"-")+'</td>'+
+            '<td><div style="display:flex;gap:4px;justify-content:flex-end;">'+
+              '<button class="btn btn-sm btn-secondary" data-action="edit-'+r.kind+'" data-id="'+r.id+'" title="แก้ไข">✏️</button>'+
+              '<button class="icon-btn" data-action="'+(r.kind==="tx"?"tx-delete":"pu-delete")+'" data-id="'+r.id+'" title="ลบ">×</button>'+
+            '</div></td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>';
+}
+
+/* ───────────────────────── edit dialog ───────────────────────── */
+function closeModal(){
+  var root=document.getElementById("modal-root");
+  if(root){ root.innerHTML=""; root.hidden=true; }
+}
+function modalShell(title, bodyHtml){
+  return '<div class="modal-back" data-action="modal-backdrop"><div class="modal">'+
+    '<div class="modal-head"><div class="modal-title">'+title+'</div>'+
+    '<button class="modal-close" data-action="modal-close">×</button></div>'+
+    bodyHtml+
+    '<div class="modal-foot">'+
+      '<button class="btn btn-ghost" data-action="modal-close">ยกเลิก</button>'+
+      '<button class="btn btn-primary" data-action="modal-save">บันทึกการแก้ไข</button>'+
+    '</div></div></div>';
+}
+function openEditModal(kind, id){
+  var root=document.getElementById("modal-root"); if(!root) return;
+  var body;
+  if(kind==="tx"){
+    var t=transactions.find(function(x){return x.id===id;}); if(!t) return;
+    body=
+      '<input type="hidden" id="m-kind" value="tx"><input type="hidden" id="m-id" value="'+id+'">'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("วันที่ขาย",'<input type="date" id="m-date" class="input" value="'+(t.date||"")+'">')+
+        field("ชื่อลูกค้า",'<input id="m-customer" class="input" value="'+esc(t.customer||"")+'">')+
+      '</div>'+
+      '<div style="margin-bottom:12px;">'+field("รุ่นรถ / สินค้า",'<input id="m-car" class="input" value="'+esc(t.car||"")+'">')+'</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("ประเภทการขาย",'<select id="m-type" class="input"><option value="installment"'+(t.type==="installment"?" selected":"")+'>ผ่อน/ไฟแนนซ์</option><option value="cash"'+(t.type==="cash"?" selected":"")+'>เงินสด</option></select>')+
+        field("ราคาต่อหน่วย",'<input type="number" id="m-price" class="input" value="'+(t.pricePerUnit||0)+'">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("จำนวน",'<input type="number" id="m-qty" class="input" value="'+(t.quantity||1)+'">')+
+        field("ยอดเงินสดที่ได้รับ",'<input type="number" id="m-cash" class="input" value="'+(t.cashAmount||0)+'">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("เงินดาวน์",'<input type="number" id="m-down" class="input" value="'+(t.downPayment||0)+'">')+
+        field("วันที่คาดรับ (จัดสินเชื่อ+คอม)",'<input type="date" id="m-findate" class="input" value="'+(t.financingExpectedDate||"")+'">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;background:var(--warn-soft);padding:12px;border-radius:10px;border:1px solid var(--warn-border);">'+
+        field("ค่าจัดสินเชื่อ",'<input type="number" id="m-finfee" class="input" value="'+(t.financingFee||0)+'">')+
+        field("ค่าคอมไฟแนนซ์",'<input type="number" id="m-comfee" class="input" value="'+(t.commissionFee||0)+'">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("สถานะเงินค้างรับ",'<select id="m-finstatus" class="input"><option value="pending"'+(t.financingStatus==="pending"?" selected":"")+'>รอรับ</option><option value="received"'+(t.financingStatus==="received"?" selected":"")+'>รับแล้ว</option><option value="n/a"'+(t.financingStatus==="n/a"?" selected":"")+'>ไม่มี</option></select>')+
+        field("หมายเหตุ",'<input id="m-notes" class="input" value="'+esc(t.notes||"")+'">')+
+      '</div>'+
+      '<div id="m-err-slot"></div>';
+    root.innerHTML=modalShell("แก้ไขรายการขาย", body);
+  } else {
+    var p=purchases.find(function(x){return x.id===id;}); if(!p) return;
+    body=
+      '<input type="hidden" id="m-kind" value="pu"><input type="hidden" id="m-id" value="'+id+'">'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("วันที่ซื้อ / รับรถเข้า",'<input type="date" id="m-date" class="input" value="'+(p.date||"")+'">')+
+        field("รุ่นรถ",'<input id="m-car" class="input" value="'+esc(p.car||"")+'">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("ราคาต่อหน่วย",'<input type="number" id="m-price" class="input" value="'+(p.pricePerUnit||0)+'">')+
+        field("จำนวน (คัน)",'<input type="number" id="m-qty" class="input" value="'+(p.quantity||1)+'">',"","แก้จำนวนที่นี่จะไม่เพิ่ม/ลดคันในสต๊อกให้อัตโนมัติ")+
+      '</div>'+
+      '<div style="margin-bottom:12px;">'+field("หมายเหตุ",'<input id="m-notes" class="input" value="'+esc(p.notes||"")+'">')+'</div>'+
+      '<div id="m-err-slot"></div>';
+    root.innerHTML=modalShell("แก้ไขรายการซื้อ", body);
+  }
+  root.hidden=false;
+}
+function saveModal(btn){
+  var kind=val("m-kind"), id=val("m-id");
+  var price=Number(val("m-price"))||0, qty=Number(val("m-qty"))||1;
+  if(!val("m-car").trim()){ setFormError("m-err-slot","กรุณากรอกรุ่นรถ / สินค้า"); return; }
+  var fn, patch;
+  if(kind==="tx"){
+    if(!val("m-customer").trim()){ setFormError("m-err-slot","กรุณากรอกชื่อลูกค้า"); return; }
+    var type=val("m-type");
+    var finFee=Number(val("m-finfee"))||0, comFee=Number(val("m-comfee"))||0;
+    patch={
+      date:val("m-date"), customer:val("m-customer").trim(), car:val("m-car").trim(),
+      type:type, pricePerUnit:price, quantity:qty, totalAmount:price*qty,
+      downPayment: type==="installment"?(Number(val("m-down"))||0):0,
+      financingFee: type==="installment"?finFee:0,
+      commissionFee: type==="installment"?comFee:0,
+      financingExpectedDate: type==="installment"?val("m-findate"):"",
+      financingStatus: (type==="installment" && (finFee+comFee)>0) ? val("m-finstatus") : "n/a",
+      cashAmount: type==="cash"?(Number(val("m-cash"))||0):0,
+      notes:val("m-notes").trim(),
+    };
+    fn="updateTransaction";
+  } else {
+    patch={
+      date:val("m-date"), car:val("m-car").trim(),
+      pricePerUnit:price, quantity:qty, totalAmount:price*qty,
+      notes:val("m-notes").trim(),
+    };
+    fn="updatePurchase";
+  }
+  busy(btn);
+  gs(fn,id,patch).then(function(){
+    closeModal();
+    return refreshAll(true);
+  }).then(function(){ showToast("แก้ไขเรียบร้อย ✓"); })
+    .catch(function(err){ btn.disabled=false; showErr(err); });
+}
+
+function renderPurchases(){
+  return '<div class="row" style="flex-direction:column;gap:20px;">'+
+    '<div class="card" style="max-width:680px;">'+
+      '<div class="section-title">บันทึกการซื้อรถ (รายจ่าย)</div>'+
+      '<div class="grid2" style="margin-bottom:12px;">'+
+        field("วันที่ซื้อ / รับรถเข้า",'<input type="date" id="pu-date" class="input" value="'+todayStr()+'">')+
+        '<div></div>'+
+      '</div>'+
+      (products.length>0? field("เลือกรุ่นรถ (จากสมุดสินค้า)", '<select id="pu-product" class="input" data-action="apply-product-purchase">'+productOptions("","buy")+'</select>', "margin-bottom:12px;") : "")+
+      '<div style="margin-bottom:12px;">'+field("รุ่นรถ",'<input id="pu-car" class="input" placeholder="WULING PORTA EV">')+'</div>'+
+      priceRow("pu")+
+      '<div style="margin-bottom:18px;">'+field("หมายเหตุ",'<input id="pu-notes" class="input" placeholder="...">')+'</div>'+
+      '<div id="pu-err-slot">'+(purchaseErr?'<div class="errbox">'+esc(purchaseErr)+'</div>':"")+'</div>'+
+      '<button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;" data-action="submit-purchase">บันทึกการซื้อ (สร้างรายการในสต๊อกให้อัตโนมัติ)</button>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">รายการซื้อรถทั้งหมด ('+purchases.length+')</div>'+
+      (purchases.length===0?'<div class="empty">ยังไม่มีรายการซื้อ</div>':
+      '<div class="table-wrap"><table><thead><tr><th>วันที่</th><th>รุ่นรถ</th><th class="num-col">จำนวน</th><th class="num-col">ยอดจ่าย</th><th></th></tr></thead><tbody>'+
+        purchases.map(function(p){
+          return '<tr><td><input type="date" class="input" style="width:140px;" value="'+p.date+'" data-action="pu-set-date" data-id="'+p.id+'"></td><td style="font-weight:600;">'+esc(p.car)+'</td>'+
+            '<td class="num-col">'+p.quantity+'</td><td class="num-col num" style="color:var(--bad);">฿'+thb(p.totalAmount)+'</td>'+
+            '<td><div style="display:flex;gap:4px;justify-content:flex-end;">'+
+              '<button class="btn btn-sm btn-secondary" data-action="edit-pu" data-id="'+p.id+'" title="แก้ไข">✏️</button>'+
+              '<button class="icon-btn" data-action="pu-delete" data-id="'+p.id+'" title="ลบทั้งชุด">×</button>'+
+            '</div></td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>'+
+  '</div>';
+}
+
+function renderReceivables(){
+  var items=pendingList(), today=todayStr();
+  return '<div class="card">'+
+    '<div class="section-title">ยอดค้างรับ — ค่าจัดสินเชื่อ / ค่าคอมไฟแนนซ์ ('+items.length+')</div>'+
+    (items.length===0?'<div class="empty">ไม่มียอดค้างรับ</div>':
+      '<div style="display:flex;flex-direction:column;gap:10px;">'+items.map(function(t){
+        var overdue = t.financingExpectedDate && t.financingExpectedDate<today;
+        var total=t.financingFee+t.commissionFee;
+        return '<div style="display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:12px;border:1.5px solid '+(overdue?"var(--bad-border)":"var(--border)")+';background:'+(overdue?"var(--bad-soft)":"var(--surface-2)")+';flex-wrap:wrap;gap:10px;">'+
+          '<div><div style="font-weight:700;font-size:13.5px;">'+esc(t.customer)+' <span class="dim" style="font-weight:400;">· '+esc(t.car)+'</span></div>'+
+          '<div style="font-size:11.5px;color:var(--muted);margin-top:4px;">ส่งรถ '+t.date+(t.financingExpectedDate?" · คาดรับ "+t.financingExpectedDate:"")+(overdue?' <span style="color:var(--bad);font-weight:700;">· เกินกำหนด</span>':"")+'</div></div>'+
+          '<div style="display:flex;align-items:center;gap:14px;"><div class="num" style="font-size:16px;color:var(--warn);font-weight:800;">฿'+thb(total)+'</div>'+
+          '<button class="btn btn-good btn-sm" data-action="mark-received" data-id="'+t.id+'">ได้รับแล้ว ✓</button></div></div>';
+      }).join("")+'</div>')+
+  '</div>';
+}
+
+function renderStock(){
+  var byProd = stockSummaryByProduct();
+  var inHand = stock.filter(function(s){return s.status==="in_stock"||s.status==="reserved";}).length;
+  var inStockOnly = stock.filter(function(s){return s.status==="in_stock";}).length;
+  var reserved = stock.filter(function(s){return s.status==="reserved";}).length;
+  var stockValue = stock.filter(function(s){return s.status==="in_stock"||s.status==="reserved";}).reduce(function(sum,s){
+    return sum + (Number(s.buyPrice)||0);
+  },0);
+  var units = stock.slice().sort(function(a,b){
+    var order={in_stock:0,reserved:1,delivered:2};
+    var oa=order[a.status]||0, ob=order[b.status]||0;
+    if(oa!==ob) return oa-ob;
+    return (a.deliveryPlanDate||"9999").localeCompare(b.deliveryPlanDate||"9999");
+  });
+
+  return '<div class="row" style="flex-direction:column;gap:20px;">'+
+    '<div class="row">'+
+      kpi("รถในมือ (พร้อมขาย+จอง)",String(inHand),{color:"var(--accent)",top:"var(--accent)"})+
+      kpi("พร้อมขายทันที",String(inStockOnly),{color:"var(--good)",top:"var(--good)"})+
+      kpi("จองแล้ว รอส่งมอบ",String(reserved),{color:"var(--warn)",top:"var(--warn)"})+
+      kpi("มูลค่าสต๊อก (ราคาทุน)","฿"+thb(stockValue))+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">สรุปตามรุ่นรถ</div>'+
+      (byProd.length===0?'<div class="empty">ยังไม่มีสต๊อก — บันทึกการซื้อรถเพื่อเพิ่มเข้าสต๊อกอัตโนมัติ</div>':
+      '<div class="table-wrap"><table><thead><tr><th>รหัส / รุ่น</th><th class="num-col">พร้อมขาย</th><th class="num-col">จองแล้ว</th><th class="num-col">ส่งมอบแล้ว</th></tr></thead><tbody>'+
+        byProd.map(function(r){
+          return '<tr><td style="font-weight:600;">'+(r.code?'<span class="chip" style="background:var(--accent-soft);color:var(--accent);">'+esc(r.code)+'</span> ':'')+esc(r.name||"(ไม่ระบุรุ่น)")+'</td>'+
+            '<td class="num-col num" style="color:var(--good);">'+r.inStock+'</td>'+
+            '<td class="num-col num" style="color:var(--warn);">'+r.reserved+'</td>'+
+            '<td class="num-col num muted">'+r.delivered+'</td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">รายคัน &amp; แผนจัดส่ง ('+stock.length+' คัน)</div>'+
+      (units.length===0?'<div class="empty">ยังไม่มีรายการในสต๊อก</div>':
+      '<div class="table-wrap"><table><thead><tr><th>รุ่นรถ</th><th>วันที่รับเข้า</th><th>สถานะ</th><th>ลูกค้า</th><th>แผนส่งมอบ</th><th></th></tr></thead><tbody>'+
+        units.map(function(s){
+          var statusMap={in_stock:["พร้อมขาย","var(--good)","var(--good-soft)"],reserved:["จองแล้ว","var(--warn)","var(--warn-soft)"],delivered:["ส่งมอบแล้ว","var(--muted)","var(--surface-2)"]};
+          var st=statusMap[s.status]||statusMap.in_stock;
+          return '<tr><td><div style="font-weight:600;">'+esc(s.car)+'</div><div style="font-size:11px;color:var(--muted);">'+esc(stockUnitLabel(s))+'</div></td>'+
+            '<td><input type="date" class="input" style="width:140px;" value="'+(s.purchaseDate||"")+'" data-action="stock-set-purchasedate" data-id="'+s.id+'"></td>'+
+            '<td><span class="badge" style="background:'+st[2]+';color:'+st[1]+';">'+st[0]+'</span></td>'+
+            '<td>'+(s.customer?esc(s.customer):'<span class="muted">—</span>')+'</td>'+
+            '<td><input type="date" class="input" style="width:150px;" value="'+(s.deliveryPlanDate||"")+'" data-action="stock-set-delivery" data-id="'+s.id+'" '+(s.status==="delivered"?"disabled":"")+'></td>'+
+            '<td><div style="display:flex;gap:4px;">'+
+              (s.status!=="delivered"?'<button class="btn btn-sm btn-good" data-action="stock-deliver" data-id="'+s.id+'">ส่งมอบแล้ว</button>':"")+
+              (s.status==="reserved"?'<button class="btn btn-sm btn-secondary" data-action="stock-reserve" data-id="'+s.id+'">ยกเลิกจอง</button>':"")+
+              '<button class="icon-btn" data-action="stock-delete" data-id="'+s.id+'" title="ลบ">×</button>'+
+            '</div></td></tr>';
+        }).join("")+'</tbody></table></div>')+
+    '</div>'+
+  '</div>';
+}
+
+function renderSettings(){
+  return '<div class="row" style="flex-direction:column;gap:20px;">'+
+    '<div class="card" style="max-width:720px;">'+
+      '<div class="section-title">เพิ่มรุ่นรถใหม่</div>'+
+      '<div class="grid2" style="margin-bottom:12px;grid-template-columns:1fr 2fr;">'+
+        field("รหัสรุ่น",'<input id="prod-code" class="input" placeholder="EV-DARION-P">')+
+        field("ชื่อรุ่นรถ",'<input id="prod-name" class="input" placeholder="Wuling Starlight Darion EV Premium">')+
+      '</div>'+
+      '<div class="grid2" style="margin-bottom:14px;">'+
+        field("ราคาซื้อ (ต้นทุน)",'<input type="number" id="prod-buy" class="input" placeholder="0">')+
+        field("ราคาขาย (มาตรฐาน)",'<input type="number" id="prod-sell" class="input" placeholder="0">')+
+      '</div>'+
+      '<div id="prod-err-slot">'+(productErr?'<div class="errbox">'+esc(productErr)+'</div>':"")+'</div>'+
+      '<button class="btn btn-primary" data-action="submit-product">+ เพิ่มรุ่นรถ</button>'+
+    '</div>'+
+    '<div class="card">'+
+      '<div class="section-title">สมุดรุ่นรถ'+(products.length?" — "+products.length+" รายการ":"")+'</div>'+
+      (products.length===0?'<div class="empty">ยังไม่มีรุ่นรถ — เพิ่มด้านบนเพื่อใช้เลือกตอนบันทึกการขาย/ซื้อ</div>':
+      '<div class="table-wrap"><table><thead><tr><th>รหัส</th><th>ชื่อรุ่นรถ</th><th class="num-col">ราคาซื้อ</th><th class="num-col">ราคาขาย</th><th class="num-col">กำไร/คัน</th><th>สถานะ</th><th></th></tr></thead><tbody>'+
+        products.map(function(p){
+          var margin=(p.sellPrice||0)-(p.buyPrice||0);
+          return '<tr><td><span class="chip" style="background:var(--accent-soft);color:var(--accent);">'+esc(p.code)+'</span></td>'+
+            '<td style="font-weight:500;">'+esc(p.name)+'</td>'+
+            '<td class="num-col"><input type="number" class="input num" style="width:110px;text-align:right;" value="'+(p.buyPrice||0)+'" data-action="product-update" data-field="buyPrice" data-id="'+p.id+'"></td>'+
+            '<td class="num-col"><input type="number" class="input num" style="width:110px;text-align:right;" value="'+(p.sellPrice||0)+'" data-action="product-update" data-field="sellPrice" data-id="'+p.id+'"></td>'+
+            '<td class="num-col num" style="color:'+(margin>=0?"var(--good)":"var(--bad)")+';">฿'+thb(margin)+'</td>'+
+            '<td><button class="btn btn-sm '+(p.active!==false?"btn-secondary":"btn-ghost")+'" data-action="product-toggle" data-id="'+p.id+'">'+(p.active!==false?"ใช้งาน":"ปิดใช้งาน")+'</button></td>'+
+            '<td><button class="icon-btn" data-action="product-delete" data-id="'+p.id+'" title="ลบ">×</button></td></tr>';
+        }).join("")+'</tbody></table></div>'+
+        '<div style="font-size:11px;color:var(--muted);margin-top:10px;">แก้ราคาแล้วคลิกออกเพื่อบันทึกอัตโนมัติ</div>')+
+    '</div>'+
+  '</div>';
+}
+
+function priceRow(prefix){
+  return '<div style="margin-bottom:14px;"><div class="grid2" style="margin-bottom:8px;">'+
+    field("ราคาต่อหน่วย (บาท)",'<input type="number" id="'+prefix+'-price" class="input" placeholder="0">')+
+    field("จำนวน",'<input type="number" id="'+prefix+'-qty" class="input" value="1" min="1">')+
+    '</div><div style="background:var(--accent-soft);border:1px solid var(--accent-soft-border);border-radius:9px;padding:10px 14px;display:flex;justify-content:space-between;align-items:center;">'+
+    '<span style="font-size:11.5px;font-weight:700;color:var(--accent);">ยอดรวมสุทธิ</span><span id="'+prefix+'-total" class="num" style="font-size:17px;color:var(--accent);">฿0</span></div></div>';
+}
+function field(label,inputHtml,wrapStyle,hint){
+  return '<div class="field" style="'+(wrapStyle||"")+'"><label>'+label+'</label>'+inputHtml+(hint?'<div class="hint">'+hint+'</div>':"")+'</div>';
+}
+
+/* ───────────────────────── boot ───────────────────────── */
+render();
+refreshAll(true);
+gs("getDbUrl").then(function(url){
+  var a=document.getElementById("db-link");
+  if(a && url){ a.href=url; a.hidden=false; }
+}).catch(function(err){ console.error(err); });
+})();
+</script>
+</body>
+</html>

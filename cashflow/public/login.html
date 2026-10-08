@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>เข้าสู่ระบบ · Wuling Cash Flow</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#F1F4FA;font-family:system-ui,sans-serif;color:#0F1729;padding:16px}
+  form{background:#fff;border:1px solid #E1E7F2;border-radius:14px;box-shadow:0 8px 20px rgba(16,24,39,.06);padding:28px;width:min(360px,100%);display:flex;flex-direction:column;gap:14px}
+  h1{margin:0;font-size:18px}
+  input{padding:11px;border-radius:9px;border:1px solid #E1E7F2;font-size:15px}
+  button{padding:11px;border-radius:9px;border:0;background:#3D4FE0;color:#fff;font-weight:700;font-size:14px;cursor:pointer}
+  button:disabled{opacity:.55}
+  #err{color:#DC3B41;font-size:13px;min-height:1em}
+</style>
+</head>
+<body>
+<form id="f">
+  <h1>Wuling Cash Flow</h1>
+  <input id="pw" type="password" placeholder="รหัสผ่าน" autocomplete="current-password" autofocus required>
+  <div id="err"></div>
+  <button id="b">เข้าสู่ระบบ</button>
+</form>
+<script>
+document.getElementById("f").addEventListener("submit", async function(e){
+  e.preventDefault();
+  var b=document.getElementById("b"), err=document.getElementById("err");
+  b.disabled=true; err.textContent="";
+  try{
+    var r=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:document.getElementById("pw").value})});
+    var d=await r.json().catch(function(){return {};});
+    if(r.ok){ location.href="/"; return; }
+    err.textContent=d.error||"เข้าสู่ระบบไม่สำเร็จ";
+  }catch(x){ err.textContent="เชื่อมต่อไม่ได้"; }
+  b.disabled=false;
+});
+</script>
+</body>
+</html>
