@@ -2,9 +2,11 @@ import Link from 'next/link';
 import ImageSlot from './ImageSlot';
 import { Vehicle } from '@/lib/data/types';
 import { money } from '@/lib/format';
+import Tilt3D from './Tilt3D';
 
 export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
   return (
+    <Tilt3D max={6} perspective={900}>
     <article className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', padding: 0, overflow: 'hidden' }}>
       <ImageSlot
         aspectRatio="16 / 11"
@@ -25,5 +27,6 @@ export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
         </Link>
       </div>
     </article>
+    </Tilt3D>
   );
 }

@@ -445,3 +445,44 @@ details[open] > summary::after {
     margin-top: 0 !important;
   }
 }
+
+/* ---- 3D tilt scenes (Tilt3D) ---- */
+.t3d-stage { position: relative; }
+.t3d-body {
+  --t3d-x: 0; --t3d-y: 0; --t3d-rx: 0deg; --t3d-ry: 0deg;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: rotateX(var(--t3d-rx)) rotateY(var(--t3d-ry));
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  will-change: transform;
+}
+.t3d-body[data-active='true'] { transition: transform 0.08s linear; }
+/* Child layers float at their own depth and shift against the cursor. */
+.t3d-layer {
+  --z: 0px;
+  transform: translate3d(calc(var(--t3d-x) * var(--z) * -0.25), calc(var(--t3d-y) * var(--z) * -0.25), var(--z));
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.t3d-body[data-active='true'] .t3d-layer { transition: transform 0.08s linear; }
+/* Moving specular highlight, on top of whatever sits in the body. */
+.t3d-body[data-glare='true']::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(circle at calc(50% + var(--t3d-x) * 40%) calc(50% + var(--t3d-y) * 40%), rgba(255,255,255,0.22), transparent 55%);
+  opacity: 0; transition: opacity 0.3s;
+}
+.t3d-body[data-active='true'][data-glare='true']::after { opacity: 1; }
+
+/* Slow idle float for the hero so it feels 3D before the cursor arrives. */
+@keyframes t3d-float { 0%,100% { translate: 0 0; } 50% { translate: 0 -8px; } }
+.t3d-float { animation: t3d-float 6s ease-in-out infinite; }
+.t3d-floor {
+  position: absolute; left: 8%; right: 8%; bottom: -6%; height: 14%;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.45), transparent 70%);
+  filter: blur(6px);
+}
+@media (prefers-reduced-motion: reduce) {
+  .t3d-float { animation: none; }
+  .t3d-body, .t3d-layer { transition: none; }
+}

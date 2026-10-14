@@ -7,6 +7,7 @@ import { Vehicle } from '@/lib/data/types';
 import { money, priceNote } from '@/lib/format';
 import { track } from '@/lib/analytics';
 import PageIndexNav, { PageIndexItem } from './PageIndexNav';
+import Tilt3D from './Tilt3D';
 
 /**
  * Hero image + color selector + exterior gallery for a model detail page.
@@ -48,6 +49,14 @@ export default function VehicleVisuals({
       })
     : vehicle.exteriorViews;
 
+  // Drag across the main exterior shot to "orbit" through the available angles.
+  const orbit = useRef({ x: 0, moved: false });
+  const orbitIdx = visibleExteriorViews.map((v) => vehicle.exteriorViews.findIndex((e) => e.slug === v.slug));
+  const stepOrbit = (dir: number) => {
+    const at = Math.max(0, orbitIdx.indexOf(extIndex));
+    setExtIndex(orbitIdx[(at + dir + orbitIdx.length) % orbitIdx.length]);
+  };
+
   const openLightbox = () => dialogRef.current?.showModal();
   const closeLightbox = () => dialogRef.current?.close();
 
@@ -86,12 +95,16 @@ export default function VehicleVisuals({
             </div>
           </div>
           <div style={{ position: 'relative', zIndex: 2 }}>
-            <span style={{ position: 'absolute', right: '-5%', top: '14%', width: '38%', height: '72%', background: 'var(--wl-lime)', borderRadius: 'var(--radius-lg)', display: 'block' }} />
+            <Tilt3D max={10}>
+            <span aria-hidden className="t3d-layer" style={{ ['--z' as string]: '-50px', position: 'absolute', right: '-5%', top: '14%', width: '38%', height: '72%', background: 'var(--wl-lime)', borderRadius: 'var(--radius-lg)', display: 'block' }} />
             <button
               type="button"
+              className="t3d-layer"
               onClick={openLightbox}
               aria-label="ดูภาพขยาย"
               style={{
+                ['--z' as string]: '20px',
+                boxShadow: '0 30px 60px -20px rgba(0,0,0,0.6)',
                 position: 'relative',
                 zIndex: 2,
                 width: '100%',
@@ -126,6 +139,7 @@ export default function VehicleVisuals({
                 </span>
               )}
             </button>
+            </Tilt3D>
           </div>
         </div>
       </section>
@@ -171,8 +185,21 @@ export default function VehicleVisuals({
         <h2 style={{ fontSize: 'clamp(23px,3vw,32px)', margin: '0 0 var(--space-4)' }}>ภายนอก</h2>
         <button
           type="button"
-          onClick={openLightbox}
+          onClick={() => {
+            if (!orbit.current.moved) openLightbox();
+          }}
+          onPointerDown={(e) => {
+            orbit.current = { x: e.clientX, moved: false };
+          }}
+          onPointerMove={(e) => {
+            if (e.buttons !== 1 || orbitIdx.length < 2) return;
+            const dx = e.clientX - orbit.current.x;
+            if (Math.abs(dx) < 70) return;
+            orbit.current = { x: e.clientX, moved: true };
+            stepOrbit(dx < 0 ? 1 : -1);
+          }}
           style={{
+            touchAction: 'pan-y',
             position: 'relative',
             width: '100%',
             aspectRatio: '16 / 9',
@@ -197,6 +224,9 @@ export default function VehicleVisuals({
             </span>
           )}
         </button>
+        {orbitIdx.length > 1 ? (
+          <p style={{ margin: 'var(--space-2) 0 0', fontSize: 13, color: 'var(--color-neutral-600)' }}>↔ ลากภาพเพื่อหมุนดูรอบคัน</p>
+        ) : null}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(120px,1fr))', gap: 'var(--space-2)', marginTop: 'var(--space-2)' }}>
           {visibleExteriorViews.map((e) => {
             const i = vehicle.exteriorViews.findIndex((view) => view.slug === e.slug);

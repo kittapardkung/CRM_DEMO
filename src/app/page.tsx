@@ -6,6 +6,7 @@ import ModelCard from '@/components/ModelCard';
 import { resolveAsset } from '@/lib/assets';
 import ArticleCard from '@/components/ArticleCard';
 import PhoneLink from '@/components/PhoneLink';
+import Tilt3D from '@/components/Tilt3D';
 import VideoCard from '@/components/VideoCard';
 import { vehicles } from '@/lib/data/vehicles';
 import { articles } from '@/lib/data/articles';
@@ -80,51 +81,62 @@ export default async function HomePage() {
             </div>
           </div>
           <div style={{ position: 'relative', zIndex: 2, paddingRight: 'clamp(18px,2vw,28px)' }}>
-            <div
-              style={{
-                position: 'relative',
-                aspectRatio: '4 / 3',
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                background: heroSrc ? 'transparent' : 'rgba(255,255,255,0.06)',
-                border: heroSrc ? 'none' : '1px dashed rgba(255,255,255,0.4)',
-                display: heroSrc ? undefined : 'flex',
-                alignItems: heroSrc ? undefined : 'center',
-                justifyContent: heroSrc ? undefined : 'center',
-                textAlign: heroSrc ? undefined : 'center',
-                padding: heroSrc ? undefined : 'var(--space-4)',
-              }}
-            >
-              {heroSrc ? (
-                <Image
-                  src={heroSrc}
-                  alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
-                  fill
-                  priority
-                  sizes="(max-width: 820px) 100vw, 50vw"
-                  style={{ objectFit: 'cover', objectPosition: 'center 54%' }}
+            <Tilt3D max={10}>
+              <div className="t3d-float" style={{ position: 'relative' }}>
+                <span aria-hidden className="t3d-floor t3d-layer" style={{ ['--z' as string]: '-40px' }} />
+                <div
+                  className="t3d-layer"
+                  style={{
+                    ['--z' as string]: '0px',
+                    position: 'relative',
+                    aspectRatio: '4 / 3',
+                    borderRadius: 'var(--radius-lg)',
+                    overflow: 'hidden',
+                    boxShadow: '0 30px 60px -20px rgba(0,0,0,0.55)',
+                    background: heroSrc ? 'transparent' : 'rgba(255,255,255,0.06)',
+                    border: heroSrc ? 'none' : '1px dashed rgba(255,255,255,0.4)',
+                    display: heroSrc ? undefined : 'flex',
+                    alignItems: heroSrc ? undefined : 'center',
+                    justifyContent: heroSrc ? undefined : 'center',
+                    textAlign: heroSrc ? undefined : 'center',
+                    padding: heroSrc ? undefined : 'var(--space-4)',
+                  }}
+                >
+                  {heroSrc ? (
+                    <Image
+                      src={heroSrc}
+                      alt="รถยนต์ไฟฟ้า WULING ทุกรุ่น"
+                      fill
+                      priority
+                      sizes="(max-width: 820px) 100vw, 50vw"
+                      style={{ objectFit: 'cover', objectPosition: 'center 54%' }}
+                    />
+                  ) : (
+                    <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
+                      WULING Lineup · Hero
+                      <br />
+                      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>hero-wuling-front-34.webp</span>
+                    </span>
+                  )}
+                </div>
+                <span
+                  aria-hidden
+                  className="t3d-layer"
+                  style={{
+                    ['--z' as string]: '70px',
+                    position: 'absolute',
+                    right: 'calc(-1 * clamp(18px,2vw,28px))',
+                    top: '16%',
+                    bottom: '16%',
+                    width: 'clamp(8px,1vw,14px)',
+                    background: 'var(--wl-lime)',
+                    borderRadius: 999,
+                    display: 'block',
+                    boxShadow: '0 0 24px rgba(198,242,77,0.55)',
+                  }}
                 />
-              ) : (
-                <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
-                  WULING Lineup · Hero
-                  <br />
-                  <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)' }}>hero-wuling-front-34.webp</span>
-                </span>
-              )}
-            </div>
-            <span
-              aria-hidden
-              style={{
-                position: 'absolute',
-                right: 0,
-                top: '16%',
-                bottom: '16%',
-                width: 'clamp(8px,1vw,14px)',
-                background: 'var(--wl-lime)',
-                borderRadius: 999,
-                display: 'block',
-              }}
-            />
+              </div>
+            </Tilt3D>
           </div>
         </div>
       </section>
