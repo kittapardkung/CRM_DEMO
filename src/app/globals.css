@@ -522,3 +522,4 @@ details[open] > summary::after {
 .sr-modal-card { position: relative; background: #fff; color: var(--color-text); border-radius: var(--radius-lg); padding: var(--space-5); max-height: 90vh; overflow: auto; }
 .sr-modal-close { position: absolute; top: 8px; right: 10px; width: 44px; height: 44px; font-size: 28px; line-height: 1; border: none; background: rgba(255,255,255,0.9); border-radius: 50%; cursor: pointer; z-index: 2; }
 @media (prefers-reduced-motion: reduce) { .sr-hotspot::after { animation: none; } .sr-chapter { transition: none; } }
+.sr-colors { position: absolute; right: clamp(18px,4vw,56px); top: 96px; z-index: 4; display: flex; gap: 8px; }

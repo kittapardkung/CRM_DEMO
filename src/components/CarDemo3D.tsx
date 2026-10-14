@@ -3,33 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
+import { buildProceduralCar } from '@/lib/proceduralCar';
 
 export type CarColor = { name: string; code: string };
-
-/** Side silhouette of a stylised MPV (x = length, y = height), extruded across the width. */
-function bodyShape() {
-  const s = new THREE.Shape();
-  s.moveTo(-2.4, 0.42);
-  s.lineTo(-2.42, 1.2);
-  s.quadraticCurveTo(-2.4, 1.62, -1.95, 1.78);
-  s.lineTo(0.85, 1.8);
-  s.quadraticCurveTo(1.25, 1.78, 1.6, 1.3);
-  s.quadraticCurveTo(1.75, 1.12, 2.2, 1.04);
-  s.quadraticCurveTo(2.46, 0.98, 2.48, 0.7);
-  s.lineTo(2.46, 0.42);
-  s.lineTo(-2.4, 0.42);
-  return s;
-}
-
-function glassShape() {
-  const s = new THREE.Shape();
-  s.moveTo(-2.05, 1.22);
-  s.lineTo(-1.82, 1.7);
-  s.lineTo(0.8, 1.72);
-  s.quadraticCurveTo(1.15, 1.7, 1.45, 1.27);
-  s.lineTo(-2.05, 1.22);
-  return s;
-}
 
 /**
  * Prototype only: a procedurally modelled MPV, NOT the real DARION. It shows
@@ -71,53 +47,10 @@ export default function CarDemo3D({ colors }: { colors: CarColor[] }) {
     const mat = (m: THREE.Material) => (disposables.push(m), m);
     const geo = <T extends THREE.BufferGeometry>(g: T) => (disposables.push(g), g);
 
-    const car = new THREE.Group();
-    const paint = new THREE.MeshPhysicalMaterial({
-      color: colors[0].code,
-      metalness: 0.55,
-      roughness: 0.28,
-      clearcoat: 1,
-      clearcoatRoughness: 0.08,
-    });
-    bodyMat.current = paint;
-    disposables.push(paint);
-
-    const body = new THREE.Mesh(
-      geo(new THREE.ExtrudeGeometry(bodyShape(), { depth: 1.7, bevelEnabled: true, bevelSize: 0.12, bevelThickness: 0.12, bevelSegments: 6, curveSegments: 24 })),
-      paint,
-    );
-    body.position.z = -0.85;
-    body.castShadow = true;
-    const glass = new THREE.Mesh(
-      geo(new THREE.ExtrudeGeometry(glassShape(), { depth: 1.9, bevelEnabled: true, bevelSize: 0.03, bevelThickness: 0.05, bevelSegments: 3 })),
-      mat(new THREE.MeshPhysicalMaterial({ color: 0x0b0f18, metalness: 0.1, roughness: 0.05, clearcoat: 1 })),
-    );
-    glass.position.z = -0.95;
-    car.add(body, glass);
-
-    const tire = mat(new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.85 }));
-    const rim = mat(new THREE.MeshStandardMaterial({ color: 0xcfd3d8, metalness: 1, roughness: 0.25 }));
-    const tireGeo = geo(new THREE.CylinderGeometry(0.42, 0.42, 0.3, 32));
-    const rimGeo = geo(new THREE.CylinderGeometry(0.28, 0.28, 0.32, 24));
-    for (const x of [-1.55, 1.55]) {
-      for (const z of [-0.88, 0.88]) {
-        const w = new THREE.Group();
-        w.add(new THREE.Mesh(tireGeo, tire), new THREE.Mesh(rimGeo, rim));
-        w.rotation.x = Math.PI / 2;
-        w.position.set(x, 0.42, z);
-        car.add(w);
-      }
-    }
-    const lamp = (x: number, z: number, color: number, w: number) => {
-      const m = new THREE.Mesh(
-        geo(new THREE.BoxGeometry(0.06, 0.1, w)),
-        mat(new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 1.6 })),
-      );
-      m.position.set(x, color === 0xffffff ? 0.95 : 1.0, z);
-      car.add(m);
-    };
-    for (const z of [-0.55, 0.55]) lamp(2.62, z, 0xffffff, 0.45);
-    lamp(-2.55, 0, 0xff2a2a, 1.3);
+    const built = buildProceduralCar(colors[0].code, true);
+    const car = built.group;
+    bodyMat.current = built.paint;
+    disposables.push({ dispose: built.dispose });
     scene.add(car);
 
     const floor = new THREE.Mesh(

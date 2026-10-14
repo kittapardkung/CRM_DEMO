@@ -9,28 +9,12 @@ import type { Interaction } from './ShowroomCanvas';
 import MobileShowroomFallback, { ContactButtons } from './MobileShowroomFallback';
 import { ArticleModal, VideoModal } from './ShowroomModals';
 import { LeaseFacts } from './parts';
+import { detect3D as detect } from '@/lib/detect3d';
 
 // One persistent canvas, loaded only on the client and only when the device is up to it.
 const ShowroomCanvas = dynamic(() => import('./ShowroomCanvas'), { ssr: false });
 const LoadingBadge = dynamic(() => import('./ShowroomCanvas').then((m) => m.LoadingBadge), { ssr: false });
 
-let webglOk: boolean | null = null;
-function detect(): 'static' | '3d' {
-  const q = new URLSearchParams(location.search).get('mode');
-  if (q === 'static' || q === '3d') return q;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return 'static';
-  const nav = navigator as Navigator & { deviceMemory?: number };
-  if ((nav.deviceMemory ?? 8) <= 2 || (nav.hardwareConcurrency ?? 8) <= 2) return 'static';
-  if (webglOk === null) {
-    try {
-      const c = document.createElement('canvas');
-      webglOk = !!(c.getContext('webgl2') || c.getContext('webgl'));
-    } catch {
-      webglOk = false;
-    }
-  }
-  return webglOk ? '3d' : 'static';
-}
 const noopSubscribe = () => () => {};
 
 export default function ShowroomExperience({ data }: { data: ShowroomData }) {
