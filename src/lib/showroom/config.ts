@@ -30,13 +30,15 @@ export interface VehicleManifest {
   photoAspect: number;
   /** Logo / wheel positions on the stand-in photo, as [u, v] from the top-left. */
   photoAnchors: { logo: [number, number]; wheel: [number, number] };
+  /** Row (0 = top, 1 = bottom) where the tyres touch the floor in the cut-out photo. */
+  photoBase: number;
 }
 
 export const MANIFEST: Record<VehicleSlug, VehicleManifest> = {
-  porta: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] } },
-  darion: { glb: null, lengthM: null, photoAspect: 1600 / 903, photoAnchors: { logo: [0.168, 0.457], wheel: [0.525, 0.72] } },
-  binguo: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] } },
-  ekxion: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] } },
+  porta: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] }, photoBase: 0.836 },
+  darion: { glb: null, lengthM: null, photoAspect: 1600 / 903, photoAnchors: { logo: [0.168, 0.457], wheel: [0.525, 0.72] }, photoBase: 0.9 },
+  binguo: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] }, photoBase: 0.778 },
+  ekxion: { glb: null, lengthM: null, photoAspect: 1600 / 1087, photoAnchors: { logo: [0.3, 0.5], wheel: [0.3, 0.8] }, photoBase: 0.8 },
 };
 
 export const hasAuthentic3D = (slug: VehicleSlug) => MANIFEST[slug].glb !== null;
@@ -86,18 +88,31 @@ interface CamSpec {
   fov: number;
 }
 
+/** Colours of the room behind the cars (hex). */
+export interface Mood {
+  top: string;
+  bottom: string;
+  floor: string;
+}
+
 interface Preset {
   cam: CamSpec;
   vehicles: VStates;
+  mood: Mood;
 }
 
+const BRIGHT: Mood = { top: '#c4d9f2', bottom: '#f8fafd', floor: '#e8edf4' };
+const SUNRISE: Mood = { top: '#86abdc', bottom: '#ffd7ae', floor: '#efe2d4' };
+const COOL: Mood = { top: '#bccfe4', bottom: '#edf2f8', floor: '#dde5ee' };
+const DUSK: Mood = { top: '#27375a', bottom: '#f0a468', floor: '#383248' };
+
 const PRESETS: Record<string, Preset> = {
-  lineupWide: { cam: { pos: [0, 2.0, 15], target: [0, 1, 0], fov: 36 }, vehicles: lineup() },
-  lineupNear: { cam: { pos: [0, 1.7, 10.4], target: [0, 1, 0], fov: 36 }, vehicles: lineup() },
-  lease: { cam: { pos: [0, 1.7, 9.6], target: [0, 1.05, 1.6], fov: 34 }, vehicles: leaseStates() },
-  logo: { cam: { focus: { slug: 'darion', anchor: 'logo', offset: [0.7, 0.1, 3.5] }, fov: 30 }, vehicles: closeUpStates() },
-  wheel: { cam: { focus: { slug: 'darion', anchor: 'wheel', offset: [-0.8, 0.2, 3.5] }, fov: 30 }, vehicles: closeUpStates() },
-  finalWide: { cam: { pos: [0, 2.2, 16], target: [0, 1.3, 0], fov: 36 }, vehicles: lineup() },
+  lineupWide: { cam: { pos: [0, 2.0, 14], target: [0, 1, 0], fov: 36 }, vehicles: lineup(), mood: BRIGHT },
+  lineupNear: { cam: { pos: [0, 1.7, 10.4], target: [0, 1, 0], fov: 36 }, vehicles: lineup(), mood: BRIGHT },
+  lease: { cam: { pos: [0, 1.7, 9.6], target: [0, 1.05, 1.6], fov: 34 }, vehicles: leaseStates(), mood: SUNRISE },
+  logo: { cam: { focus: { slug: 'darion', anchor: 'logo', offset: [0.7, 0.1, 3.5] }, fov: 30 }, vehicles: closeUpStates(), mood: COOL },
+  wheel: { cam: { focus: { slug: 'darion', anchor: 'wheel', offset: [-0.8, 0.2, 3.5] }, fov: 30 }, vehicles: closeUpStates(), mood: DUSK },
+  finalWide: { cam: { pos: [0, 2.2, 15], target: [0, 1.3, 0], fov: 36 }, vehicles: lineup(), mood: BRIGHT },
 };
 
 /** Scroll progress (0–1) → preset. Repeated presets create holds. */
@@ -130,12 +145,14 @@ export function anchorWorld(slug: VehicleSlug, anchor: 'logo' | 'wheel', st: VSt
   const m = MANIFEST[slug];
   const [u, v] = m.photoAnchors[anchor];
   const w = CARD_H * m.photoAspect;
-  return [st.pos[0] + (u - 0.5) * w * st.scale, st.pos[1] + (1 - v) * CARD_H * st.scale, st.pos[2] + 0.02];
+  return [st.pos[0] + (u - 0.5) * w * st.scale, st.pos[1] + (m.photoBase - v) * CARD_H * st.scale, st.pos[2] + 0.02];
 }
 
 export interface Sample {
   cam: { pos: Vec3; target: Vec3; fov: number };
   vehicles: VStates;
+  /** Room colours as linear-agnostic sRGB triples (0–1). */
+  mood: { top: Vec3; bottom: Vec3; floor: Vec3 };
 }
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -152,7 +169,9 @@ function resolveCam(p: Preset) {
   return { pos: c.pos!, target: c.target!, fov: c.fov };
 }
 
-const RESOLVED = KEYFRAMES.map((k) => ({ p: k.p, cam: resolveCam(PRESETS[k.preset]), vehicles: PRESETS[k.preset].vehicles }));
+const RESOLVED = KEYFRAMES.map((k) => ({ p: k.p, cam: resolveCam(PRESETS[k.preset]), vehicles: PRESETS[k.preset].vehicles, mood: PRESETS[k.preset].mood }));
+
+const hex = (h: string): Vec3 => [parseInt(h.slice(1, 3), 16) / 255, parseInt(h.slice(3, 5), 16) / 255, parseInt(h.slice(5, 7), 16) / 255];
 
 /** Interpolated camera + vehicle state at scroll progress `p`. Fully reversible. */
 export function sample(p: number): Sample {
@@ -168,7 +187,12 @@ export function sample(p: number): Sample {
     const vb = b.vehicles[s];
     vehicles[s] = { pos: lerp3(va.pos, vb.pos, t), rotY: lerp(va.rotY, vb.rotY, t), opacity: lerp(va.opacity, vb.opacity, t), scale: lerp(va.scale, vb.scale, t) };
   }
-  return { cam: { pos: lerp3(a.cam.pos, b.cam.pos, t), target: lerp3(a.cam.target, b.cam.target, t), fov: lerp(a.cam.fov, b.cam.fov, t) }, vehicles };
+  const mood = {
+    top: lerp3(hex(a.mood.top), hex(b.mood.top), t),
+    bottom: lerp3(hex(a.mood.bottom), hex(b.mood.bottom), t),
+    floor: lerp3(hex(a.mood.floor), hex(b.mood.floor), t),
+  };
+  return { cam: { pos: lerp3(a.cam.pos, b.cam.pos, t), target: lerp3(a.cam.target, b.cam.target, t), fov: lerp(a.cam.fov, b.cam.fov, t) }, vehicles, mood };
 }
 
 /* --------------------------------- hotspots -------------------------------- */

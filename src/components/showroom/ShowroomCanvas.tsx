@@ -65,6 +65,7 @@ function useFeatherMap() {
 
 function Rig({ shared, interaction, selected, scene }: { shared: Shared; interaction: MutableRefObject<Interaction>; selected: VehicleSlug | null; scene: number }) {
   const sp = useRef(0);
+  const lastBg = useRef('');
   const selMix = useRef(0);
   const coarse = useMemo(() => typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches, []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
@@ -76,13 +77,23 @@ function Rig({ shared, interaction, selected, scene }: { shared: Shared; interac
     selMix.current = THREE.MathUtils.damp(selMix.current, selected && scene === 1 ? 1 : 0, 5, dt);
     shared.update(s, selMix.current);
 
+    // Room mood: gradient behind the (transparent) canvas + matching fog.
+    const css = (c: [number, number, number]) => `rgb(${Math.round(c[0] * 255)},${Math.round(c[1] * 255)},${Math.round(c[2] * 255)})`;
+    const bg = `linear-gradient(to bottom, ${css(s.mood.top)} 0%, ${css(s.mood.bottom)} 58%, ${css(s.mood.floor)} 100%)`;
+    if (bg !== lastBg.current) {
+      lastBg.current = bg;
+      state.gl.domElement.style.background = bg;
+    }
+    const fog = state.scene.fog as THREE.Fog | null;
+    if (fog) fog.color.setRGB(s.mood.bottom[0], s.mood.bottom[1], s.mood.bottom[2], THREE.SRGBColorSpace);
+
     const { pos, target } = s.cam;
     let fov = s.cam.fov;
     let p = new THREE.Vector3(...pos);
     const t = new THREE.Vector3(...target);
     if (selMix.current > 0.001 && selected) {
       const v = s.vehicles[selected];
-      const tt = new THREE.Vector3(v.pos[0], v.pos[1] + CARD_H * 0.5 * v.scale, v.pos[2]);
+      const tt = new THREE.Vector3(v.pos[0], v.pos[1] + CARD_H * 0.42 * v.scale, v.pos[2]);
       const pp = tt.clone().add(tmp.set(0, 0.15, 8.2 / interaction.current.zoom));
       p.lerp(pp, selMix.current);
       t.lerp(tt, selMix.current);
@@ -128,12 +139,44 @@ function Lighting() {
   );
 }
 
-function Floor() {
+function Floor({ shared }: { shared: Shared }) {
+  const mat = useRef<THREE.MeshBasicMaterial>(null);
+  useFrame(() => {
+    const f = shared.sample.mood.floor;
+    mat.current?.color.setRGB(f[0], f[1], f[2], THREE.SRGBColorSpace);
+  });
   return (
     <mesh rotation-x={-Math.PI / 2} position={[0, -0.001, 0]}>
-      <planeGeometry args={[120, 120]} />
-      <meshBasicMaterial color="#0b1d38" />
+      <planeGeometry args={[160, 160]} />
+      <meshBasicMaterial ref={mat} color="#e8edf4" />
     </mesh>
+  );
+}
+
+/** Architectural back wall: deep-blue plinth, lime accent line and vertical light slats. */
+function BackWall({ shared }: { shared: Shared }) {
+  const slat = useRef<THREE.MeshBasicMaterial>(null);
+  useFrame(() => {
+    const f = shared.sample.mood.floor;
+    slat.current?.color.setRGB(Math.min(1, f[0] * 1.04), Math.min(1, f[1] * 1.04), Math.min(1, f[2] * 1.04), THREE.SRGBColorSpace);
+  });
+  return (
+    <group position={[0, 0, -17]}>
+      <mesh position={[0, 0.5, 0]}>
+        <boxGeometry args={[120, 1, 0.4]} />
+        <meshBasicMaterial color="#102a43" />
+      </mesh>
+      <mesh position={[0, 1.04, 0.05]}>
+        <boxGeometry args={[120, 0.07, 0.4]} />
+        <meshBasicMaterial color="#b6e431" toneMapped={false} />
+      </mesh>
+      {Array.from({ length: 41 }, (_, i) => (
+        <mesh key={i} position={[(i - 20) * 2.4, 6.4, 0]}>
+          <boxGeometry args={[0.9, 10.8, 0.2]} />
+          <meshBasicMaterial ref={i === 0 ? slat : undefined} color="#e8edf4" transparent opacity={0.55} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
@@ -143,30 +186,62 @@ function WallLogo({ src, shared }: { src: string; shared: Shared }) {
   useFrame(() => {
     // Quiet backdrop for most of the journey, full reveal in the final scene.
     const cam = shared.sample.cam.pos;
-    const reveal = THREE.MathUtils.smoothstep(cam[2], 14.2, 15.8);
+    const reveal = THREE.MathUtils.smoothstep(cam[2], 13.2, 14.8);
     if (mat.current) mat.current.opacity = 0.12 + 0.88 * reveal;
   });
   return (
-    <mesh position={[0, 4.3, -10]}>
-      <planeGeometry args={[3, 3]} />
+    <mesh position={[0, 3.3, -16.6]}>
+      <planeGeometry args={[3.2, 3.2]} />
       <meshBasicMaterial ref={mat} map={tex} transparent toneMapped={false} />
     </mesh>
   );
 }
 
+const MIRROR_VERT = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }';
+// Reflection that fades with distance from the floor (uv.y = 0 is the contact edge once mirrored).
+const MIRROR_FRAG = `uniform sampler2D map; uniform float opacity; varying vec2 vUv;
+void main(){ vec4 c = texture2D(map, vUv); float fade = pow(1.0 - vUv.y, 1.6); gl_FragColor = vec4(c.rgb, c.a * fade * opacity);
+#include <colorspace_fragment>
+}`;
+
+function useShadowMap() {
+  return useMemo(() => {
+    const c = document.createElement('canvas');
+    c.width = c.height = 128;
+    const g = c.getContext('2d')!;
+    const grad = g.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(0,0,0,0.6)');
+    grad.addColorStop(0.55, 'rgba(0,0,0,0.25)');
+    grad.addColorStop(1, 'rgba(0,0,0,0)');
+    g.fillStyle = grad;
+    g.fillRect(0, 0, 128, 128);
+    return new THREE.CanvasTexture(c);
+  }, []);
+}
+
 /** Stand-in: the verified product photo on a flat card. NOT a 3D model. */
-function PhotoFace({ url, aspect, feather, matRef, mirrorRef }: { url: string; aspect: number; feather: THREE.Texture; matRef: MutableRefObject<THREE.MeshBasicMaterial | null>; mirrorRef: MutableRefObject<THREE.MeshBasicMaterial | null> }) {
+function PhotoFace({ url, aspect, base, cutout, feather, matRef, mirrorRef, shadowRef }: {
+  url: string; aspect: number; base: number; cutout: boolean; feather: THREE.Texture;
+  matRef: MutableRefObject<THREE.MeshBasicMaterial | null>; mirrorRef: MutableRefObject<THREE.ShaderMaterial | null>; shadowRef: MutableRefObject<THREE.MeshBasicMaterial | null>;
+}) {
   const tex = useTexture(url);
+  const shadow = useShadowMap();
   const w = CARD_H * aspect;
+  const uniforms = useMemo(() => ({ map: { value: tex }, opacity: { value: 0.22 } }), [tex]);
   return (
     <>
-      <mesh position={[0, CARD_H / 2, 0]}>
-        <planeGeometry args={[w, CARD_H]} />
-        <meshBasicMaterial ref={matRef} map={tex} alphaMap={feather} transparent toneMapped={false} depthWrite={false} />
+      {/* soft contact shadow where the tyres meet the floor */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.006, 0.05]}>
+        <planeGeometry args={[w * 0.85, 1.1]} />
+        <meshBasicMaterial ref={shadowRef} map={shadow} transparent depthWrite={false} toneMapped={false} />
       </mesh>
-      <mesh position={[0, -CARD_H / 2 - 0.04, 0]} scale-y={-1}>
+      <mesh position={[0, (base - 0.5) * CARD_H, 0]}>
         <planeGeometry args={[w, CARD_H]} />
-        <meshBasicMaterial ref={mirrorRef} map={tex} alphaMap={feather} transparent toneMapped={false} depthWrite={false} opacity={0.12} />
+        <meshBasicMaterial ref={matRef} map={tex} alphaMap={cutout ? null : feather} transparent toneMapped={false} depthWrite={false} />
+      </mesh>
+      <mesh position={[0, (0.5 - base) * CARD_H, 0]} scale-y={-1}>
+        <planeGeometry args={[w, CARD_H]} />
+        <shaderMaterial ref={mirrorRef} uniforms={uniforms} vertexShader={MIRROR_VERT} fragmentShader={MIRROR_FRAG} transparent depthWrite={false} />
       </mesh>
     </>
   );
@@ -215,7 +290,8 @@ function Vehicle({ v, shared, interaction, selected, scene, colorIndex, feather,
 }) {
   const group = useRef<THREE.Group>(null);
   const mat = useRef<THREE.MeshBasicMaterial | null>(null);
-  const mirror = useRef<THREE.MeshBasicMaterial | null>(null);
+  const mirror = useRef<THREE.ShaderMaterial | null>(null);
+  const shadowMat = useRef<THREE.MeshBasicMaterial | null>(null);
   const yaw = useRef(0);
   const m = MANIFEST[v.slug];
   const isSel = selected === v.slug;
@@ -236,14 +312,15 @@ function Vehicle({ v, shared, interaction, selected, scene, colorIndex, feather,
     const dim = selected && !isSel ? 1 - 0.8 * mix : 1;
     const o = st.opacity * dim;
     if (mat.current) mat.current.opacity = o;
-    if (mirror.current) mirror.current.opacity = 0.12 * o;
+    if (mirror.current) mirror.current.uniforms.opacity.value = 0.24 * o;
+    if (shadowMat.current) shadowMat.current.opacity = o;
     g.visible = o > 0.01;
   });
 
   const w = CARD_H * m.photoAspect;
   const at = (a: 'logo' | 'wheel'): [number, number, number] => {
     const [u, vv] = m.photoAnchors[a];
-    return [(u - 0.5) * w, (1 - vv) * CARD_H, 0.03];
+    return [(u - 0.5) * w, (m.photoBase - vv) * CARD_H, 0.03];
   };
   const showTech = v.slug === 'darion' && scene === 3;
   const showWheel = v.slug === 'darion' && scene === 4;
@@ -251,12 +328,12 @@ function Vehicle({ v, shared, interaction, selected, scene, colorIndex, feather,
   return (
     <group ref={group} onClick={(e: ThreeEvent<MouseEvent>) => { if (scene === 1) { e.stopPropagation(); onSelect(v.slug); } }}>
       <Suspense fallback={null}>
-        {m.glb ? <GlbModel url={m.glb} slug={v.slug} color={v.colors[colorIndex]?.code} /> : photo ? <PhotoFace url={photo} aspect={m.photoAspect} feather={feather} matRef={mat} mirrorRef={mirror} /> : null}
+        {m.glb ? <GlbModel url={m.glb} slug={v.slug} color={v.colors[colorIndex]?.code} /> : photo ? <PhotoFace url={photo} aspect={m.photoAspect} base={m.photoBase} cutout={v.cutout} feather={feather} matRef={mat} mirrorRef={mirror} shadowRef={shadowMat} /> : null}
       </Suspense>
       {showTech
         ? ARTICLE_HOTSPOTS.map((h) => {
             const a = articles.find((x) => x.slug === h.slug);
-            return a ? <Hotspot key={h.slug} position={[(h.uv[0] - 0.5) * w, (1 - h.uv[1]) * CARD_H, 0.03]} label={a.title} onClick={() => onArticle(a.slug)} /> : null;
+            return a ? <Hotspot key={h.slug} position={[(h.uv[0] - 0.5) * w, (m.photoBase - h.uv[1]) * CARD_H, 0.03]} label={a.title} onClick={() => onArticle(a.slug)} /> : null;
           })
         : null}
       {showWheel ? <Hotspot position={at('wheel')} label="ดูวิดีโอ EV Knowledge" onClick={onWheel} /> : null}
@@ -271,6 +348,7 @@ export default function ShowroomCanvas(props: Props) {
 
   return (
     <Canvas
+      flat
       frameloop={paused ? 'never' : 'always'}
       dpr={dpr}
       camera={{ fov: 36, near: 0.1, far: 120, position: [0, 2.2, 17.5] }}
@@ -284,9 +362,10 @@ export default function ShowroomCanvas(props: Props) {
       }}
     >
       <PerformanceMonitor onDecline={() => setDpr([1, 1])} />
-      <fog attach="fog" args={['#0a1a33', 22, 52]} />
+      <fog attach="fog" args={['#f8fafd', 26, 70]} />
       <Lighting />
-      <Floor />
+      <Floor shared={shared} />
+      <BackWall shared={shared} />
       <Rig shared={shared} interaction={interaction} selected={props.selected} scene={props.scene} />
       <Suspense fallback={null}>{logo ? <WallLogo src={logo} shared={shared} /> : null}</Suspense>
       <Scene {...props} shared={shared} />

@@ -14,6 +14,8 @@ export interface ShowroomVehicle {
   tagline: string;
   price: string;
   photo: string | null;
+  /** True when `photo` is a background-removed cut-out (transparent), so it can float in the room. */
+  cutout: boolean;
   /** Only models with dealer-confirmed colours and a matching photo per colour. */
   colors: { name: string; code: string; photo: string }[];
   glb: string | null;
@@ -28,17 +30,20 @@ export function getShowroomData() {
     const colors =
       slug === 'darion'
         ? v.colors.flatMap((c) => {
-            const photo = resolveAsset(`darion-front-34-${c.slug}.jpg`);
+            // Haze Grey is the reference studio shot; the other colours have matching studio renders.
+            const photo = c.slug === 'haze-grey' ? resolveAsset('cutout-darion-front-34.webp') : resolveAsset(`cutout-darion-front-34-${c.slug}.webp`);
             return photo ? [{ name: c.name, code: c.code, photo }] : [];
           })
         : [];
+    const cut = resolveAsset(`cutout-${slug}-front-34.webp`);
     return {
       slug,
       label: v.shortName,
       name: v.name,
       tagline: v.tagline,
       price: v.startingPrice !== null ? `เริ่มต้น ${money(v.startingPrice)}` : 'ราคารอยืนยัน',
-      photo: resolveAsset(v.image),
+      photo: cut ?? resolveAsset(v.image),
+      cutout: cut !== null,
       colors,
       glb: MANIFEST[slug].glb,
     };
