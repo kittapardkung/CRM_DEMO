@@ -7,8 +7,10 @@ import { resolveAsset } from '@/lib/assets';
 import ArticleCard from '@/components/ArticleCard';
 import PhoneLink from '@/components/PhoneLink';
 import Tilt3D from '@/components/Tilt3D';
+import Lineup3DLoader from '@/components/Lineup3DLoader';
 import VideoCard from '@/components/VideoCard';
 import { vehicles } from '@/lib/data/vehicles';
+import { money } from '@/lib/format';
 import { articles } from '@/lib/data/articles';
 import { videos } from '@/lib/data/videos';
 import { dealer } from '@/lib/data/dealer';
@@ -140,6 +142,16 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
+
+      <Lineup3DLoader
+        items={vehicles.map((v) => ({
+          slug: v.slug,
+          name: v.name,
+          tagline: v.tagline,
+          price: v.startingPrice !== null ? `เริ่มต้น ${money(v.startingPrice)}` : 'ราคารอยืนยัน',
+          src: resolveAsset(v.image),
+        }))}
+      />
 
       <section style={{ padding: 'var(--space-8) 0' }}>
         <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 'var(--space-4)', flexWrap: 'wrap', marginBottom: 'var(--space-6)' }}>
