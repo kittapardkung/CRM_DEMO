@@ -37,10 +37,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
   if (vehicle.slug === 'mini-ev-gen5') {
+    // Spec figures (battery/range) deliberately left out of this
+    // description — withheld pending the Dec 2569 launch event, same as
+    // the page body. Restore them here too when told to reveal.
     return {
       title: 'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค.',
       description:
-        'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด แบตเตอรี่ 16.2–25.1 kWh วิ่งได้ 205–301 กม. (CLTC) เตรียมเปิดตัวในไทย ธ.ค. 2569 ติดตามข่าว WULING CHONBURI',
+        'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุดจาก WULING เตรียมเปิดตัวในไทยช่วงเดือนธันวาคม 2569 ติดตามรายละเอียดและราคาได้ที่ WULING CHONBURI ชลบุรี',
       alternates: { canonical: `/models/${vehicle.slug}` },
       ...(openGraph ? { openGraph } : {}),
     };

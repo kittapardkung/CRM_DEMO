@@ -98,6 +98,20 @@ function buildSpecGroups(specValues?: Record<string, string>): SpecGroup[] {
   }));
 }
 
+/**
+ * Masks every value in a confirmed specValues map to "-" — for a vehicle
+ * whose specs are known internally but the dealer wants withheld from the
+ * public site until a launch event (e.g. MINI EV GEN 5, held for Dec 2569).
+ * `specValues` is read directly in several places beyond buildSpecGroups
+ * (CompareTool, EvSavingsCalculator) — masking at this single source, not
+ * per-consumer, is what keeps the real numbers from leaking through any of
+ * them. The real map stays intact as the function's input; swap the call
+ * site back to the unmasked map (one line) when told to reveal.
+ */
+function withholdSpecValues(specValues: Record<string, string>): Record<string, string> {
+  return Object.fromEntries(Object.keys(specValues).map((k) => [k, '-']));
+}
+
 export const genericSpecifications: SpecGroup[] = buildSpecGroups();
 
 /** Real confirmed specs — source: WULING PORTA EV spec sheet + Wuling Chonburi v2 design export. */
@@ -399,26 +413,39 @@ export const vehicles: Vehicle[] = [
     colors,
     exteriorViews,
     interiorViews,
+    // WITHHELD per compliance request (26 ต.ค. 2569): all spec numbers
+    // below show "-" until told to reveal, ahead of the Dec 2569 launch
+    // event. Real confirmed values stay in miniEvGen5SpecValues above,
+    // untouched — only this page's display is masked. To reveal: swap
+    // `withholdSpecValues(miniEvGen5SpecValues)` back to
+    // `miniEvGen5SpecValues` below, and restore the highlights/features
+    // values from the commented originals in this block.
     highlights: [
-      { value: '301', unit: 'KM (CLTC)', label: 'ระยะทางวิ่งสูงสุด (Long Range)' },
-      { value: 'X', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
-      { value: '25.1', unit: 'kWh', label: 'ความจุแบตเตอรี่สูงสุด' },
-      { value: '30', unit: 'kW', label: 'กำลังมอเตอร์' },
+      // Real (withheld): 301 / KM (CLTC) — ระยะทางวิ่งสูงสุด (Long Range)
+      { value: '-', unit: '', label: 'ระยะทางวิ่งสูงสุด' },
+      // Real (withheld): X / SEATS — จำนวนที่นั่ง
+      { value: '-', unit: '', label: 'จำนวนที่นั่ง' },
+      // Real (withheld): 25.1 / kWh — ความจุแบตเตอรี่สูงสุด
+      { value: '-', unit: '', label: 'ความจุแบตเตอรี่สูงสุด' },
+      // Real (withheld): 30 / kW — กำลังมอเตอร์
+      { value: '-', unit: '', label: 'กำลังมอเตอร์' },
     ],
-    specifications: buildSpecGroups(miniEvGen5SpecValues),
-    specValues: miniEvGen5SpecValues,
+    specifications: buildSpecGroups(withholdSpecValues(miniEvGen5SpecValues)),
+    specValues: withholdSpecValues(miniEvGen5SpecValues),
     variants: [
       {
         id: 'standard-range',
         name: 'Standard Range',
         price: null,
-        features: ['แบตเตอรี่ 16.2 kWh', 'ระยะทาง 205 กม. (CLTC)', 'แอป MyWuling+'],
+        // Real (withheld): ['แบตเตอรี่ 16.2 kWh', 'ระยะทาง 205 กม. (CLTC)', 'แอป MyWuling+']
+        features: ['รายละเอียดจะเปิดเผยในงานเปิดตัว ธ.ค. นี้'],
       },
       {
         id: 'long-range',
         name: 'Long Range',
         price: null,
-        features: ['แบตเตอรี่ 25.1 kWh', 'ระยะทาง 301 กม. (CLTC)', 'แอป MyWuling+'],
+        // Real (withheld): ['แบตเตอรี่ 25.1 kWh', 'ระยะทาง 301 กม. (CLTC)', 'แอป MyWuling+']
+        features: ['รายละเอียดจะเปิดเผยในงานเปิดตัว ธ.ค. นี้'],
       },
     ],
   },
