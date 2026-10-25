@@ -36,11 +36,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ...(openGraph ? { openGraph } : {}),
     };
   }
-  if (vehicle.slug === 'aira') {
+  if (vehicle.slug === 'mini-ev-gen5') {
     return {
-      title: 'WULING AIRA EV ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค. นี้',
+      title: 'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค.',
       description:
-        'WULING AIRA EV ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด แบตเตอรี่ 16.2–25.1 kWh วิ่งได้ 205–301 กม. (CLTC) เตรียมเปิดตัวในไทยธันวาคม 2569 ติดตามข่าวและราคาได้ที่ WULING CHONBURI',
+        'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด แบตเตอรี่ 16.2–25.1 kWh วิ่งได้ 205–301 กม. (CLTC) เตรียมเปิดตัวในไทย ธ.ค. 2569 ติดตามข่าว WULING CHONBURI',
       alternates: { canonical: `/models/${vehicle.slug}` },
       ...(openGraph ? { openGraph } : {}),
     };
