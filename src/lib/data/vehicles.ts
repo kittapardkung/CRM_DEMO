@@ -395,6 +395,7 @@ export const vehicles: Vehicle[] = [
     seats: 'XX',
     startingPrice: null,
     comingSoon: true,
+    image: 'mini-ev-gen5-hero.jpg',
     colors,
     exteriorViews,
     interiorViews,
