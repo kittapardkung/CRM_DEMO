@@ -1,6 +1,13 @@
 import { Article } from './types';
 import { leaseArticles } from './leaseArticles';
 
+// Switch to 'revealed' when publishing the real-car image set for MINI EV GEN 5.
+const MINI_EV_ARTICLE_IMAGE_VERSION: 'shadow' | 'revealed' = 'shadow';
+const miniEvArticleImage = (filename: string) => {
+  const selectedVersion: string = MINI_EV_ARTICLE_IMAGE_VERSION;
+  return selectedVersion === 'revealed' ? filename.replace(/\\.jpg$/, '-revealed.jpg') : filename;
+};
+
 /**
  * Filter chips on /articles. Keep this list matching only categories that at
  * least one article actually uses — an unused entry renders a filter pill
@@ -3367,7 +3374,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'wuling-mini-ev-why-popular',
-    image: 'article-wuling-mini-ev-why-popular.jpg',
+    image: miniEvArticleImage('article-wuling-mini-ev-why-popular.jpg'),
     category: 'รถยนต์ไฟฟ้า',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3415,7 +3422,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-factory-worker-chonburi',
-    image: 'article-mini-ev-factory-worker-chonburi.jpg',
+    image: miniEvArticleImage('article-mini-ev-factory-worker-chonburi.jpg'),
     category: 'รถยนต์ไฟฟ้า',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3466,7 +3473,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-first-car-first-jobber',
-    image: 'article-mini-ev-first-car-first-jobber.jpg',
+    image: miniEvArticleImage('article-mini-ev-first-car-first-jobber.jpg'),
     category: 'คู่มือซื้อรถ',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3522,7 +3529,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-for-child-university',
-    image: 'article-mini-ev-for-child-university.jpg',
+    image: miniEvArticleImage('article-mini-ev-for-child-university.jpg'),
     category: 'คู่มือซื้อรถ',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3578,7 +3585,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-second-car-daily-use',
-    image: 'article-mini-ev-second-car-daily-use.jpg',
+    image: miniEvArticleImage('article-mini-ev-second-car-daily-use.jpg'),
     category: 'รถยนต์ไฟฟ้า',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3638,7 +3645,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-company-use',
-    image: 'article-mini-ev-company-use.jpg',
+    image: miniEvArticleImage('article-mini-ev-company-use.jpg'),
     category: 'EV สำหรับธุรกิจ',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3694,7 +3701,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-easy-parking',
-    image: 'article-mini-ev-easy-parking.jpg',
+    image: miniEvArticleImage('article-mini-ev-easy-parking.jpg'),
     category: 'รถยนต์ไฟฟ้า',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3748,7 +3755,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'wuling-mini-ev-gen5-features',
-    image: 'article-wuling-mini-ev-gen5-features.jpg',
+    image: miniEvArticleImage('article-wuling-mini-ev-gen5-features.jpg'),
     category: 'คู่มือซื้อรถ',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3820,7 +3827,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'mini-ev-electricity-maintenance-cost',
-    image: 'article-mini-ev-electricity-maintenance-cost.jpg',
+    image: miniEvArticleImage('article-mini-ev-electricity-maintenance-cost.jpg'),
     category: 'เทคนิคการใช้งาน',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
@@ -3874,7 +3881,7 @@ export const articles: Article[] = [
   },
   {
     slug: 'wuling-mini-ev-gen5-value-for-money',
-    image: 'article-wuling-mini-ev-gen5-value-for-money.jpg',
+    image: miniEvArticleImage('article-wuling-mini-ev-gen5-value-for-money.jpg'),
     category: 'คู่มือซื้อรถ',
     relatedVehicleSlug: 'mini-ev-gen5',
     publishedAt: '25 ต.ค. 2569',
