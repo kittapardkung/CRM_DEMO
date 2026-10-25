@@ -12,8 +12,9 @@ const nextConfig: NextConfig = {
     return [
       // The new-model page briefly shipped under the wrong slug (named
       // after the Indonesia-market name, "AIRA EV") before the dealer
-      // confirmed the Thailand market name is "MINI EV GEN 5" — permanent
+      // confirmed the Thailand market name is "WULING MINI EV" — permanent
       // redirect in case it was crawled or linked in that short window.
+      // (Slug kept as mini-ev-gen5 — only the displayed name changed.)
       { source: '/models/aira', destination: '/models/mini-ev-gen5', permanent: true },
     ];
   },

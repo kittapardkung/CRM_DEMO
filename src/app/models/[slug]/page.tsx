@@ -41,9 +41,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     // description — withheld pending the Dec 2569 launch event, same as
     // the page body. Restore them here too when told to reveal.
     return {
-      title: 'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค.',
+      title: 'WULING MINI EV ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค.',
       description:
-        'WULING MINI EV GEN 5 ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุดจาก WULING เตรียมเปิดตัวในไทยช่วงเดือนธันวาคม 2569 ติดตามรายละเอียดและราคาได้ที่ WULING CHONBURI ชลบุรี',
+        'WULING MINI EV ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุดจาก WULING เตรียมเปิดตัวในไทยช่วงเดือนธันวาคม 2569 ติดตามรายละเอียดและราคาได้ที่ WULING CHONBURI ชลบุรี',
       alternates: { canonical: `/models/${vehicle.slug}` },
       ...(openGraph ? { openGraph } : {}),
     };

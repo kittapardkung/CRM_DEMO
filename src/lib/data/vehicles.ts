@@ -101,7 +101,7 @@ function buildSpecGroups(specValues?: Record<string, string>): SpecGroup[] {
 /**
  * Masks every value in a confirmed specValues map to "-" — for a vehicle
  * whose specs are known internally but the dealer wants withheld from the
- * public site until a launch event (e.g. MINI EV GEN 5, held for Dec 2569).
+ * public site until a launch event (e.g. WULING MINI EV, held for Dec 2569).
  * `specValues` is read directly in several places beyond buildSpecGroups
  * (CompareTool, EvSavingsCalculator) — masking at this single source, not
  * per-consumer, is what keeps the real numbers from leaking through any of
@@ -190,7 +190,7 @@ const ekxionSpecValues: Record<string, string> = {
 };
 
 /**
- * Pre-launch SEO page for WULING MINI EV GEN 5 (Thailand launch confirmed
+ * Pre-launch SEO page for WULING MINI EV (Thailand launch confirmed
  * for Dec 2569, price not yet set by the dealer) — specs sourced from the
  * same vehicle's official Indonesia launch, where it's sold as "AIRA EV"
  * (GIIAS 2026, wuling.id), since no Thailand spec sheet exists yet under
@@ -401,8 +401,8 @@ export const vehicles: Vehicle[] = [
   },
   {
     slug: 'mini-ev-gen5',
-    name: 'WULING MINI EV GEN 5',
-    shortName: 'MINI EV GEN 5',
+    name: 'WULING MINI EV',
+    shortName: 'MINI EV',
     tagline: 'ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด เตรียมเปิดตัวในไทย ธันวาคมนี้',
     positioning: 'All-New Electric City Car',
     vehicleType: 'Mini EV',
