@@ -101,7 +101,7 @@ export default function VehicleVisuals({
                 position: 'relative',
                 zIndex: 2,
                 width: '100%',
-                aspectRatio: '4 / 3',
+                aspectRatio: vehicle.slug === 'mini-ev-gen5' ? '1 / 1' : '4 / 3',
                 overflow: 'hidden',
                 background: '#0b1730',
                 border: heroSrc ? 'none' : '1px dashed rgba(255,255,255,0.4)',
@@ -122,7 +122,7 @@ export default function VehicleVisuals({
                   fill
                   priority
                   sizes="(max-width: 820px) 100vw, 50vw"
-                  style={{ objectFit: 'cover' }}
+                  style={{ objectFit: vehicle.slug === 'mini-ev-gen5' ? 'contain' : 'cover' }}
                 />
               ) : (
                 <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.88)' }}>
