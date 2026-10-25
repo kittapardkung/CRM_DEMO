@@ -7,7 +7,7 @@ export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
   return (
     <article className="card" style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-3)', padding: 0, overflow: 'hidden' }}>
       <ImageSlot
-        aspectRatio={vehicle.slug === 'mini-ev-gen5' ? '1 / 1' : '16 / 11'}
+        aspectRatio="16 / 11"
         caption={`WULING ${vehicle.shortName} มุมหน้า 3/4 — ${vehicle.positioning}`}
         filename={vehicle.image ?? `${vehicle.slug}-front-34.webp`}
         sizes="(max-width: 820px) 100vw, 25vw"
