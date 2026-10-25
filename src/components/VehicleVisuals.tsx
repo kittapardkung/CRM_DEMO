@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Vehicle } from '@/lib/data/types';
+import { Vehicle, COMING_SOON } from '@/lib/data/types';
 import { money, priceNote } from '@/lib/format';
 import { track } from '@/lib/analytics';
 import PageIndexNav, { PageIndexItem } from './PageIndexNav';
@@ -72,8 +72,14 @@ export default function VehicleVisuals({
             <h1 style={{ fontSize: 'clamp(34px,5vw,60px)', lineHeight: 1.1, margin: '0 0 var(--space-3)', color: '#fff' }}>{vehicle.shortName}</h1>
             <p style={{ margin: '0 0 var(--space-4)', fontSize: 18, maxWidth: '36ch', color: 'rgba(255,255,255,0.78)' }}>{vehicle.tagline}</p>
             <p style={{ margin: '0 0 var(--space-6)', fontSize: 16, color: 'rgba(255,255,255,0.78)' }}>
-              เริ่มต้น <b className="tnum" style={{ fontWeight: 600, fontSize: 24, color: 'var(--wl-lime)' }}>{money(vehicle.startingPrice)}</b>{' '}
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{priceNote}</span>
+              {vehicle.comingSoon ? (
+                <b className="tnum" style={{ fontWeight: 600, fontSize: 24, color: 'var(--wl-lime)' }}>{COMING_SOON}</b>
+              ) : (
+                <>
+                  เริ่มต้น <b className="tnum" style={{ fontWeight: 600, fontSize: 24, color: 'var(--wl-lime)' }}>{money(vehicle.startingPrice)}</b>{' '}
+                  <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)' }}>{priceNote}</span>
+                </>
+              )}
             </p>
             <div style={{ display: 'flex', gap: 'var(--space-3)', flexWrap: 'wrap' }}>
               <Link href="/test-drive" className="btn btn-primary" onClick={() => track('click_test_drive')}>ทดลองขับ</Link>

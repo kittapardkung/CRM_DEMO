@@ -175,6 +175,27 @@ const ekxionSpecValues: Record<string, string> = {
   'DC ชาร์จเร็ว': '20 นาที (30–80%)', 'AC ชาร์จปกติ': '9.7 ชม. (20–100%), กำลังชาร์จ 6.6 kW',
 };
 
+/**
+ * Pre-launch SEO page (Thailand launch confirmed for Dec 2569, price not
+ * yet set by the dealer) — specs sourced from the official Indonesia launch
+ * (GIIAS 2026, wuling.id) since no Thailand spec sheet exists yet. Only
+ * figures that were consistent across the Indonesia coverage are included;
+ * seat count is left PLACEHOLDER because Indonesian sources disagree
+ * (4 vs 5) and battery chemistry wasn't stated, so neither is guessed here.
+ * Re-verify every value against the dealer's own material once Thailand
+ * specs are confirmed — Indonesia-market figures are a starting point, not
+ * a substitute.
+ */
+const airaSpecValues: Record<string, string> = {
+  ความยาว: '3,268 มม.', ความกว้าง: '1,550 มม.', ความสูง: '1,575 มม.', ระยะฐานล้อ: '2,190 มม.',
+  กำลังสูงสุด: '30 kW', แรงบิดสูงสุด: '85 Nm', ระบบขับเคลื่อน: 'ขับเคลื่อนล้อหลัง',
+  ความจุแบตเตอรี่: '16.2 kWh (Standard Range) / 25.1 kWh (Long Range)',
+  ระยะทางต่อการชาร์จ: '205 กม. (Standard Range, CLTC) / 301 กม. (Long Range, CLTC)',
+  ถุงลมนิรภัย: 'คู่หน้า', 'ระบบเบรก ABS/EBD': 'มี ABS และ EBD',
+  TPMS: 'มีระบบตรวจวัดแรงดันลมยาง', ISOFIX: 'มีจุดยึดเบาะนั่งสำหรับเด็ก',
+  ระบบเชื่อมต่อ: 'แอป MyWuling+ (IoV)',
+};
+
 export const vehicles: Vehicle[] = [
   {
     slug: 'porta',
@@ -360,6 +381,42 @@ export const vehicles: Vehicle[] = [
         name: 'Premium',
         price: null,
         features: ['ระบบ ADAS', 'จอคู่', 'ชุดแต่งรอบคัน'],
+      },
+    ],
+  },
+  {
+    slug: 'aira',
+    name: 'WULING AIRA EV',
+    shortName: 'AIRA EV',
+    tagline: 'ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด เตรียมเปิดตัวในไทย ธันวาคมนี้',
+    positioning: 'All-New Electric City Car',
+    vehicleType: 'Mini EV',
+    seats: 'XX',
+    startingPrice: null,
+    comingSoon: true,
+    colors,
+    exteriorViews,
+    interiorViews,
+    highlights: [
+      { value: '301', unit: 'KM (CLTC)', label: 'ระยะทางวิ่งสูงสุด (Long Range)' },
+      { value: 'X', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
+      { value: '25.1', unit: 'kWh', label: 'ความจุแบตเตอรี่สูงสุด' },
+      { value: '30', unit: 'kW', label: 'กำลังมอเตอร์' },
+    ],
+    specifications: buildSpecGroups(airaSpecValues),
+    specValues: airaSpecValues,
+    variants: [
+      {
+        id: 'standard-range',
+        name: 'Standard Range',
+        price: null,
+        features: ['แบตเตอรี่ 16.2 kWh', 'ระยะทาง 205 กม. (CLTC)', 'แอป MyWuling+'],
+      },
+      {
+        id: 'long-range',
+        name: 'Long Range',
+        price: null,
+        features: ['แบตเตอรี่ 25.1 kWh', 'ระยะทาง 301 กม. (CLTC)', 'แอป MyWuling+'],
       },
     ],
   },

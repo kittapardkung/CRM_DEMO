@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import ImageSlot from './ImageSlot';
-import { Vehicle } from '@/lib/data/types';
+import { Vehicle, COMING_SOON } from '@/lib/data/types';
 import { money } from '@/lib/format';
 
 export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
@@ -18,7 +18,7 @@ export default function ModelCard({ vehicle }: { vehicle: Vehicle }) {
         <h3 className="card-title" style={{ margin: 0, fontSize: 26, fontWeight: 400 }}>{vehicle.shortName}</h3>
         <p className="card-body" style={{ margin: 0 }}>{vehicle.tagline}</p>
         <p style={{ margin: 'var(--space-2) 0 0', fontSize: 15, color: 'var(--color-neutral-800)' }}>
-          เริ่มต้น <b className="tnum" style={{ fontWeight: 600 }}>{money(vehicle.startingPrice)}</b>
+          เริ่มต้น <b className="tnum" style={{ fontWeight: 600 }}>{vehicle.comingSoon ? COMING_SOON : money(vehicle.startingPrice)}</b>
         </p>
         <Link href={`/models/${vehicle.slug}`} className="btn btn-secondary" style={{ marginTop: 'var(--space-3)', alignSelf: 'flex-start' }}>
           ดูรายละเอียด

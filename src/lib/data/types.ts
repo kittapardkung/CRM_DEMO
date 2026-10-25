@@ -60,6 +60,8 @@ export interface Vehicle {
   seats: string;
   /** null = price still unconfirmed by the dealer (e.g. EKXION). */
   startingPrice: Money | null;
+  /** True for a vehicle with a confirmed upcoming Thailand launch but no price yet (e.g. AIRA EV, Dec launch) — shows COMING_SOON instead of the generic PLACEHOLDER wherever startingPrice would render. */
+  comingSoon?: boolean;
   colors: VehicleColor[];
   exteriorViews: VehicleImageSlot[];
   interiorViews: VehicleImageSlot[];
@@ -275,3 +277,5 @@ export interface LeaseStep {
 
 export const PLACEHOLDER = 'ข้อมูลรอยืนยัน';
 export const TBC_COST = 'รอข้อมูลจากผู้จำหน่าย';
+/** Shown instead of PLACEHOLDER for a vehicle that's confirmed to be launching but has no Thailand price yet (e.g. AIRA EV, pre-launch SEO page) — distinct wording from "unconfirmed" because a launch date IS confirmed. */
+export const COMING_SOON = 'เปิดตัวเร็วๆ นี้';

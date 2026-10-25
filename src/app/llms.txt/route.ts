@@ -4,6 +4,7 @@ import { videos } from '@/lib/data/videos';
 import { dealer } from '@/lib/data/dealer';
 import { money } from '@/lib/format';
 import { SITE_URL } from '@/lib/seo';
+import { COMING_SOON } from '@/lib/data/types';
 
 /**
  * llms.txt (see llmstxt.org) — a plain-text index for AI answer engines and
@@ -12,7 +13,7 @@ import { SITE_URL } from '@/lib/seo';
  */
 export function GET() {
   const modelLines = vehicles
-    .map((v) => `- [${v.shortName}](${SITE_URL}/models/${v.slug}): ${v.tagline} เริ่มต้น ${money(v.startingPrice)}`)
+    .map((v) => `- [${v.shortName}](${SITE_URL}/models/${v.slug}): ${v.tagline} เริ่มต้น ${v.comingSoon ? COMING_SOON : money(v.startingPrice)}`)
     .join('\n');
 
   const articleLines = allArticles
