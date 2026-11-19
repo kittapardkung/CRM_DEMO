@@ -1,8 +1,8 @@
 import { Article } from './types';
 import { leaseArticles } from './leaseArticles';
 
-// Switch to 'revealed' when publishing the real-car image set for MINI EV GEN 5.
-const MINI_EV_ARTICLE_IMAGE_VERSION: 'shadow' | 'revealed' = 'shadow';
+// Real-car image set revealed alongside the confirmed Thailand specs.
+const MINI_EV_ARTICLE_IMAGE_VERSION: 'shadow' | 'revealed' = 'revealed';
 const miniEvArticleImage = (filename: string) => {
   const selectedVersion: string = MINI_EV_ARTICLE_IMAGE_VERSION;
   return selectedVersion === 'revealed' ? filename.replace(/\\.jpg$/, '-revealed.jpg') : filename;
