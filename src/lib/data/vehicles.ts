@@ -411,11 +411,12 @@ export const vehicles: Vehicle[] = [
     comingSoon: true,
     // Real dealer photos supplied 19 พ.ย. 2569 — replaces the pre-launch
     // silhouette teaser (mini-ev-gen5-hero.jpg, kept on disk but unused).
-    // Studio cutout reads cleaner as the hero/OG thumbnail; the on-location
-    // shot goes in the front-34 gallery slot so the gallery shows a real,
+    // Hero/OG thumbnail is the branded cutout (dealer's own lime/white
+    // background treatment, supplied separately); the on-location shot
+    // goes in the front-34 gallery slot so the gallery shows a real,
     // unretouched car. No straight-on "front" shot was supplied, so that
     // view stays a placeholder rather than mislabeling the 3/4 angle.
-    image: 'mini-ev-gen5-studio.png',
+    image: 'mini-ev-gen5-hero-brand.webp',
     exteriorImages: {
       'front-34': 'mini-ev-gen5-front-34.png',
       rear: 'mini-ev-gen5-rear.png',
