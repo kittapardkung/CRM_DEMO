@@ -98,20 +98,6 @@ function buildSpecGroups(specValues?: Record<string, string>): SpecGroup[] {
   }));
 }
 
-/**
- * Masks every value in a confirmed specValues map to "-" — for a vehicle
- * whose specs are known internally but the dealer wants withheld from the
- * public site until a launch event (e.g. WULING MINI EV, held for Dec 2569).
- * `specValues` is read directly in several places beyond buildSpecGroups
- * (CompareTool, EvSavingsCalculator) — masking at this single source, not
- * per-consumer, is what keeps the real numbers from leaking through any of
- * them. The real map stays intact as the function's input; swap the call
- * site back to the unmasked map (one line) when told to reveal.
- */
-function withholdSpecValues(specValues: Record<string, string>): Record<string, string> {
-  return Object.fromEntries(Object.keys(specValues).map((k) => [k, '-']));
-}
-
 export const genericSpecifications: SpecGroup[] = buildSpecGroups();
 
 /** Real confirmed specs — source: WULING PORTA EV spec sheet + Wuling Chonburi v2 design export. */
@@ -190,25 +176,39 @@ const ekxionSpecValues: Record<string, string> = {
 };
 
 /**
- * Pre-launch SEO page for WULING MINI EV (Thailand launch confirmed
- * for Dec 2569, price not yet set by the dealer) — specs sourced from the
- * same vehicle's official Indonesia launch, where it's sold as "AIRA EV"
- * (GIIAS 2026, wuling.id), since no Thailand spec sheet exists yet under
- * the Thai market name. Only figures that were consistent across the
- * Indonesia coverage are included; seat count is left PLACEHOLDER because
- * Indonesian sources disagree (4 vs 5) and battery chemistry wasn't
- * stated, so neither is guessed here. Re-verify every value against the
- * dealer's own material once Thailand specs are confirmed —
- * Indonesia-market figures are a starting point, not a substitute.
+ * Real confirmed specs for WULING MINI EV, Thailand market — source:
+ * Autolifethailand.tv, "เปิดสเป็ค – ภาพรถคันจริง WULING MINI EV รถไฟฟ้า100%
+ * เวอร์ชั่นไทย" (published 17 พ.ย. 2569). Supersedes the earlier
+ * Indonesia-market (AIRA EV) placeholder figures the page launched with —
+ * seat count (4) and battery chemistry (Lithium-ion) that were left
+ * PLACEHOLDER before are now confirmed for the Thai-market car itself.
+ * Range standard is NEDC per this source (not CLTC, as the pre-launch
+ * estimate had assumed). Official launch + price announcement is at
+ * มหกรรมยานยนต์ ครั้งที่ 43 (Motor Expo 2026), December 2569 — price
+ * itself is still NOT officially confirmed; do not add a startingPrice
+ * from the outlet's own "เริ่มต้นที่ 29x,xxx บาท" prediction, which the
+ * article itself labels as its own estimate, not Wuling's.
  */
 const miniEvGen5SpecValues: Record<string, string> = {
-  ความยาว: '3,268 มม.', ความกว้าง: '1,550 มม.', ความสูง: '1,575 มม.', ระยะฐานล้อ: '2,190 มม.',
-  กำลังสูงสุด: '30 kW', แรงบิดสูงสุด: '85 Nm', ระบบขับเคลื่อน: 'ขับเคลื่อนล้อหลัง',
-  ความจุแบตเตอรี่: '16.2 kWh (Standard Range) / 25.1 kWh (Long Range)',
-  ระยะทางต่อการชาร์จ: '205 กม. (Standard Range, CLTC) / 301 กม. (Long Range, CLTC)',
-  ถุงลมนิรภัย: 'คู่หน้า', 'ระบบเบรก ABS/EBD': 'มี ABS และ EBD',
-  TPMS: 'มีระบบตรวจวัดแรงดันลมยาง', ISOFIX: 'มีจุดยึดเบาะนั่งสำหรับเด็ก',
-  ระบบเชื่อมต่อ: 'แอป MyWuling+ (IoV)',
+  ความยาว: '3,286 มม.', ความกว้าง: '1,550 มม.', ความสูง: '1,575 มม.', ระยะฐานล้อ: '2,190 มม.',
+  น้ำหนักรถ: '795 กก. (LITE) / 865 กก. (PRO)',
+  ชนิดมอเตอร์: 'มอเตอร์ไฟฟ้า 1 ตัว ระบบขับเคลื่อนไฟฟ้าแบบ 3-in-1', กำลังสูงสุด: '40 แรงม้า (ความเร็วสูงสุด 101 กม./ชม.)', ระบบขับเคลื่อน: 'ขับเคลื่อนล้อหลัง (RWD)',
+  ชนิดแบตเตอรี่: 'Lithium-ion', ความจุแบตเตอรี่: '16.2 kWh (LITE) / 25.1 kWh (PRO)',
+  ระยะทางต่อการชาร์จ: '205 กม. (LITE, มาตรฐาน NEDC) / 301 กม. (PRO, มาตรฐาน NEDC)',
+  'DC ชาร์จเร็ว': '35 นาที (30–80%) ทั้ง 2 รุ่น', 'AC ชาร์จปกติ': '4.8 ชม. (LITE, 20–100%) / 7.2 ชม. (PRO, 20–100%)',
+  ไฟหน้า: 'LED ดีไซน์ Yuanqu Star Ring พร้อมไฟหรี่หน่วงเวลา Follow Me Home', ไฟท้าย: 'LED พร้อมไฟเบรกดวงที่ 3 แบบ LED',
+  กระจกมองข้าง: 'ปรับด้วยไฟฟ้า', ระบบพวงมาลัย: 'พวงมาลัยมัลติฟังก์ชัน',
+  พื้นที่บรรทุก: '170 ลิตร (ขยายได้สูงสุด 838 ลิตร เมื่อพับเบาะหลัง)',
+  หน้าจอกลาง: 'จอสัมผัสขนาด 10.1 นิ้ว', เรือนไมล์: 'จอแสดงข้อมูลการขับขี่แบบสี ขนาด 7 นิ้ว',
+  วัสดุหุ้มเบาะ: 'ผ้าลายตาราง สีน้ำตาล-ขาว', ระบบปรับอากาศ: 'เครื่องปรับอากาศระบบไฟฟ้า',
+  เบาะแถวสอง: 'พับแยกอิสระแบบ 50:50', เบาะคนขับ: 'ปรับได้ 4 ทิศทาง (เบาะคู่หน้า)',
+  ถุงลมนิรภัย: 'คู่หน้า', 'ระบบเบรก ABS/EBD': 'มี ABS และ EBD', ระบบควบคุมเสถียรภาพ: 'ESC, TCS, VDC',
+  กล้องมองหลัง: 'มี พร้อมเซนเซอร์ช่วยจอดด้านหลัง', ระบบช่วยออกตัวบนทางลาด: 'มี (HHC)',
+  TPMS: 'มีระบบตรวจวัดแรงดันลมยาง', ISOFIX: 'มีจุดยึดเบาะนั่งเด็ก 2 ตำแหน่ง',
+  ระบบกุญแจ: 'กุญแจรีโมท Smart Key 2 ชิ้น เข้า-ออกและล็อกโดยไม่ต้องใช้กุญแจ',
+  'ช่องชาร์จ USB': 'มี 3 ช่อง พร้อมช่องจ่ายไฟ 12V',
+  ระบบเชื่อมต่อ: 'Bluetooth, Apple CarPlay และ Android Auto แบบไร้สายผ่านกล่องเชื่อมต่อภายนอก, แอป MyWuling+ (IoV)',
+  ลำโพง: '2 ตำแหน่ง',
 };
 
 export const vehicles: Vehicle[] = [
@@ -403,49 +403,45 @@ export const vehicles: Vehicle[] = [
     slug: 'mini-ev-gen5',
     name: 'WULING MINI EV',
     shortName: 'MINI EV',
-    tagline: 'ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุด เตรียมเปิดตัวในไทย ธันวาคมนี้',
+    tagline: 'ซิตี้คาร์ไฟฟ้า 4 ที่นั่ง เตรียมเปิดตัวในงานมหกรรมยานยนต์ครั้งที่ 43 (Motor Expo 2026)',
     positioning: 'All-New Electric City Car',
     vehicleType: 'Mini EV',
-    seats: 'XX',
+    seats: '4',
     startingPrice: null,
     comingSoon: true,
     image: 'mini-ev-gen5-hero.jpg',
-    colors,
+    colors: [
+      { name: 'ดำ (Starry Black)', code: '#1c1c1e', slug: 'starry-black' },
+      { name: 'น้ำเงิน (Neon Blue)', code: '#2a5fd1', slug: 'neon-blue' },
+      { name: 'น้ำตาล (Milk Tea Coffee)', code: '#c9a789', slug: 'milk-tea-coffee' },
+    ],
     exteriorViews,
     interiorViews,
-    // WITHHELD per compliance request (26 ต.ค. 2569): all spec numbers
-    // below show "-" until told to reveal, ahead of the Dec 2569 launch
-    // event. Real confirmed values stay in miniEvGen5SpecValues above,
-    // untouched — only this page's display is masked. To reveal: swap
-    // `withholdSpecValues(miniEvGen5SpecValues)` back to
-    // `miniEvGen5SpecValues` below, and restore the highlights/features
-    // values from the commented originals in this block.
+    // Specs revealed (19 พ.ย. 2569): confirmed via Autolifethailand.tv
+    // ahead of the official Dec 2569 launch event — see the sourcing note
+    // on miniEvGen5SpecValues above. Only startingPrice/price stay null:
+    // the dealer has not confirmed a price, and the outlet's own "29x,xxx
+    // บาท" guess is explicitly not official — do not promote it here.
     highlights: [
-      // Real (withheld): 301 / KM (CLTC) — ระยะทางวิ่งสูงสุด (Long Range)
-      { value: '-', unit: '', label: 'ระยะทางวิ่งสูงสุด' },
-      // Real (withheld): X / SEATS — จำนวนที่นั่ง
-      { value: '-', unit: '', label: 'จำนวนที่นั่ง' },
-      // Real (withheld): 25.1 / kWh — ความจุแบตเตอรี่สูงสุด
-      { value: '-', unit: '', label: 'ความจุแบตเตอรี่สูงสุด' },
-      // Real (withheld): 30 / kW — กำลังมอเตอร์
-      { value: '-', unit: '', label: 'กำลังมอเตอร์' },
+      { value: '301', unit: 'KM (NEDC)', label: 'ระยะทางวิ่งสูงสุด (รุ่น PRO)' },
+      { value: '4', unit: 'SEATS', label: 'จำนวนที่นั่ง' },
+      { value: '25.1', unit: 'kWh', label: 'ความจุแบตเตอรี่สูงสุด' },
+      { value: '40', unit: 'HP', label: 'กำลังมอเตอร์สูงสุด' },
     ],
-    specifications: buildSpecGroups(withholdSpecValues(miniEvGen5SpecValues)),
-    specValues: withholdSpecValues(miniEvGen5SpecValues),
+    specifications: buildSpecGroups(miniEvGen5SpecValues),
+    specValues: miniEvGen5SpecValues,
     variants: [
       {
-        id: 'standard-range',
-        name: 'Standard Range',
+        id: 'lite',
+        name: 'LITE',
         price: null,
-        // Real (withheld): ['แบตเตอรี่ 16.2 kWh', 'ระยะทาง 205 กม. (CLTC)', 'แอป MyWuling+']
-        features: ['รายละเอียดจะเปิดเผยในงานเปิดตัว ธ.ค. นี้'],
+        features: ['แบตเตอรี่ 16.2 kWh', 'ระยะทาง 205 กม. (NEDC)', 'น้ำหนักตัวรถ 795 กก.', 'ราคาจะประกาศในงาน Motor Expo 2026'],
       },
       {
-        id: 'long-range',
-        name: 'Long Range',
+        id: 'pro',
+        name: 'PRO',
         price: null,
-        // Real (withheld): ['แบตเตอรี่ 25.1 kWh', 'ระยะทาง 301 กม. (CLTC)', 'แอป MyWuling+']
-        features: ['รายละเอียดจะเปิดเผยในงานเปิดตัว ธ.ค. นี้'],
+        features: ['แบตเตอรี่ 25.1 kWh', 'ระยะทาง 301 กม. (NEDC)', 'น้ำหนักตัวรถ 865 กก.', 'ราคาจะประกาศในงาน Motor Expo 2026'],
       },
     ],
   },

@@ -37,13 +37,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   }
   if (vehicle.slug === 'mini-ev-gen5') {
-    // Spec figures (battery/range) deliberately left out of this
-    // description — withheld pending the Dec 2569 launch event, same as
-    // the page body. Restore them here too when told to reveal.
     return {
-      title: 'WULING MINI EV ซิตี้คาร์ไฟฟ้าใหม่ เปิดตัว ธ.ค.',
+      title: 'WULING MINI EV ซิตี้คาร์ไฟฟ้า 4 ที่นั่ง วิ่งไกลสุด 301 กม.',
       description:
-        'WULING MINI EV ซิตี้คาร์ไฟฟ้ารุ่นใหม่ล่าสุดจาก WULING เตรียมเปิดตัวในไทยช่วงเดือนธันวาคม 2569 ติดตามรายละเอียดและราคาได้ที่ WULING CHONBURI ชลบุรี',
+        'WULING MINI EV ซิตี้คาร์ไฟฟ้า 4 ประตู 4 ที่นั่ง แบตเตอรี่ 16.2/25.1 kWh วิ่งไกลสุด 205/301 กม. (NEDC) 2 รุ่นย่อย LITE/PRO เตรียมเปิดตัวพร้อมราคาในงาน Motor Expo 2026 ธันวาคมนี้ ติดตามได้ที่ WULING CHONBURI ชลบุรี',
       alternates: { canonical: `/models/${vehicle.slug}` },
       ...(openGraph ? { openGraph } : {}),
     };
