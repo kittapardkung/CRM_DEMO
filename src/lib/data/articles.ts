@@ -5,7 +5,7 @@ import { leaseArticles } from './leaseArticles';
 const MINI_EV_ARTICLE_IMAGE_VERSION: 'shadow' | 'revealed' = 'revealed';
 const miniEvArticleImage = (filename: string) => {
   const selectedVersion: string = MINI_EV_ARTICLE_IMAGE_VERSION;
-  return selectedVersion === 'revealed' ? filename.replace(/\\.jpg$/, '-revealed.jpg') : filename;
+  return selectedVersion === 'revealed' ? filename.replace(/\.jpg$/, '-revealed.jpg') : filename;
 };
 
 /**
