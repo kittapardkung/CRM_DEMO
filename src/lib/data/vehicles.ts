@@ -409,7 +409,19 @@ export const vehicles: Vehicle[] = [
     seats: '4',
     startingPrice: null,
     comingSoon: true,
-    image: 'mini-ev-gen5-hero.jpg',
+    // Real dealer photos supplied 19 พ.ย. 2569 — replaces the pre-launch
+    // silhouette teaser (mini-ev-gen5-hero.jpg, kept on disk but unused).
+    // Studio cutout reads cleaner as the hero/OG thumbnail; the on-location
+    // shot goes in the front-34 gallery slot so the gallery shows a real,
+    // unretouched car. No straight-on "front" shot was supplied, so that
+    // view stays a placeholder rather than mislabeling the 3/4 angle.
+    image: 'mini-ev-gen5-studio.png',
+    exteriorImages: {
+      'front-34': 'mini-ev-gen5-front-34.png',
+      rear: 'mini-ev-gen5-rear.png',
+      side: 'mini-ev-gen5-side.png',
+      'rear-34': 'mini-ev-gen5-rear-34.png',
+    },
     colors: [
       { name: 'ดำ (Starry Black)', code: '#1c1c1e', slug: 'starry-black' },
       { name: 'น้ำเงิน (Neon Blue)', code: '#2a5fd1', slug: 'neon-blue' },
