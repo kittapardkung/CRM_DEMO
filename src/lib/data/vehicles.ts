@@ -409,23 +409,27 @@ export const vehicles: Vehicle[] = [
     seats: '4',
     startingPrice: null,
     comingSoon: true,
-    // Real dealer photos supplied 19 พ.ย. 2569 — replaces the pre-launch
+    // Real dealer photos supplied 19-20 พ.ย. 2569 — replaces the pre-launch
     // silhouette teaser (mini-ev-gen5-hero.jpg, kept on disk but unused).
     // Hero/OG thumbnail is the branded cutout (dealer's own lime/white
-    // background treatment, supplied separately); the on-location shot
-    // goes in the front-34 gallery slot so the gallery shows a real,
-    // unretouched car. No straight-on "front" shot was supplied, so that
-    // view stays a placeholder rather than mislabeling the 3/4 angle.
+    // background treatment, supplied separately). The first photo batch
+    // (cream body, black roof) is keyed to Milk Tea Coffee below — it was
+    // never a neutral placeholder, that's the actual paint on that car.
+    // No straight-on "front" shot was supplied for any color, so that view
+    // stays a placeholder rather than mislabeling a 3/4 angle as straight-on.
     image: 'mini-ev-gen5-hero-brand.webp',
     exteriorImages: {
-      'front-34': 'mini-ev-gen5-front-34.png',
-      rear: 'mini-ev-gen5-rear.png',
-      side: 'mini-ev-gen5-side.png',
-      'rear-34': 'mini-ev-gen5-rear-34.png',
+      'front-34-milk-tea-coffee': 'mini-ev-gen5-front-34.png',
+      'rear-milk-tea-coffee': 'mini-ev-gen5-rear.png',
+      'side-milk-tea-coffee': 'mini-ev-gen5-side.png',
+      'rear-34-milk-tea-coffee': 'mini-ev-gen5-rear-34.png',
+      'front-34-neon-blue': 'mini-ev-gen5-front-34-neon-blue.png',
     },
     colors: [
       { name: 'ดำ (Starry Black)', code: '#1c1c1e', slug: 'starry-black' },
-      { name: 'น้ำเงิน (Neon Blue)', code: '#2a5fd1', slug: 'neon-blue' },
+      // Code confirmed from a real photo (20 พ.ย. 2569) — a soft powder
+      // blue, not the vivid blue the placeholder code implied.
+      { name: 'น้ำเงิน (Neon Blue)', code: '#9fc3dd', slug: 'neon-blue' },
       { name: 'น้ำตาล (Milk Tea Coffee)', code: '#c9a789', slug: 'milk-tea-coffee' },
     ],
     exteriorViews,
