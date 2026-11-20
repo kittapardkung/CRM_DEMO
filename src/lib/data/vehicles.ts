@@ -440,11 +440,13 @@ export const vehicles: Vehicle[] = [
       'front-starry-black': 'mini-ev-gen5-front-starry-black.png',
     },
     colors: [
+      // Milk Tea Coffee leads: it has the fullest real photo set (4
+      // exterior angles + full interior), so it's what shows by default.
+      { name: 'น้ำตาล (Milk Tea Coffee)', code: '#c9a789', slug: 'milk-tea-coffee' },
       { name: 'ดำ (Starry Black)', code: '#1c1c1e', slug: 'starry-black' },
       // Code confirmed from a real photo (20 พ.ย. 2569) — a soft powder
       // blue, not the vivid blue the placeholder code implied.
       { name: 'น้ำเงิน (Neon Blue)', code: '#9fc3dd', slug: 'neon-blue' },
-      { name: 'น้ำตาล (Milk Tea Coffee)', code: '#c9a789', slug: 'milk-tea-coffee' },
     ],
     exteriorViews,
     interiorViews: miniEvGen5InteriorViews,
