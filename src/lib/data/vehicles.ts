@@ -424,6 +424,7 @@ export const vehicles: Vehicle[] = [
       'side-milk-tea-coffee': 'mini-ev-gen5-side.png',
       'rear-34-milk-tea-coffee': 'mini-ev-gen5-rear-34.png',
       'front-34-neon-blue': 'mini-ev-gen5-front-34-neon-blue.png',
+      'front-starry-black': 'mini-ev-gen5-front-starry-black.png',
     },
     colors: [
       { name: 'ดำ (Starry Black)', code: '#1c1c1e', slug: 'starry-black' },
