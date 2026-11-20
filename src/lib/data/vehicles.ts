@@ -45,6 +45,18 @@ const darionInteriorViews: VehicleImageSlot[] = [
   { slug: 'cargo-seats-up', label: 'พื้นที่สัมภาระเมื่อกางเบาะ' },
 ];
 
+/** MINI EV GEN 5: like the generic set, but with two cargo shots (seats up/folded) instead of one. */
+const miniEvGen5InteriorViews: VehicleImageSlot[] = [
+  { slug: 'dashboard', label: 'แผงหน้าปัด' },
+  { slug: 'steering-wheel', label: 'พวงมาลัย' },
+  { slug: 'center-display', label: 'จอกลาง' },
+  { slug: 'front-seats', label: 'เบาะหน้า' },
+  { slug: 'rear-seats', label: 'เบาะหลัง' },
+  { slug: 'cargo-seats-up', label: 'พื้นที่สัมภาระเมื่อกางเบาะ' },
+  { slug: 'cargo-seats-folded', label: 'พื้นที่สัมภาระเมื่อพับเบาะ' },
+  { slug: 'details', label: 'รายละเอียดภายใน' },
+];
+
 /** PORTA has no rear seats / cargo area / center display / details interior shots — it's a 2-seat cargo van. */
 const portaInteriorViews = interiorViews.filter(
   (v) => !['rear-seats', 'cargo-area', 'details', 'center-display'].includes(v.slug),
@@ -415,8 +427,9 @@ export const vehicles: Vehicle[] = [
     // background treatment, supplied separately). The first photo batch
     // (cream body, black roof) is keyed to Milk Tea Coffee below — it was
     // never a neutral placeholder, that's the actual paint on that car.
-    // No straight-on "front" shot was supplied for any color, so that view
-    // stays a placeholder rather than mislabeling a 3/4 angle as straight-on.
+    // No straight-on "front" shot was supplied for Neon Blue or Milk Tea
+    // Coffee, so those stay placeholders rather than mislabeling a 3/4
+    // angle as straight-on.
     image: 'mini-ev-gen5-hero-brand.webp',
     exteriorImages: {
       'front-34-milk-tea-coffee': 'mini-ev-gen5-front-34.png',
@@ -434,7 +447,7 @@ export const vehicles: Vehicle[] = [
       { name: 'น้ำตาล (Milk Tea Coffee)', code: '#c9a789', slug: 'milk-tea-coffee' },
     ],
     exteriorViews,
-    interiorViews,
+    interiorViews: miniEvGen5InteriorViews,
     // Specs revealed (19 พ.ย. 2569): confirmed via Autolifethailand.tv
     // ahead of the official Dec 2569 launch event — see the sourcing note
     // on miniEvGen5SpecValues above. Only startingPrice/price stay null:
